@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Main from './pages/main';
 import TextBook from './pages/textbook';
 
-import './app.css';
+import './App.css';
 
 const APP_PAGES = {
   main: '/',
