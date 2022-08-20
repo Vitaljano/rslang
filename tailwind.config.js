@@ -14,6 +14,8 @@ module.exports = {
       current: 'currentColor',
       white: '#ffffff',
       action: '#575D75',
+      black: '#000',
+
       violet: {
         900: '#93A0CD',
         700: '#4338ca',
