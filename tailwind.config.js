@@ -2,12 +2,18 @@
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        Mukta: ['Mukta', 'sans-serif'],
+      },
+    },
     colors: {
+      header: '#93A0CD',
       footer: '#f7cc7b',
       transparent: 'transparent',
       current: 'currentColor',
       white: '#ffffff',
+      action: '#575D75',
       violet: {
         900: '#93A0CD',
         700: '#4338ca',
