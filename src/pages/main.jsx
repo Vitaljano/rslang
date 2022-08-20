@@ -5,11 +5,14 @@ import book from '../img/book.jpg';
 import sprint from '../img/sprint.jpg';
 import './main.css';
 import { Link } from 'react-router-dom';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 function Main() {
   return (
     <>
-      <div className="container flex flex-col w-full p-4">
+      <Header />
+      <div className="container mx-auto flex flex-col w-full p-4">
         <div className="my-0 mx-auto items-center startscreen flex flex-row w-10/12">
           <div className="startscreen-text flex flex-col gap-8 w-4/12 mr-20">
             <h1 className="text-action text-4xl">
@@ -114,6 +117,7 @@ function Main() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
