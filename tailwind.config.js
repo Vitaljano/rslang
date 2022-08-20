@@ -12,6 +12,7 @@ module.exports = {
       footer: '#f7cc7b',
       white: '#ffff',
       action: '#575D75',
+      black: '#000',
     },
   },
   plugins: [],
