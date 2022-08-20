@@ -1,4 +1,4 @@
-import Card from '../../src/components/Card';
+import Card from '../../src/components/card';
 const mock = [
   {
     id: 1,
@@ -100,7 +100,7 @@ const mock = [
 
 function TextBook() {
   return (
-    <section className="bg-green-900">
+    <section className="bg-green-900 pt-10">
       <div className="container mx-auto flex justify-center">
         <div className="flex flex-col max-w-xs justify-center  sm:max-w-none sm:grid sm:grid-cols-2 sm:auto-cols  md:grid-cols-3 lg:grid-cols-4 gap-4 sm:items-center">
           {mock.map((item) => (
