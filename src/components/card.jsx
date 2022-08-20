@@ -1,6 +1,6 @@
 function Card() {
   return (
-    <div className="w-80  rounded-xl border shadow-xl  relative">
+    <div className="sm:max-w-xs rounded-xl  shadow-2xl  relative">
       <div className="w-auto r-0 absolute z-1">
         <img
           className="rounded-t-xl"
@@ -8,7 +8,7 @@ function Card() {
           alt=""
         />
       </div>
-      <div className="text-right pt-60 px-4 pb-4 rounded-xl bg-gradient-to-t via-green-400 from-emerald-700 z-10 relative">
+      <div className="text-right pt-60 px-4 pb-4 rounded-xl bg-gradient-to-t via-white from-white z-10 relative">
         <div className="uppercase text-lg font-medium mb-2">duck</div>
         <div className="flex justify-end items-center">
           <span className="mx-2">утка [dʌk]</span>
