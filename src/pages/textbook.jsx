@@ -1,4 +1,5 @@
 import Card from '../../src/components/Card';
+import Pagination from '../components/Pagination';
 const mock = [
   {
     id: 1,
@@ -107,6 +108,9 @@ function TextBook() {
             <Card card={item} key={item.id} />
           ))}
         </div>
+      </div>
+      <div className="container mx-auto px-4 flex justify-center mt-10">
+        <Pagination />
       </div>
     </section>
   );
