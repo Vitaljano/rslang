@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Burger({ onClickLink }) {
+function Burger({ onClickLink, bgColor }) {
   return (
     <>
-      <div className="w-full absolute bg-header h-full z-50">
+      <div className={bgColor + ' w-full absolute h-full z-50'}>
         <ul className="my-0 mx-auto flex items-center flex-row text-3xl w-11/12 justify-between">
           <Link onClick={onClickLink} to="/textbook">
             <li className="hover:opacity-80 transition-all">Учебник</li>

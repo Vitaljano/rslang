@@ -1,18 +1,26 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import Burger from './Burger';
 
+const pageRoutes = {
+  '/textbook': 'bg-green-900',
+};
+
 function Header() {
-  const [openBurger, setOpenBurger] = React.useState(false);
+  const [openBurger, setOpenBurger] = useState(false);
+  const location = useLocation();
+  const bgColor = pageRoutes[location.pathname] || 'bg-header';
+
   const onClickBurger = () => {
     setOpenBurger(true);
   };
   const onClickLink = () => {
     setOpenBurger(false);
   };
-
   return (
-    <header className="bg-header z-50 max-w-1400px relative w-full h-20 text-white">
+    <header
+      className={bgColor + ' z-50 max-w-1400px relative w-full h-20 text-white'}
+    >
       <div className="container h-full items-center my-0 mx-auto w-11/12 flex justify-between ">
         <Link onClick={onClickLink} to="/">
           <div className="logo flex flex-row items-center">
@@ -65,7 +73,7 @@ function Header() {
           </div>
         </div>
       </div>
-      {openBurger && <Burger onClickLink={onClickLink} />}
+      {openBurger && <Burger onClickLink={onClickLink} bgColor={bgColor} />}
     </header>
   );
 }
