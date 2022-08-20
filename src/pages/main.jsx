@@ -1,9 +1,11 @@
-import Footer from '../components/footer';
+// import Footer from '../components/footer';
+import Header from '../components/Header';
 function Main() {
   return (
     <>
-      <div>Main page</div>
-      <Footer />
+      <Header />
+      {/* <div>Main page</div> */}
+      {/* <Footer /> */}
     </>
   );
 }
