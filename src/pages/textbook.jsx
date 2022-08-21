@@ -1,4 +1,5 @@
 import Card from '../../src/components/Card';
+import Header from '../components/Header';
 import Pagination from '../components/Pagination';
 const mock = [
   {
@@ -101,18 +102,21 @@ const mock = [
 
 function TextBook() {
   return (
-    <section className="bg-green-900 pt-10">
-      <div className="container px-4 mx-auto flex justify-center">
-        <div className="flex flex-col max-w-xs justify-center  sm:max-w-none sm:grid sm:grid-cols-2 sm:auto-cols  md:grid-cols-3 lg:grid-cols-4 gap-4 sm:items-center">
-          {mock.map((item) => (
-            <Card card={item} key={item.id} />
-          ))}
+    <>
+      <Header />
+      <section className="bg-green-900 pt-10">
+        <div className="container px-4 mx-auto flex justify-center">
+          <div className="flex flex-col max-w-xs justify-center  sm:max-w-none sm:grid sm:grid-cols-2 sm:auto-cols  md:grid-cols-3 lg:grid-cols-4 gap-4 sm:items-center">
+            {mock.map((item) => (
+              <Card card={item} key={item.id} />
+            ))}
+          </div>
         </div>
-      </div>
-      <div className="container mx-auto px-4 flex justify-center mt-10">
-        <Pagination />
-      </div>
-    </section>
+        <div className="container mx-auto px-4 flex justify-center mt-10">
+          <Pagination />
+        </div>
+      </section>
+    </>
   );
 }
 export default TextBook;
