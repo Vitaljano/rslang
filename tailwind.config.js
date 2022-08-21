@@ -17,6 +17,7 @@ module.exports = {
       black: '#000',
       grey: '#676060',
 
+
       violet: {
         900: '#93A0CD',
         700: '#4338ca',
@@ -28,6 +29,7 @@ module.exports = {
         400: '#2dd4bf',
         200: '#99f6e4',
       },
+      red: 'rgb(185 28 28);',
     },
   },
   plugins: [],
