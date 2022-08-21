@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { registration } from '../../utils/api/thunks';
+import { registration, getNewUserTokens } from '../../utils/api/thunks';
 import { login } from '../../utils/api/thunks';
 
 const initialState = {
@@ -19,8 +19,14 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setUserName: (state, { payload }) => {
-      state.user ? (state.user.name = payload.name) : null;
+    setIsAuth: (state, action) => {
+      state.isAuth = action.payload;
+    },
+    setAuthUserName(state, action) {
+      state.user.name = action.payload;
+    },
+    setAuthUserId(state, action) {
+      state.user.userId = action.payload;
     },
   },
   extraReducers: {
@@ -56,9 +62,23 @@ export const authSlice = createSlice({
       state.userCreationError = action.payload;
       console.error(action.payload);
     },
+
+    [getNewUserTokens.pending.type]: (state) => {
+      state.isLoading = true;
+    },
+    [getNewUserTokens.fulfilled.type]: (state, action) => {
+      state.isLoading = false;
+      if (state.user) {
+        state.user.token = action.payload.token;
+        state.user.refreshToken = action.payload.refreshToken;
+      }
+    },
+    [getNewUserTokens.rejected.type]: (state) => {
+      state.isLoading = false;
+    },
   },
 });
 
-export const { setUserName } = authSlice.actions;
+export const { setIsAuth, setAuthUserName, setAuthUserId } = authSlice.actions;
 
 export default authSlice.reducer;

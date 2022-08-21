@@ -19,7 +19,8 @@ const AuthForm = () => {
   } = useForm({
     mode: 'all',
   });
-  const { isLoading, } = useSelector((state) => state.auth);
+
+  const { isLoading } = useSelector((state) => state.auth);
 
   const onSubmit = (data) => {
     try {
@@ -31,6 +32,8 @@ const AuthForm = () => {
       history(APP_PAGES.main);
     } catch (e) {
       console.log(e);
+    } finally {
+      // dispatch(getNewUserTokens(user.userId));
     }
   };
 
