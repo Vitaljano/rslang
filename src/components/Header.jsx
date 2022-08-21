@@ -32,9 +32,9 @@ function Header() {
     userLogout();
   };
 
-  openBurger
-    ? (document.body.style.overflow = 'hidden')
-    : (document.body.style.overflow = 'visible');
+  // openBurger
+  //   ? (document.body.style.overflow = 'hidden')
+  //   : (document.body.style.overflow = 'visible');
 
   return (
     <header
@@ -92,7 +92,6 @@ function Header() {
               </button>
             </NavLink>
           )}
-
           <div
             onClick={openBurger ? onClickLink : onClickBurger}
             className="burger ml-8 cursor-pointer"
