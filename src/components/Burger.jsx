@@ -22,7 +22,7 @@ function Burger({ onClickLink, bgColor }) {
       </div>
       <div
         onClick={onClickLink}
-        className="shadow z-10 bg-black opacity-70 w-full h-full fixed top-1/12 left-0"
+        className="shadow z-10 bg-black opacity-70 w-full h-full fixed  top-1/12 left-0"
       ></div>
     </>
   );

@@ -17,6 +17,11 @@ function Header() {
   const onClickLink = () => {
     setOpenBurger(false);
   };
+
+  openBurger
+    ? (document.body.style.overflow = 'hidden')
+    : (document.body.style.overflow = 'visible');
+
   return (
     <header
       className={bgColor + ' z-50 max-w-1400px relative w-full h-20 text-white'}

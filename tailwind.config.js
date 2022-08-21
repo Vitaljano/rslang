@@ -15,6 +15,9 @@ module.exports = {
       white: '#ffffff',
       action: '#575D75',
       black: '#000',
+      grey: '#676060',
+
+
       violet: {
         900: '#93A0CD',
         700: '#4338ca',
