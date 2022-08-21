@@ -3,6 +3,9 @@ import audio from '../img/audio.jpg';
 import stats from '../img/stats.jpg';
 import book from '../img/book.jpg';
 import sprint from '../img/sprint.jpg';
+import dasha from '../img/dasha.jpg';
+import user from '../img/user-image.png';
+
 import './main.css';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
@@ -61,8 +64,8 @@ function Main() {
             </div>
             <div className="flex flex-col">
               <p className="text-grey text-xl mb-5">
-                Эта аудиотренировка больше похожа на игру, но при этом ты
-                эффективно обучаешься языку!
+                Эта аудиотренировка больше похожа на игру, и ты эффективно
+                обучаешься языку!
               </p>
               <Link to="/">
                 <button
@@ -114,6 +117,41 @@ function Main() {
                 </button>
               </Link>
             </div>
+          </div>
+        </div>
+      </div>
+      <div className="team  text-action mt-4">
+        <h3 className="text-4xl">Наша команда</h3>
+        <div className="vit">
+          <img className="rounded-full" src={user} alt="" width={200} />
+          <div className="caption">
+            <p>
+              <b>Виталий Лазаревич</b>
+            </p>
+            <b>Team-Lead</b>
+            <br />
+            текст о том что мы сделали
+          </div>
+        </div>
+
+        <div className="dar">
+          <img className="rounded-full ml-30" src={dasha} alt="" width={200} />
+
+          <div className="caption">
+            <p>
+              <b>Дарья Венская</b>
+            </p>
+            текст о том что мы сделали
+          </div>
+        </div>
+
+        <div className="den">
+          <img className="rounded-full" src={user} alt="" width={200} />
+          <div className="caption">
+            <p>
+              <b>Денис Кавальчук</b>
+            </p>
+            текст о том что мы сделали
           </div>
         </div>
       </div>

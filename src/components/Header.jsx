@@ -18,9 +18,9 @@ function Header() {
     setOpenBurger(false);
   };
 
-  openBurger
-    ? (document.body.style.overflow = 'hidden')
-    : (document.body.style.overflow = 'visible');
+  // openBurger
+  //   ? (document.body.style.overflow = 'hidden')
+  //   : (document.body.style.overflow = 'visible');
 
   return (
     <header
@@ -50,12 +50,14 @@ function Header() {
           </div>
         </Link>
         <div className="actions flex items-center flex-row">
-          <button
-            type="button"
-            className="text-white text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
-          >
-            Начать учиться
-          </button>
+          <Link to="/login">
+            <button
+              type="button"
+              className="text-white text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+            >
+              Начать учиться
+            </button>
+          </Link>
           <div
             onClick={openBurger ? onClickLink : onClickBurger}
             className="burger ml-8 cursor-pointer"
