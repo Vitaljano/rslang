@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Burger from './Burger';
+import { useSelector } from 'react-redux';
 
 const pageRoutes = {
   '/textbook': 'bg-green-900',
 };
 
 function Header() {
+  const { isAuth } = useSelector((state) => state.auth);
   const [openBurger, setOpenBurger] = useState(false);
   const location = useLocation();
   const bgColor = pageRoutes[location.pathname] || 'bg-header';
@@ -45,7 +47,9 @@ function Header() {
               </svg>
             </div>
             <div className="logo-caption ml-3">
-              <p className="text-4xl font-semibold">RSLang</p>
+              <p className="text-4xl font-semibold">
+                {isAuth ? 'RSLang-auth' : 'Rslang'}
+              </p>
             </div>
           </div>
         </Link>

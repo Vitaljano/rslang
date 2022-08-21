@@ -5,11 +5,12 @@ import { useForm } from 'react-hook-form';
 import { registration, login } from '../../utils/api/thunks';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const AuthForm = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-  // const history = useNavigate();
+  const history = useNavigate();
   const isLogin = location.pathname === APP_PAGES.login;
   const {
     register,
@@ -18,7 +19,7 @@ const AuthForm = () => {
   } = useForm({
     mode: 'all',
   });
-  const { isLoading } = useSelector((state) => state.auth);
+  const { isLoading, } = useSelector((state) => state.auth);
 
   const onSubmit = (data) => {
     try {
@@ -27,7 +28,7 @@ const AuthForm = () => {
       } else {
         dispatch(registration(data));
       }
-      // history(APP_PAGES.main);
+      history(APP_PAGES.main);
     } catch (e) {
       console.log(e);
     }
