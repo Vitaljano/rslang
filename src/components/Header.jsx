@@ -1,16 +1,23 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Burger from './Burger';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { authSlice } from '../store/reducers/AuthSlice';
+import { userLogout } from '../services/authService';
+import { APP_PAGES } from '../App';
 
 const pageRoutes = {
   '/textbook': 'bg-green-900',
 };
 
 function Header() {
-  const { isAuth } = useSelector((state) => state.auth);
+  const { isAuth, user } = useSelector((state) => state.auth);
   const [openBurger, setOpenBurger] = useState(false);
   const location = useLocation();
+  const dispatch = useDispatch();
+  const history = useNavigate();
   const bgColor = pageRoutes[location.pathname] || 'bg-header';
 
   const onClickBurger = () => {
@@ -18,6 +25,11 @@ function Header() {
   };
   const onClickLink = () => {
     setOpenBurger(false);
+  };
+  const logOut = () => {
+    dispatch(authSlice.actions.setIsAuth(false));
+    dispatch(authSlice.actions.setUserData({}));
+    userLogout();
   };
 
   openBurger
@@ -47,19 +59,40 @@ function Header() {
               </svg>
             </div>
             <div className="logo-caption ml-3">
-              <p className="text-4xl font-semibold">
-                {isAuth ? 'RSLang-auth' : 'Rslang'}
-              </p>
+              <p className="text-4xl font-semibold">Rslang</p>
             </div>
           </div>
         </Link>
         <div className="actions flex items-center flex-row">
-          <button
-            type="button"
-            className="text-white text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
-          >
-            Начать учиться
-          </button>
+          {isAuth ? (
+            <div className=" flex justify-center align-middle gap-3">
+              <img
+                className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
+                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
+                alt=""
+              ></img>
+              <p className=" font-medium text-white text-xl text-center transition cursor-pointer duration-300 ease-in-out hover:text-action hover:border-none">
+                {user.name}
+              </p>
+              <p
+                onClick={logOut}
+                className=" font-medium text-white text-xl text-center transition cursor-pointer duration-300 ease-in-out hover:text-action hover:border-none"
+              >
+                выход
+              </p>
+            </div>
+          ) : (
+            <NavLink to={APP_PAGES.login}>
+              <button
+                onClick={() => history.APP_PAGES.login}
+                type="button"
+                className="text-white text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+              >
+                Начать учиться
+              </button>
+            </NavLink>
+          )}
+
           <div
             onClick={openBurger ? onClickLink : onClickBurger}
             className="burger ml-8 cursor-pointer"

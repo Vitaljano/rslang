@@ -1,5 +1,4 @@
 import { $host, $authHostRefresh } from '../utils/api/http';
-// import { $host, $authHost } from '../utils/api/http';
 
 export default class AuthService {
   static async login(email, password) {
@@ -27,12 +26,6 @@ export default class AuthService {
     return response;
   }
 
-  static async logout() {
-    localStorage.removeItem('name');
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshtoken');
-    return $host.post('/');
-  }
   static async check(userId) {
     const response = await $authHostRefresh.get(`/users/${userId}/tokens`);
     localStorage.setItem('token', response.data.token);
@@ -40,3 +33,10 @@ export default class AuthService {
     return response;
   }
 }
+
+export const userLogout = () => {
+  localStorage.removeItem('name');
+  localStorage.removeItem('token');
+  localStorage.removeItem('refreshtoken');
+  localStorage.removeItem('userId');
+};
