@@ -1,10 +1,12 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Main from './pages/main';
-import TextBook from './pages/textbook';
+import TextBook from './pages/Textbook';
 import AuthPage from './pages/Auth';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getNewUserTokens } from './utils/api/thunks';
+
+import Footer from './components/Footer';
 import {
   authSlice,
   setAuthUserName,
@@ -32,14 +34,17 @@ function App() {
     }
   }, [localStorage.getItem('userId')]);
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<Main />} path={APP_PAGES.main} />
-        <Route element={<TextBook />} path={APP_PAGES.textBook} />
-        <Route element={<AuthPage />} path={APP_PAGES.login} />
-        <Route element={<AuthPage />} path={APP_PAGES.registration} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Main />} path={APP_PAGES.main} />
+          <Route element={<TextBook />} path={APP_PAGES.textBook} />
+          <Route element={<AuthPage />} path={APP_PAGES.login} />
+          <Route element={<AuthPage />} path={APP_PAGES.registration} />
+        </Routes>
+      </BrowserRouter>
+      <Footer />
+    </>
   );
 }
 

@@ -1,17 +1,24 @@
-function Card() {
+import { API_URL } from '../utils/api/http';
+
+function Card({
+  word,
+  transcription,
+  textExample,
+  textExampleTranslate,
+  image,
+}) {
   return (
     <div className="sm:max-w-xs rounded-xl  shadow-2xl  relative">
       <div className="w-auto r-0 absolute z-1">
-        <img
-          className="rounded-t-xl"
-          src="https://cdn.britannica.com/92/100692-050-5B69B59B/Mallard.jpg"
-          alt=""
-        />
+        <img className="rounded-t-xl" src={`${API_URL}/${image}`} alt="" />
       </div>
       <div className="text-right pt-60 px-4 pb-4 rounded-xl bg-gradient-to-t via-white from-white z-10 relative">
-        <div className="uppercase text-lg font-medium mb-2">duck</div>
+        <div className="uppercase text-lg font-medium mb-2">{word}</div>
         <div className="flex justify-end items-center">
-          <span className="mx-2">утка [dʌk]</span>
+          <span className="mx-2">
+            {word}
+            {transcription}
+          </span>
           <button>
             <svg
               width="38"
@@ -48,12 +55,8 @@ function Card() {
           </button>
         </div>
 
-        <div className="my-2 text-md font-medium">
-          A duck is a small water bird. People feed ducks at the lake.
-        </div>
-        <div className="font-light">
-          Утка - маленькая водяная птица Люди кормят уток у озера
-        </div>
+        <div className="my-2 text-md font-medium">{textExample}</div>
+        <div className="font-light">{textExampleTranslate}</div>
       </div>
     </div>
   );
