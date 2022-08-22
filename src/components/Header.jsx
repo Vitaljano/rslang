@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Link, useLocation, NavLink } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import Burger from './Burger';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -17,7 +16,6 @@ function Header() {
   const [openBurger, setOpenBurger] = useState(false);
   const location = useLocation();
   const dispatch = useDispatch();
-  const history = useNavigate();
   const bgColor = pageRoutes[location.pathname] || 'bg-header';
 
   const onClickBurger = () => {
@@ -84,7 +82,6 @@ function Header() {
           ) : (
             <NavLink to={APP_PAGES.login}>
               <button
-                onClick={() => history.APP_PAGES.login}
                 type="button"
                 className="text-white text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
               >
