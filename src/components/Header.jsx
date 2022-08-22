@@ -9,6 +9,7 @@ import { APP_PAGES } from '../App';
 
 const pageRoutes = {
   '/textbook': 'bg-green-900',
+  '/audiogame': 'bg-yellow',
 };
 
 function Header() {
@@ -30,9 +31,9 @@ function Header() {
     userLogout();
   };
 
-  // openBurger
-  //   ? (document.body.style.overflow = 'hidden')
-  //   : (document.body.style.overflow = 'visible');
+  openBurger
+    ? (document.body.style.overflow = 'hidden')
+    : (document.body.style.overflow = 'visible');
 
   return (
     <header
@@ -61,6 +62,7 @@ function Header() {
             </div>
           </div>
         </Link>
+
         <div className="actions flex items-center flex-row">
           {isAuth ? (
             <div className=" flex justify-center align-middle gap-3">
