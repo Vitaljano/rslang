@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Main from './pages/main';
 import TextBook from './pages/textbook';
 import AuthPage from './pages/Auth';
+import SprintGame from './pages/sprint';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getNewUserTokens } from './utils/api/thunks';
@@ -18,6 +19,7 @@ export const APP_PAGES = {
   textBook: '/textbook',
   login: '/login',
   registration: '/registration',
+  sprint: '/sprint',
 };
 
 function App() {
@@ -38,6 +40,7 @@ function App() {
         <Route element={<TextBook />} path={APP_PAGES.textBook} />
         <Route element={<AuthPage />} path={APP_PAGES.login} />
         <Route element={<AuthPage />} path={APP_PAGES.registration} />
+        <Route element={<SprintGame />} path={APP_PAGES.sprint} />
       </Routes>
     </BrowserRouter>
   );
