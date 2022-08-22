@@ -1,11 +1,3 @@
-import startScreenImg from '../img/start-screen.jpg';
-import audio from '../img/audio.jpg';
-import stats from '../img/stats.jpg';
-import book from '../img/book.jpg';
-import sprint from '../img/sprint.jpg';
-import dasha from '../img/dasha.jpg';
-import user from '../img/user-image.png';
-
 import './main.css';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
@@ -34,17 +26,17 @@ function Main() {
               </button>
             </a>
           </div>
-          <img src={startScreenImg} alt="" width={580} />
+          <img src="start-screen.jpg" alt="" width={580} />
         </div>
         <div id="about" className="about my-20 mx-auto w-4/5">
           <div className="textbook flex flex-row items-center cursor-pointer">
             <div className="flex flex-col items-center">
               <h3 className="text-action text-2xl">Электронный учебник</h3>
-              <img src={book} alt="textbook" width={300} />
+              <img src="book.jpg" alt="textbook" width={300} />
             </div>
             <div className="flex flex-col">
               <p className="text-grey text-xl mb-5">
-                Учи слова, узнавай их перевод и произнощение в интерактивном
+                Учи слова, узнавай их перевод и произношение в интерактивном
                 современном учебнике
               </p>
               <Link to="/textbook">
@@ -60,11 +52,11 @@ function Main() {
           <div className="audio flex flex-row-reverse items-center">
             <div className="flex flex-col items-center">
               <h3 className="text-action text-2xl">Аудиовызов</h3>
-              <img src={audio} alt="audio" width={300} />
+              <img src="audio.jpg" alt="audio" width={300} />
             </div>
             <div className="flex flex-col">
               <p className="text-grey text-xl mb-5">
-                Эта аудиотренировка больше похожа на игру, и ты эффективно
+                Эта аудиотренировка больше похожа на игру где ты эффективно
                 обучаешься языку!
               </p>
               <Link to="/">
@@ -80,11 +72,11 @@ function Main() {
           <div className="sprint items-center flex flex-row cursor-pointer">
             <div className="flex flex-col items-center">
               <h3 className="text-action text-2xl">Спринт</h3>
-              <img src={sprint} alt="sprint" width={300} />
+              <img src="sprint.jpg" alt="sprint" width={300} />
             </div>
             <div className="flex flex-col">
               <div className="text-grey text-xl mb-5">
-                Тренировка на скорость - узнавай больше переводов слова за
+                Тренировка на скорость - узнавай больше переводов слов за
                 ограниченное время
               </div>
               <Link to="/">
@@ -102,7 +94,7 @@ function Main() {
               <h3 className="text-action text-2xl">
                 Твоя статистика и прогресс в личном кабинете
               </h3>
-              <img src={stats} alt="statistics" width={300} />
+              <img src="stats.jpg" alt="statistics" width={250} />
             </div>
             <div className="flex flex-col">
               <p className="text-grey text-xl mb-5">
@@ -123,7 +115,12 @@ function Main() {
       <div className="team  text-action mt-4">
         <h3 className="text-4xl">Наша команда</h3>
         <div className="vit">
-          <img className="rounded-full" src={user} alt="" width={200} />
+          <img
+            className="rounded-full"
+            src="user-image.png"
+            alt=""
+            width={200}
+          />
           <div className="caption">
             <p>
               <b>Виталий Лазаревич</b>
@@ -135,7 +132,12 @@ function Main() {
         </div>
 
         <div className="dar">
-          <img className="rounded-full ml-30" src={dasha} alt="" width={200} />
+          <img
+            className="rounded-full ml-30"
+            src="dasha.jpg"
+            alt=""
+            width={200}
+          />
 
           <div className="caption">
             <p>
@@ -146,7 +148,12 @@ function Main() {
         </div>
 
         <div className="den">
-          <img className="rounded-full" src={user} alt="" width={200} />
+          <img
+            className="rounded-full"
+            src="user-image.png"
+            alt=""
+            width={200}
+          />
           <div className="caption">
             <p>
               <b>Денис Кавальчук</b>
