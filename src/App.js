@@ -1,11 +1,13 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Main from './pages/main';
-import TextBook from './pages/textbook';
+import TextBook from './pages/Textbook';
 import AuthPage from './pages/Auth';
 import AudioGame from './pages/AudioGame';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getNewUserTokens } from './utils/api/thunks';
+
+import Footer from './components/Footer';
 import {
   authSlice,
   setAuthUserName,
@@ -34,6 +36,7 @@ function App() {
     }
   }, [localStorage.getItem('userId')]);
   return (
+
     <BrowserRouter>
       <Routes>
         <Route element={<Main />} path={APP_PAGES.main} />
