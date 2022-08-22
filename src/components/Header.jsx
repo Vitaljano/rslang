@@ -18,9 +18,9 @@ function Header() {
     setOpenBurger(false);
   };
 
-  // openBurger
-  //   ? (document.body.style.overflow = 'hidden')
-  //   : (document.body.style.overflow = 'visible');
+  openBurger
+    ? (document.body.style.overflow = 'hidden')
+    : (document.body.style.overflow = 'visible');
 
   return (
     <header
