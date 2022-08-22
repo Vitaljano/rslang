@@ -72,7 +72,8 @@ export const getNewUserTokens = createAsyncThunk(
   'user/getUserTokens',
   async (userId, thunkAPI) => {
     try {
-      const response = await AuthService.check(userId);
+      const response = await AuthService.check(userId, {});
+      console.log(response);
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
