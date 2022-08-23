@@ -2,7 +2,13 @@ import React from 'react';
 import WordCard from './WordCard';
 import Card from '../Card';
 
-const WordsList = ({ currentWords, cardData, hahdleClick }) => {
+const WordsList = ({
+  currentWords,
+  cardData,
+  hahdleClick,
+  delHandleClick,
+  addHandleClick,
+}) => {
   return (
     <div className="container  mx-auto mt-10">
       СЛОВА
@@ -22,6 +28,8 @@ const WordsList = ({ currentWords, cardData, hahdleClick }) => {
 
         {cardData && (
           <Card
+            delHandleClick={delHandleClick}
+            addHandleClick={addHandleClick}
             name={cardData.name}
             key={cardData.id}
             id={cardData.id}

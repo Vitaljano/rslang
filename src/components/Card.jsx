@@ -6,6 +6,9 @@ function Card({
   textExample,
   textExampleTranslate,
   image,
+  addHandleClick,
+  delHandleClick,
+  id,
 }) {
   return (
     <div className="sm:max-w-xs rounded-xl  shadow-2xl  relative">
@@ -57,6 +60,23 @@ function Card({
 
         <div className="my-2 text-md font-medium">{textExample}</div>
         <div className="font-light">{textExampleTranslate}</div>
+      </div>
+
+      <div className=" flex my-3 text-sm font-medium gap-3 justify-items-center">
+        <button
+          onClick={() => addHandleClick(id)}
+          type="button"
+          className="flex items-center justify-between px-3 text-white  border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg  bg-green-600 w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+        >
+          <h2>Добавить в сложные слова</h2>
+        </button>
+        <button
+          onClick={() => delHandleClick(id)}
+          type="button"
+          className="flex items-center justify-between px-3 text-white  text-center  border-2 border-bg-white transition duration-300 ease-in-out font-medium bg-red rounded-lg w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+        >
+          <h2>Удалить из сложных слов</h2>
+        </button>
       </div>
     </div>
   );
