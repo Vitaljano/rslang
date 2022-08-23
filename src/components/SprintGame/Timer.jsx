@@ -1,20 +1,24 @@
 import { useState, useEffect } from 'react';
-function Timer() {
-  const [seconds, setSeconds] = useState(60);
+
+function Timer({ start, end }) {
+  const [seconds, setSeconds] = useState(60); //1 minute timer;
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (seconds === 0) {
-        clearTimeout(timer);
-        return;
-      }
+    if (start) {
+      const timer = setTimeout(() => {
+        if (seconds === 0) {
+          end(true);
+          clearTimeout(timer);
+          return;
+        }
 
-      setSeconds((count) => {
-        return count - 1;
-      });
-    }, 1000);
+        setSeconds((count) => {
+          return count - 1;
+        });
+      }, 1000);
 
-    return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
+    }
   });
   return (
     <>

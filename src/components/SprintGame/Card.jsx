@@ -1,15 +1,8 @@
 import Button from '../Button';
-import Timer from './Timer';
 
 function Card() {
   return (
     <div>
-      <div className="mx-auto w-80 flex justify-between pb-2">
-        <Timer />
-        <div className="w-16 h-16 text-2xl font-medium bg-white rounded-full flex justify-center items-center">
-          100
-        </div>
-      </div>
       <div className="bg-white rounded-md pt-20 pb-20 w-80 h-2/4 mx-auto">
         <div className="text-center text-2xl">Duck</div>
         <button className="m-auto block my-4 ">
@@ -48,8 +41,8 @@ function Card() {
         </button>
         <div className="text-center text-2xl">Утка</div>
         <div className="flex mt-10 justify-around">
-          <Button content={'Не Верно'} style={'danger'} />
-          <Button content={'Верно'} style={'success'} />
+          <Button content={'Не Верно'} type={'danger'} />
+          <Button content={'Верно'} type={'success'} />
         </div>
       </div>
     </div>
