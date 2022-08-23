@@ -20,6 +20,9 @@ module.exports = {
       success: '#06bfad',
       danger: '#e03168',
       sprint: '#f5c1d2',
+      yellow: '#FFDC68',
+      lightyellow: '#FFE489',
+
 
       violet: {
         900: '#93A0CD',

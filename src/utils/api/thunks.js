@@ -226,11 +226,25 @@ export const getAllWords = createAsyncThunk('getAllWords', async (thunkAPI) => {
   }
 });
 
+export const getGroupWords = createAsyncThunk(
+  'getWords',
+  async (group, page, thunkAPI) => {
+    try {
+      const response = await $authHost.get(
+        `/words?group=${group}$page=${page}`
+      );
+      return response.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
 export const getWordByID = createAsyncThunk(
-  'getAllWords',
+  'getWordByID ',
   async (wordId, thunkAPI) => {
     try {
-      const response = await $host.get(`/words${wordId}`);
+      const response = await $host.get(`/words/${wordId}`);
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
