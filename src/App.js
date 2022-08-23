@@ -7,7 +7,6 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getNewUserTokens } from './utils/api/thunks';
 
-import Footer from './components/Footer';
 import {
   authSlice,
   setAuthUserName,
@@ -36,7 +35,6 @@ function App() {
     }
   }, [localStorage.getItem('userId')]);
   return (
-
     <BrowserRouter>
       <Routes>
         <Route element={<Main />} path={APP_PAGES.main} />
