@@ -1,4 +1,4 @@
-function Button({ className, content, type }) {
+function Button({ className, content, type, onAnswer }) {
   const danger = 'w-28 rounded bg-danger  px-4 py-2';
   const success = 'w-28 rounded bg-success  px-4 py-2';
   const sprint = 'w-28 rounded bg-sprint  px-4 py-2';
@@ -19,6 +19,14 @@ function Button({ className, content, type }) {
       typeSet = def;
   }
   const style = className || '';
-  return <button className={typeSet + ' ' + style}>{content}</button>;
+  return (
+    <button
+      onClick={onAnswer}
+      className={typeSet + ' ' + style}
+      data-answer={type === 'success' ? true : false}
+    >
+      {content}
+    </button>
+  );
 }
 export default Button;
