@@ -5,11 +5,22 @@ function Timer({ start, end }) {
 
   useEffect(() => {
     if (start) {
+      const timerEl = document.querySelector('.timer');
       const timer = setTimeout(() => {
         if (seconds === 0) {
           end(true);
           clearTimeout(timer);
           return;
+        }
+        if (seconds < 10) {
+          timerEl.classList.add('animate-pulse');
+          if (seconds % 2 === 0) {
+            timerEl.classList.remove('bg-white');
+            timerEl.classList.add('bg-danger');
+          } else {
+            timerEl.classList.add('bg-white');
+            timerEl.classList.remove('animate-pulse');
+          }
         }
 
         setSeconds((count) => {
@@ -22,7 +33,7 @@ function Timer({ start, end }) {
   });
   return (
     <>
-      <div className="w-16 h-16 text-2xl font-medium bg-white rounded-full flex justify-center items-center">
+      <div className="timer duration-700 w-16 h-16 text-2xl font-medium bg-white rounded-full flex justify-center items-center">
         {seconds}
       </div>
     </>

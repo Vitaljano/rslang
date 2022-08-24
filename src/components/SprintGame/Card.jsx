@@ -1,10 +1,19 @@
-import Button from '../Button';
+import Button from './Button';
+import Points from './Points';
+import Timer from './Timer';
 
-function Card() {
+function Card({ question, answer, onAnswer, gameStart, gameEnd, level }) {
+  const endTimerHandle = (value) => {
+    gameEnd(value);
+  };
   return (
     <div>
-      <div className="bg-white rounded-md pt-20 pb-20 w-80 h-2/4 mx-auto">
-        <div className="text-center text-2xl">Duck</div>
+      <div className="mx-auto w-96 flex justify-between pb-2">
+        <Timer start={gameStart} end={endTimerHandle} />
+        <Points level={level} />
+      </div>
+      <div className="bg-white rounded-md shadow  pt-20 pb-20 w-96 h-full mx-auto">
+        <div className="text-center text-2xl">{question}</div>
         <button className="m-auto block my-4 ">
           <svg
             width="38"
@@ -39,10 +48,10 @@ function Card() {
             </defs>
           </svg>
         </button>
-        <div className="text-center text-2xl">Утка</div>
+        <div className="text-center text-2xl">{answer}</div>
         <div className="flex mt-10 justify-around">
-          <Button content={'Не Верно'} type={'danger'} />
-          <Button content={'Верно'} type={'success'} />
+          <Button content={'Не Верно'} type={'danger'} onAnswer={onAnswer} />
+          <Button content={'Верно'} type={'success'} onAnswer={onAnswer} />
         </div>
       </div>
     </div>
