@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { toastr } from 'react-redux-toastr';
-import { $authHost, $host } from './http';
+import { $authHost, $host, $authHostRefresh } from './http';
 import AuthService from '../../services/authService';
 
 //Auth
@@ -84,7 +84,8 @@ export const getNewUserTokens = createAsyncThunk(
 //Users/Words
 export const getAllUserWords = createAsyncThunk(
   'user/getAllUserWords',
-  async (userId, thunkAPI) => {
+  async (data, thunkAPI) => {
+    const { userId } = data;
     try {
       const response = await $authHost.get(`/users/${userId}/words`);
       return response.data;
@@ -97,18 +98,7 @@ export const getUserWordsBId = createAsyncThunk(
   'user/getUserWordById',
   async (userId, wordId, thunkAPI) => {
     try {
-      const response = await $authHost.get(`/users/${userId}/words${wordId}`);
-      return response.data;
-    } catch (e) {
-      return thunkAPI.rejectWithValue(e);
-    }
-  }
-);
-export const createUserWord = createAsyncThunk(
-  'user/createUserWord',
-  async (userId, wordId, thunkAPI) => {
-    try {
-      const response = await $authHost.post(`/users/${userId}/words/${wordId}`);
+      const response = $authHost.get(`/users/${userId}/words/${wordId}`, {});
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
@@ -116,11 +106,33 @@ export const createUserWord = createAsyncThunk(
   }
 );
 
+export const saveUserWord = createAsyncThunk(
+  'saveUserWord',
+  async (data, { rejectWithValue }) => {
+    const { userId, wordId, englishLevel, isLearned } = data;
+    // const { userId, wordId } = data;
+    try {
+      const response = await $authHost.post(`users/${userId}/words/${wordId}`, {
+        difficulty: englishLevel,
+        optional: {
+          isLearned: isLearned,
+        },
+      });
+      return response.data;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
 export const updateUserWordsById = createAsyncThunk(
   'user/updateUserWordById',
-  async (userId, wordId, thunkAPI) => {
+  async (data, thunkAPI) => {
+    const { userId, wordId } = data;
     try {
-      const response = await $authHost.put(`/users/${userId}/words${wordId}`);
+      const response = await $authHostRefresh.put(
+        `/users/${userId}/words/${wordId}`
+      );
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
@@ -129,7 +141,8 @@ export const updateUserWordsById = createAsyncThunk(
 );
 export const deleteUserWordsBIyd = createAsyncThunk(
   'user/deleteUserWordById',
-  async (userId, wordId, thunkAPI) => {
+  async (data, thunkAPI) => {
+    const { userId, wordId } = data;
     try {
       const response = await $authHost.delete(
         `/users/${userId}/words${wordId}`
@@ -144,7 +157,8 @@ export const deleteUserWordsBIyd = createAsyncThunk(
 //Users/AggregatedWords
 export const getAllUserAgregatedWords = createAsyncThunk(
   'user/getAllUserAgregatedWords',
-  async (userId, thunkAPI) => {
+  async (data, thunkAPI) => {
+    const { userId,  } = data;
     try {
       const response = await $authHost.get(`/users/${userId}/aggregatedWords`);
       return response.data;
@@ -155,7 +169,8 @@ export const getAllUserAgregatedWords = createAsyncThunk(
 );
 export const getUserAgregatedWordById = createAsyncThunk(
   'user/getUserAgregatedWordById',
-  async (userId, wordId, thunkAPI) => {
+  async (data, thunkAPI) => {
+    const { userId, wordId } = data;
     try {
       const response = await $authHost.get(
         `/users/${userId}/aggregatedWords/${wordId}`
@@ -226,11 +241,28 @@ export const getAllWords = createAsyncThunk('getAllWords', async (thunkAPI) => {
   }
 });
 
-export const getWordByID = createAsyncThunk(
-  'getAllWords',
-  async (wordId, thunkAPI) => {
+export const getGroupWords = createAsyncThunk(
+  'getWordsByGroup',
+
+  async (data, thunkAPI) => {
+    const { page, group } = data;
     try {
-      const response = await $host.get(`/words${wordId}`);
+      const response = await $authHost.get(
+        `/words?group=${group}&page=${page}`
+      );
+      return response.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
+export const getWordByID = createAsyncThunk(
+  'getWordByID ',
+  async (wordId, thunkAPI) => {
+    // const { wordId } = data;
+    try {
+      const response = await $host.get(`/words/${wordId}`);
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e);

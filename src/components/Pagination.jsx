@@ -1,18 +1,31 @@
 import { useState, useEffect } from 'react';
 import ReactPaginate from 'react-paginate';
+import { useDispatch } from 'react-redux';
+import { setPage } from '../store/reducers/WordSlice';
 
 {
   //test Data
 }
 const items = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-  11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5,
-  6, 7, 8, 9, 10, 11, 12, 13, 14,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
 ];
 {
   //test Data
 }
-const itemsPerPage = 4;
+
 const arrowRight = (
   <svg
     width="29"
@@ -42,7 +55,8 @@ const arrowLeft = (
   </svg>
 );
 
-const Pagination = () => {
+export const Pagination = ({ itemsPerPage }) => {
+  const dispatch = useDispatch();
   // We start with an empty list of items.
   const [, setCurrentItems] = useState(null);
   const [pageCount, setPageCount] = useState(0);
@@ -65,6 +79,8 @@ const Pagination = () => {
       `User requested page number ${event.selected}, which is offset ${newOffset}`
     );
     setItemOffset(newOffset);
+    dispatch(setPage(event.selected));
+    localStorage.setItem('bookPage', event.selected);
   };
 
   return (
@@ -73,7 +89,7 @@ const Pagination = () => {
       breakLabel="..."
       nextLabel={arrowRight}
       onPageChange={handlePageClick}
-      pageRangeDisplayed={5}
+      pageRangeDisplayed={15}
       pageCount={pageCount}
       previousLabel={arrowLeft}
       renderOnZeroPageCount={null}
@@ -88,7 +104,7 @@ const Pagination = () => {
       }
       breakClassName={'mx-2'}
       pageClassName={'mx-1 '}
-      activeClassName={'opacity-40'}
+      activeClassName={'opacity-40 '}
       disabledLinkClassName={'opacity-40'}
     />
   );
