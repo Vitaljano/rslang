@@ -1,17 +1,16 @@
 import { API_URL } from '../../utils/api/http';
 import Card from './Card';
-
-import WindowToStartGame from './WindowToStartGame';
 import PreLoader from './PreLoader';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import GameResult from './GameResult';
+import ModalStart from './ModalWindow';
 
 function MainScreen() {
-  const [isOpenModal, setIsOpenModal] = useState(true);
-  const [preLoader, setPreLoader] = useState(true);
+  const [isModalActive, setIsModalActive] = useState(true);
+  const [preLoader, setPreLoader] = useState(false);
 
-  const [isGameStart, setGameStart] = useState(true);
+  const [isGameStart, setGameStart] = useState(false);
   const [isGameEnd, setGameEnd] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [words, setWords] = useState([]);
@@ -26,11 +25,6 @@ function MainScreen() {
   const inCorrectSound = new Audio(
     process.env.PUBLIC_URL + '/audio/incorrect.mp3'
   );
-  useEffect(() => {
-    setTimeout(() => {
-      setPreLoader(false);
-    }, 3000);
-  }, [preLoader]);
 
   useEffect(() => {
     async function getData() {
@@ -124,7 +118,7 @@ function MainScreen() {
     setPreLoader(true);
     setGameEnd(false);
     setShowResult(false);
-    setGameStart(true);
+    setGameStart(false);
   };
 
   const checkLevel = () => {
@@ -140,16 +134,18 @@ function MainScreen() {
   };
   const pointsCounter = (points) => {};
 
-  const clickHandle = () => {
-    setIsOpenModal(false);
-    setPreLoader(true);
-  };
-
   return (
     <>
-      {/*isOpenModal && <WindowToStartGame onClick={clickHandle} />*/}
-      {preLoader && <PreLoader />}
-      {!isGameEnd && !showResult && !preLoader && (
+      {isModalActive && (
+        <ModalStart
+          setActiveModal={setIsModalActive}
+          preLoader={setPreLoader}
+        />
+      )}
+      {preLoader && (
+        <PreLoader startGame={setGameStart} preLoader={setPreLoader} />
+      )}
+      {isGameStart && !isGameEnd && (
         <Card
           question={wordToGuess}
           answer={wordAnswer}
@@ -160,7 +156,7 @@ function MainScreen() {
           pointsCounter={pointsCounter}
         />
       )}
-      {showResult && (
+      {showResult && isGameEnd && (
         <GameResult onRestart={onRestartHandle} log={userAnswerLog} />
       )}
     </>
