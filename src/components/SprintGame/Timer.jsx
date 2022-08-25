@@ -6,12 +6,7 @@ function Timer({ start, end }) {
   useEffect(() => {
     if (start) {
       const timerEl = document.querySelector('.timer');
-      const timer = setTimeout(() => {
-        if (seconds === 0) {
-          end(true);
-          clearTimeout(timer);
-          return;
-        }
+      const timer = setInterval(() => {
         if (seconds < 10) {
           timerEl.classList.add('animate-pulse');
           if (seconds % 2 === 0) {
@@ -28,9 +23,15 @@ function Timer({ start, end }) {
         });
       }, 1000);
 
-      return () => clearTimeout(timer);
+      if (seconds === 0) {
+        end(true);
+        clearInterval(timer);
+        return;
+      }
+
+      return () => clearInterval(timer);
     }
-  });
+  }, [seconds]);
   return (
     <>
       <div className="timer duration-700 w-16 h-16 text-2xl font-medium bg-white rounded-full flex justify-center items-center">
