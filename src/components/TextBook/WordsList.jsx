@@ -1,21 +1,51 @@
 import React from 'react';
 import WordCard from './WordCard';
 import Card from '../Card';
-// import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { saveUserWord, deleteUserWordsBIyd } from '../../utils/api/thunks';
 
-const WordsList = ({
-  currentWords,
-  cardData,
-  showCardinfo,
-  delHandleClick,
-  addHandleClick,
-  activeWord,
-  addtoLearnedWords,
-}) => {
-  // const [activeWord, setActiveWord] = useState(currentWords[0]);
-  // useEffect(() => {
-  //   setActiveWord(currentWords[0]);
-  // }, [currentWords]);
+const WordsList = ({ currentWords }) => {
+  const [activedWord, setActivedWord] = useState(currentWords[0]);
+  const setActiveWord = (wordItem) => {
+    setActivedWord(wordItem);
+  };
+  const dispatch = useDispatch();
+  const { isAuth, user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    setActivedWord(currentWords[0]);
+  }, [currentWords]);
+
+  const addtoDifficultWords = async () => {
+    dispatch(
+      saveUserWord({
+        userId: user.userId,
+        wordId: activedWord._id,
+        difficulty: 'hard',
+        isLearned: false,
+      })
+    );
+  };
+  const addtoLearnedWords = async () => {
+    localStorage.setItem('activeWordId', activedWord._id);
+    dispatch(
+      saveUserWord({
+        userId: user.userId,
+        wordId: activedWord._id,
+        difficulty: 'easy',
+        isLearned: true,
+      })
+    );
+  };
+  const delSavedWord = async () => {
+    dispatch(
+      deleteUserWordsBIyd({
+        userId: user.userId,
+        wordId: activedWord._id,
+      })
+    );
+  };
   return (
     <div className="container  mx-auto mt-10">
       СЛОВА
@@ -24,37 +54,23 @@ const WordsList = ({
           {currentWords &&
             currentWords.map((wordItem) => (
               <WordCard
-                id={wordItem.id}
-                key={wordItem.id}
+                id={isAuth ? wordItem._id : wordItem.id}
+                key={isAuth ? wordItem._id : wordItem.id}
                 name={wordItem.word}
                 translateName={wordItem.wordTranslate}
-                // hahdleClick={() => setActiveWord(wordItem)}
-                showCardInfo={showCardinfo}
-                // activeWord={activeWord.id}
-                activeWord={activeWord}
+                showCardInfo={() => setActiveWord(wordItem)}
+                activeWord={activedWord ? activedWord._id : ''}
               />
             ))}
         </div>
 
-        {cardData && (
+        {activedWord && (
           <Card
-            delHandleClick={delHandleClick}
-            addHandleClick={addHandleClick}
+            delSavedWordById={delSavedWord}
+            addtoDifficultWords={addtoDifficultWords}
             addtoLearnedWords={addtoLearnedWords}
-            name={cardData.name}
-            key={cardData.id}
-            id={cardData.id}
-            word={cardData.word}
-            image={cardData.image}
-            audio={cardData.audio}
-            audioMeanind={cardData.audioMeanind}
-            audioExample={cardData.audioExample}
-            textMeaning={cardData.textMeaning}
-            textExample={cardData.textExample}
-            transcription={cardData.transcription}
-            wordTranslate={cardData.wordTranslate}
-            textMeaningTranslate={cardData.textMeaningTranslate}
-            textExampleTranslate={cardData.textExampleTranslate}
+            activeWord={activedWord}
+            key={isAuth ? activedWord._id : activedWord.id}
           />
         )}
       </div>

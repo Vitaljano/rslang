@@ -2,28 +2,29 @@ import { API_URL } from '../utils/api/http';
 import { useSelector } from 'react-redux';
 
 function Card({
-  word,
-  transcription,
-  textExample,
-  textExampleTranslate,
-  image,
-  addHandleClick,
-  delHandleClick,
+  activeWord,
+  addtoDifficultWords,
+  delSavedWordById,
   addtoLearnedWords,
-  id,
 }) {
   const { isAuth } = useSelector((state) => state.auth);
   return (
     <div className="sm:max-w-xs rounded-xl  shadow-2xl  relative">
       <div className="w-auto r-0 absolute z-1">
-        <img className="rounded-t-xl" src={`${API_URL}/${image}`} alt="" />
+        <img
+          className="rounded-t-xl"
+          src={`${API_URL}/${activeWord.image}`}
+          alt=""
+        />
       </div>
       <div className="text-right pt-60 px-4 pb-4 rounded-xl bg-gradient-to-t via-white from-white z-10 relative">
-        <div className="uppercase text-lg font-medium mb-2">{word}</div>
+        <div className="uppercase text-lg font-medium mb-2">
+          {activeWord.word}
+        </div>
         <div className="flex justify-end items-center">
           <span className="mx-2">
-            {word}
-            {transcription}
+            {activeWord.word}
+            {activeWord.transcription}
           </span>
           <button>
             <svg
@@ -61,27 +62,27 @@ function Card({
           </button>
         </div>
 
-        <div className="my-2 text-md font-medium">{textExample}</div>
-        <div className="font-light">{textExampleTranslate}</div>
+        <div className="my-2 text-md font-medium">{activeWord.textExample}</div>
+        <div className="font-light">{activeWord.textExampleTranslate}</div>
       </div>
       {isAuth && (
         <div className=" flex  flex-col my-3 text-sm font-medium gap-3 justify-items-center">
           <button
-            onClick={() => addHandleClick(id)}
+            onClick={addtoDifficultWords}
             type="button"
             className="flex  items-center justify-between px-3 text-white  border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg  bg-green-600 w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
           >
             <h2>Добавить в сложные слова</h2>
           </button>
           <button
-            onClick={() => delHandleClick(id)}
+            onClick={delSavedWordById}
             type="button"
             className="flex items-center justify-between px-3 text-white  text-center  border-2 border-bg-white transition duration-300 ease-in-out font-medium bg-red rounded-lg w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
           >
             <h2>Удалить из сложных слов</h2>
           </button>
           <button
-            onClick={() => addtoLearnedWords(id)}
+            onClick={addtoLearnedWords}
             type="button"
             className="flex items-center justify-between px-3 text-white  text-center  border-2 border-bg-white transition duration-300 ease-in-out font-medium bg-red rounded-lg w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
           >

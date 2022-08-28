@@ -3,7 +3,7 @@ import React from 'react';
 const WordCard = ({ translateName, name, showCardInfo, id, activeWord }) => {
   return (
     <button
-      onClick={() => showCardInfo(id)}
+      onClick={showCardInfo}
       type="button"
       className={
         activeWord === id

@@ -4,56 +4,59 @@ import WordsList from '../components/TextBook/WordsList';
 import { setLangGroupNumber, setPage } from '../store/reducers/WordSlice';
 import {
   getGroupWords,
-  getWordByID,
-  saveUserWord,
-  deleteUserWordsBIyd,
-  // getAllUserWords,
-  getDifficultWords,
   getAllUserAgregatedWords,
-  // getLearnedWords,
-  // getUserWordsBId,
+  getDifficultWords,
+  getLearnedWords,
 } from '../utils/api/thunks';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import Pagination from '../components/Pagination';
 import { useDispatch } from 'react-redux';
-// import axios from 'axios';
 
 export const TextBook = () => {
   console.log('render');
   const dispatch = useDispatch();
-  const {
-    langGroupNumber,
-    bookPage,
-    currentWords,
-    // difficultWords,
-    itemsPerPage,
-    activeWord,
-  } = useSelector((state) => state.words);
+  const { langGroupNumber, bookPage, currentWords, itemsPerPage } = useSelector(
+    (state) => state.words
+  );
   const { user, isAuth } = useSelector((state) => state.auth);
-  const { userWords } = useSelector((state) => state.userWords);
-
-  // useEffect(() => {
-  //   dispatch(
-  //     getGroupWords({
-  //       group: Number(localStorage.getItem('langGroupNumber') || 0),
-  //       page: Number(localStorage.getItem('bookPage') || 0),
-  //     })
-  //   );
-  // }, [langGroupNumber, bookPage]);
+  const { allUserWords } = useSelector((state) => state.userWords);
+  const { difficultWords } = useSelector((state) => state.agregatingWords);
 
   useEffect(() => {
-    // if (isAuth) {
-    //   dispatch(getAllUserWords(user.userId));
-    // }
     if (isAuth) {
-      dispatch(
-        getAllUserAgregatedWords({
-          userId: user.userId,
-          group: langGroupNumber,
-          page: bookPage,
-        })
-      );
+      if (localStorage.getItem('langGroupNumber')) {
+        dispatch(
+          getAllUserAgregatedWords({
+            userId: user.userId,
+            group: Number(localStorage.getItem('langGroupNumber')),
+            page: Number(localStorage.getItem('bookPage')),
+          })
+        );
+        dispatch(
+          getDifficultWords({
+            userId: user.userId,
+            difficulty: 'hard',
+            isLearned: false,
+          })
+        );
+        dispatch(
+          getLearnedWords({
+            userId: user.userId,
+            difficulty: 'easy',
+            isLearned: true,
+          })
+        );
+        // console.log(difficultWords && difficultWords.paginatedResults);
+      } else {
+        dispatch(
+          getAllUserAgregatedWords({
+            userId: user.userId,
+            group: Number(localStorage.getItem('langGroupNumber')),
+            page: Number(localStorage.getItem('bookPage')),
+          })
+        );
+      }
     } else {
       dispatch(
         getGroupWords({
@@ -62,13 +65,8 @@ export const TextBook = () => {
         })
       );
     }
-  }, [langGroupNumber, bookPage]);
+  }, [isAuth, langGroupNumber, bookPage, getAllUserAgregatedWords]);
 
-  useEffect(() => {
-    if (localStorage.getItem('activeWordId')) {
-      dispatch(getWordByID(localStorage.getItem('activeWordId')));
-    }
-  }, []);
   useEffect(() => {
     localStorage.setItem('bookPage', String(bookPage));
     localStorage.setItem('langGroupNumber', String(langGroupNumber));
@@ -76,56 +74,8 @@ export const TextBook = () => {
 
   const changeLevel = async (langLevel) => {
     localStorage.setItem('langGroupNumber', langLevel);
-    const result = await dispatch(setLangGroupNumber(langLevel));
-    if (result) {
-      dispatch(getWordByID(currentWords[0].id));
-      localStorage.setItem('activeWordId', currentWords[0].id);
-    }
+    dispatch(setLangGroupNumber(langLevel));
     dispatch(setPage(0));
-  };
-  const changeWoard = (wordId) => {
-    dispatch(getWordByID(wordId));
-
-    localStorage.setItem('activeWordId', wordId);
-  };
-  const addtoDifficaltWords = (wordId) => {
-    localStorage.setItem('activeWordId', wordId);
-    dispatch(
-      saveUserWord({
-        userId: user.userId,
-        wordId: activeWord.id,
-        difficulty: 'hard',
-        isLearned: false,
-      })
-    );
-    dispatch(
-      getDifficultWords({
-        userId: user.userId,
-        difficulty: 'hard',
-        isLearned: false,
-      })
-    );
-  };
-  const addtoLearnedWords = (wordId) => {
-    localStorage.setItem('activeWordId', wordId);
-    dispatch(
-      saveUserWord({
-        userId: user.userId,
-        wordId: activeWord.id,
-        difficulty: 'easy',
-        isLearned: true,
-      })
-    );
-  };
-
-  const delSavedWord = (wordId) => {
-    dispatch(
-      deleteUserWordsBIyd({
-        userId: user.userId,
-        wordId: activeWord.id,
-      })
-    );
-    localStorage.remove('activeWordId', wordId);
   };
 
   return (
@@ -134,24 +84,15 @@ export const TextBook = () => {
       <section className="bg-green-900 pt-10 flef flex-col gap-8">
         <Levels handleClick={changeLevel} activeLevel={langGroupNumber} />
         <WordsList
-          currentWords={isAuth ? userWords.userWords : currentWords}
-          difficultWords={userWords}
-          cardData={activeWord}
-          showCardinfo={changeWoard}
-          delHandleClick={delSavedWord}
-          addHandleClick={addtoDifficaltWords}
-          addtoLearnedWords={addtoLearnedWords}
-          activeWord={
-            localStorage.getItem('activeWordId')
-              ? localStorage.getItem('activeWordId')
-              : currentWords[0]
+          currentWords={
+            isAuth && allUserWords.paginatedResults
+              ? allUserWords.paginatedResults
+              : currentWords
           }
+          difficultWords={difficultWords && difficultWords.paginatedResults}
         />
         <div className="container mx-auto px-4 flex mt-8 justify-center ">
-          <Pagination
-            itemsPerPage={itemsPerPage}
-            pageCount={isAuth ? userWords.userWords : currentWords}
-          />
+          <Pagination itemsPerPage={itemsPerPage} pageCount={30} />
         </div>
       </section>
     </>

@@ -7,8 +7,7 @@ import {
 
 const initialState = {
   isLoading: false,
-  userWords: [],
-  savedUserWord: null,
+  allUserWords: [],
 };
 
 export const userWordsSlice = createSlice({
@@ -21,7 +20,7 @@ export const userWordsSlice = createSlice({
     },
     [getAllUserAgregatedWords.fulfilled.type]: (state, { payload }) => {
       state.isLoading = false;
-      state.userWords = payload;
+      state.allUserWords = payload[0];
     },
     [getAllUserAgregatedWords.rejected.type]: (state) => {
       state.isLoading = false;
@@ -29,9 +28,8 @@ export const userWordsSlice = createSlice({
     [saveUserWord.pending.type]: (state) => {
       state.isLoading = true;
     },
-    [saveUserWord.fulfilled.type]: (state, action) => {
+    [saveUserWord.fulfilled.type]: (state) => {
       state.isLoading = false;
-      state.userWords = [state.userWords, ...action.payload];
     },
     [saveUserWord.rejected.type]: (state) => {
       state.isLoading = false;

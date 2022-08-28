@@ -3,8 +3,8 @@ import { getDifficultWords, getLearnedWords } from '../../utils/api/thunks';
 
 const initialState = {
   isLoading: false,
-  dificultWords: null,
-  learnedWords: null,
+  dificultWords: [],
+  learnedWords: [],
 };
 
 export const agregatedWordsSlice = createSlice({
@@ -15,9 +15,9 @@ export const agregatedWordsSlice = createSlice({
     [getDifficultWords.pending.type]: (state) => {
       state.isLoading = true;
     },
-    [getDifficultWords.fulfilled.type]: (state, action) => {
+    [getDifficultWords.fulfilled.type]: (state, { payload }) => {
       state.isLoading = false;
-      state.dificultWords = action.payload;
+      state.dificultWords = payload[0];
     },
     [getDifficultWords.rejected.type]: (state) => {
       state.isLoading = false;
