@@ -3,9 +3,9 @@ import { getGroupWords, getWordByID } from '../../utils/api/thunks';
 
 const initialState = {
   isLoading: false,
-  currentWords: null,
-  langGroupNumber: null,
-  bookPage: null,
+  currentWords: [],
+  langGroupNumber: 0,
+  bookPage: 0,
   paginationCount: 30,
   itemsPerPage: 20,
   activeWord: null,

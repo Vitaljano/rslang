@@ -1,14 +1,21 @@
 import React from 'react';
 import WordCard from './WordCard';
 import Card from '../Card';
+// import { useEffect, useState } from 'react';
 
 const WordsList = ({
   currentWords,
   cardData,
-  hahdleClick,
+  showCardinfo,
   delHandleClick,
   addHandleClick,
+  activeWord,
+  addtoLearnedWords,
 }) => {
+  // const [activeWord, setActiveWord] = useState(currentWords[0]);
+  // useEffect(() => {
+  //   setActiveWord(currentWords[0]);
+  // }, [currentWords]);
   return (
     <div className="container  mx-auto mt-10">
       СЛОВА
@@ -21,7 +28,10 @@ const WordsList = ({
                 key={wordItem.id}
                 name={wordItem.word}
                 translateName={wordItem.wordTranslate}
-                hahdleClick={hahdleClick}
+                // hahdleClick={() => setActiveWord(wordItem)}
+                showCardInfo={showCardinfo}
+                // activeWord={activeWord.id}
+                activeWord={activeWord}
               />
             ))}
         </div>
@@ -30,6 +40,7 @@ const WordsList = ({
           <Card
             delHandleClick={delHandleClick}
             addHandleClick={addHandleClick}
+            addtoLearnedWords={addtoLearnedWords}
             name={cardData.name}
             key={cardData.id}
             id={cardData.id}

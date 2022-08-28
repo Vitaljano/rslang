@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getAllUserAgregatedWords } from '../../utils/api/thunks';
+import { getDifficultWords, getLearnedWords } from '../../utils/api/thunks';
 
 const initialState = {
   isLoading: false,
   dificultWords: null,
-  leaningWords: null,
+  learnedWords: null,
 };
 
 export const agregatedWordsSlice = createSlice({
@@ -12,14 +12,24 @@ export const agregatedWordsSlice = createSlice({
   initialState: initialState,
   reducers: {},
   extraReducers: {
-    [getAllUserAgregatedWords.pending.type]: (state) => {
+    [getDifficultWords.pending.type]: (state) => {
       state.isLoading = true;
     },
-    [getAllUserAgregatedWords.fulfilled.type]: (state, action) => {
+    [getDifficultWords.fulfilled.type]: (state, action) => {
       state.isLoading = false;
-      state.leaningWords = action.payload;
+      state.dificultWords = action.payload;
     },
-    [getAllUserAgregatedWords.rejected.type]: (state) => {
+    [getDifficultWords.rejected.type]: (state) => {
+      state.isLoading = false;
+    },
+    [getLearnedWords.pending.type]: (state) => {
+      state.isLoading = true;
+    },
+    [getLearnedWords.fulfilled.type]: (state, action) => {
+      state.isLoading = false;
+      state.learnedWords = action.payload;
+    },
+    [getLearnedWords.rejected.type]: (state) => {
       state.isLoading = false;
     },
   },

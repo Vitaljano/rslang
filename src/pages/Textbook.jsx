@@ -7,6 +7,10 @@ import {
   getWordByID,
   saveUserWord,
   deleteUserWordsBIyd,
+  // getAllUserWords,
+  getDifficultWords,
+  getAllUserAgregatedWords,
+  // getLearnedWords,
   // getUserWordsBId,
 } from '../utils/api/thunks';
 import { useEffect } from 'react';
@@ -18,46 +22,100 @@ import { useDispatch } from 'react-redux';
 export const TextBook = () => {
   console.log('render');
   const dispatch = useDispatch();
-  const { langGroupNumber, bookPage, currentWords, itemsPerPage, activeWord } =
-    useSelector((state) => state.words);
-  const { user } = useSelector((state) => state.auth);
+  const {
+    langGroupNumber,
+    bookPage,
+    currentWords,
+    // difficultWords,
+    itemsPerPage,
+    activeWord,
+  } = useSelector((state) => state.words);
+  const { user, isAuth } = useSelector((state) => state.auth);
+  const { userWords } = useSelector((state) => state.userWords);
+
+  // useEffect(() => {
+  //   dispatch(
+  //     getGroupWords({
+  //       group: Number(localStorage.getItem('langGroupNumber') || 0),
+  //       page: Number(localStorage.getItem('bookPage') || 0),
+  //     })
+  //   );
+  // }, [langGroupNumber, bookPage]);
 
   useEffect(() => {
-    dispatch(
-      getGroupWords({
-        group: Number(localStorage.getItem('langGroupNumber') || 0),
-        page: Number(localStorage.getItem('bookPage')),
-      })
-    );
+    // if (isAuth) {
+    //   dispatch(getAllUserWords(user.userId));
+    // }
+    if (isAuth) {
+      dispatch(
+        getAllUserAgregatedWords({
+          userId: user.userId,
+          group: langGroupNumber,
+          page: bookPage,
+        })
+      );
+    } else {
+      dispatch(
+        getGroupWords({
+          group: Number(localStorage.getItem('langGroupNumber') || 0),
+          page: Number(localStorage.getItem('bookPage') || 0),
+        })
+      );
+    }
   }, [langGroupNumber, bookPage]);
 
   useEffect(() => {
     if (localStorage.getItem('activeWordId')) {
       dispatch(getWordByID(localStorage.getItem('activeWordId')));
-    } else {
-      dispatch(getWordByID('5e9f5ee35eb9e72bc21af4a0'));
     }
   }, []);
+  useEffect(() => {
+    localStorage.setItem('bookPage', String(bookPage));
+    localStorage.setItem('langGroupNumber', String(langGroupNumber));
+  }, [bookPage, langGroupNumber]);
 
-  const changeLevel = (langLevel) => {
-    dispatch(setLangGroupNumber(langLevel));
-    dispatch(setPage(0));
+  const changeLevel = async (langLevel) => {
     localStorage.setItem('langGroupNumber', langLevel);
+    const result = await dispatch(setLangGroupNumber(langLevel));
+    if (result) {
+      dispatch(getWordByID(currentWords[0].id));
+      localStorage.setItem('activeWordId', currentWords[0].id);
+    }
+    dispatch(setPage(0));
   };
   const changeWoard = (wordId) => {
     dispatch(getWordByID(wordId));
-    // dispatch(setPage(0));
+
     localStorage.setItem('activeWordId', wordId);
   };
-  const addtoSavedWords = (wordId) => {
+  const addtoDifficaltWords = (wordId) => {
     localStorage.setItem('activeWordId', wordId);
     dispatch(
       saveUserWord({
         userId: user.userId,
         wordId: activeWord.id,
+        difficulty: 'hard',
+        isLearned: false,
       })
     );
-    console.log(activeWord.id);
+    dispatch(
+      getDifficultWords({
+        userId: user.userId,
+        difficulty: 'hard',
+        isLearned: false,
+      })
+    );
+  };
+  const addtoLearnedWords = (wordId) => {
+    localStorage.setItem('activeWordId', wordId);
+    dispatch(
+      saveUserWord({
+        userId: user.userId,
+        wordId: activeWord.id,
+        difficulty: 'easy',
+        isLearned: true,
+      })
+    );
   };
 
   const delSavedWord = (wordId) => {
@@ -67,26 +125,37 @@ export const TextBook = () => {
         wordId: activeWord.id,
       })
     );
-    console.log(typeof wordId);
+    localStorage.remove('activeWordId', wordId);
   };
 
   return (
     <>
       <Header />
       <section className="bg-green-900 pt-10 flef flex-col gap-8">
-        <Levels handleClick={changeLevel} />
+        <Levels handleClick={changeLevel} activeLevel={langGroupNumber} />
         <WordsList
-          currentWords={currentWords}
+          currentWords={isAuth ? userWords.userWords : currentWords}
+          difficultWords={userWords}
           cardData={activeWord}
-          hahdleClick={changeWoard}
+          showCardinfo={changeWoard}
           delHandleClick={delSavedWord}
-          addHandleClick={addtoSavedWords}
+          addHandleClick={addtoDifficaltWords}
+          addtoLearnedWords={addtoLearnedWords}
+          activeWord={
+            localStorage.getItem('activeWordId')
+              ? localStorage.getItem('activeWordId')
+              : currentWords[0]
+          }
         />
         <div className="container mx-auto px-4 flex mt-8 justify-center ">
-          <Pagination itemsPerPage={itemsPerPage} pageCount={currentWords} />
+          <Pagination
+            itemsPerPage={itemsPerPage}
+            pageCount={isAuth ? userWords.userWords : currentWords}
+          />
         </div>
       </section>
     </>
   );
 };
+
 export default TextBook;
