@@ -4,7 +4,6 @@ function Points({ level }) {
   const [points, setPoint] = useState(10);
 
   useEffect(() => {
-    console.log('wtf', points);
     if (level === 1) {
       setPoint(10);
     }

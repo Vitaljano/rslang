@@ -8,10 +8,8 @@ import GameResult from './GameResult';
 import ModalStart from './ModalWindow';
 
 function MainScreen() {
-
   const [isModalActive, setIsModalActive] = useState(true);
   const [preLoader, setPreLoader] = useState(false);
-
 
   const [isGameStart, setGameStart] = useState(false);
   const [isGameEnd, setGameEnd] = useState(false);
@@ -136,7 +134,6 @@ function MainScreen() {
     }
   };
 
-
   return (
     <>
       {isModalActive && (
@@ -156,7 +153,6 @@ function MainScreen() {
           gameStart={isGameStart}
           gameEnd={onGameEndHandle}
           level={level}
-          pointsCounter={pointsCounter}
         />
       )}
       {showResult && isGameEnd && (
