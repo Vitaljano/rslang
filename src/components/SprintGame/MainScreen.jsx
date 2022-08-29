@@ -1,14 +1,18 @@
 import { API_URL } from '../../utils/api/http';
 import Card from './Card';
 
+
 import WindowToStartGame from './WindowToStartGame';
+
 import PreLoader from './PreLoader';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import GameResult from './GameResult';
 
 function MainScreen() {
-  const [isOpenModal, setIsOpenModal] = useState(true);
+
+  // const [isOpenModal, setIsOpenModal] = useState(true);
+
   const [preLoader, setPreLoader] = useState(true);
 
   const [isGameStart, setGameStart] = useState(true);
@@ -138,12 +142,14 @@ function MainScreen() {
       setLevel(1);
     }
   };
-  const pointsCounter = (points) => {};
 
-  const clickHandle = () => {
-    setIsOpenModal(false);
-    setPreLoader(true);
-  };
+  const pointsCounter = () => {};
+
+  // const clickHandle = () => {
+  //   setIsOpenModal(false);
+  //   setPreLoader(true);
+  // };
+
 
   return (
     <>

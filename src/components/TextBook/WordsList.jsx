@@ -1,14 +1,127 @@
 import React from 'react';
 import WordCard from './WordCard';
 import Card from '../Card';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  saveUserWord,
+  getAllUserAgregatedWords,
+  updateUserWordsById,
+  getDifficultWords,
+  getLearnedWords,
+} from '../../utils/api/thunks';
 
-const WordsList = ({
-  currentWords,
-  cardData,
-  hahdleClick,
-  delHandleClick,
-  addHandleClick,
-}) => {
+const WordsList = ({ currentWords }) => {
+  const [activedWord, setActivedWord] = useState(currentWords[0]);
+  const setActiveWord = (wordItem) => {
+    setActivedWord(wordItem);
+  };
+  const dispatch = useDispatch();
+  const { isAuth, user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    setActivedWord(currentWords[0]);
+  }, [currentWords]);
+
+  const addtoDifficultWords = async () => {
+    if (activedWord.userWord) {
+      await dispatch(
+        updateUserWordsById({
+          userId: user.userId,
+          wordId: activedWord._id,
+          difficulty: 'hard',
+          isLearned: false,
+        })
+      );
+      await dispatch(
+        getLearnedWords({
+          userId: user.userId,
+          difficulty: 'studied',
+          isLearned: true,
+        })
+      );
+    } else {
+      await dispatch(
+        saveUserWord({
+          userId: user.userId,
+          wordId: activedWord._id,
+          difficulty: 'hard',
+          isLearned: false,
+        })
+      );
+    }
+
+    await dispatch(
+      getAllUserAgregatedWords({
+        userId: user.userId,
+        group: Number(localStorage.getItem('langGroupNumber')),
+        page: Number(localStorage.getItem('bookPage')),
+      })
+    );
+  };
+  const addtoLearnedWords = async () => {
+    localStorage.setItem('activeWordId', activedWord._id);
+    if (activedWord.userWord) {
+      await dispatch(
+        updateUserWordsById({
+          userId: user.userId,
+          wordId: activedWord._id,
+          difficulty: 'studied',
+          isLearned: true,
+        })
+      );
+      await dispatch(
+        getDifficultWords({
+          userId: user.userId,
+          difficulty: 'hard',
+          isLearned: false,
+        })
+      );
+    } else {
+      await dispatch(
+        saveUserWord({
+          userId: user.userId,
+          wordId: activedWord._id,
+          difficulty: 'studied',
+          isLearned: true,
+        })
+      );
+    }
+    await dispatch(
+      getAllUserAgregatedWords({
+        userId: user.userId,
+        group: Number(localStorage.getItem('langGroupNumber')),
+        page: Number(localStorage.getItem('bookPage')),
+      })
+    );
+  };
+  const delDifficultWord = async () => {
+    if (activedWord.userWord) {
+      await dispatch(
+        updateUserWordsById({
+          userId: user.userId,
+          wordId: activedWord._id,
+          difficulty: 'easy',
+          isLearned: false,
+        })
+      );
+      await dispatch(
+        getDifficultWords({
+          userId: user.userId,
+          difficulty: 'hard',
+          isLearned: false,
+        })
+      );
+    }
+
+    await dispatch(
+      getAllUserAgregatedWords({
+        userId: user.userId,
+        group: Number(localStorage.getItem('langGroupNumber')),
+        page: Number(localStorage.getItem('bookPage')),
+      })
+    );
+  };
   return (
     <div className="container  mx-auto mt-10">
       СЛОВА
@@ -17,33 +130,24 @@ const WordsList = ({
           {currentWords &&
             currentWords.map((wordItem) => (
               <WordCard
-                id={wordItem.id}
-                key={wordItem.id}
+                id={isAuth ? wordItem._id : wordItem.id}
+                key={isAuth ? wordItem._id : wordItem.id}
                 name={wordItem.word}
                 translateName={wordItem.wordTranslate}
-                hahdleClick={hahdleClick}
+                showCardInfo={() => setActiveWord(wordItem)}
+                activeWord={activedWord ? activedWord : ''}
+                word={wordItem}
               />
             ))}
         </div>
 
-        {cardData && (
+        {activedWord && (
           <Card
-            delHandleClick={delHandleClick}
-            addHandleClick={addHandleClick}
-            name={cardData.name}
-            key={cardData.id}
-            id={cardData.id}
-            word={cardData.word}
-            image={cardData.image}
-            audio={cardData.audio}
-            audioMeanind={cardData.audioMeanind}
-            audioExample={cardData.audioExample}
-            textMeaning={cardData.textMeaning}
-            textExample={cardData.textExample}
-            transcription={cardData.transcription}
-            wordTranslate={cardData.wordTranslate}
-            textMeaningTranslate={cardData.textMeaningTranslate}
-            textExampleTranslate={cardData.textExampleTranslate}
+            delDifficultWordById={delDifficultWord}
+            addtoDifficultWords={addtoDifficultWords}
+            addtoLearnedWords={addtoLearnedWords}
+            activeWord={activedWord}
+            key={isAuth ? activedWord._id : activedWord.id}
           />
         )}
       </div>
