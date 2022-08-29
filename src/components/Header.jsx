@@ -9,7 +9,9 @@ import { APP_PAGES } from '../App';
 
 const pageRoutes = {
   '/textbook': 'bg-green-900',
+  '/sprint': 'bg-sprint',
   '/audiogame': 'bg-yellow',
+
 };
 
 function Header() {

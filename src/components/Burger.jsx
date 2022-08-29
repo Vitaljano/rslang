@@ -9,7 +9,7 @@ function Burger({ onClickLink, bgColor }) {
           <Link onClick={onClickLink} to="/textbook">
             <li className="hover:opacity-80 transition-all">Учебник</li>
           </Link>
-          <Link onClick={onClickLink} to="/">
+          <Link onClick={onClickLink} to="/sprint">
             <li className="hover:opacity-80 transition-all">Спринт</li>
           </Link>
           <Link onClick={onClickLink} to="/audiogame">

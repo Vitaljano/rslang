@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Main from './pages/main';
 import TextBook from './pages/Textbook';
 import AuthPage from './pages/Auth';
+import SprintGame from './pages/sprint';
 import AudioGame from './pages/AudioGame';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
@@ -21,6 +22,7 @@ export const APP_PAGES = {
   audiogame: '/audiogame',
   login: '/login',
   registration: '/registration',
+  sprint: '/sprint',
 };
 
 function App() {
@@ -42,6 +44,7 @@ function App() {
         <Route element={<AudioGame />} path={APP_PAGES.audiogame} />
         <Route element={<AuthPage />} path={APP_PAGES.login} />
         <Route element={<AuthPage />} path={APP_PAGES.registration} />
+        <Route element={<SprintGame />} path={APP_PAGES.sprint} />
       </Routes>
     </BrowserRouter>
   );
