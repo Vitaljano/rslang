@@ -1,5 +1,6 @@
 import { API_URL } from '../../utils/api/http';
 import Card from './Card';
+
 import PreLoader from './PreLoader';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -7,8 +8,10 @@ import GameResult from './GameResult';
 import ModalStart from './ModalWindow';
 
 function MainScreen() {
+
   const [isModalActive, setIsModalActive] = useState(true);
   const [preLoader, setPreLoader] = useState(false);
+
 
   const [isGameStart, setGameStart] = useState(false);
   const [isGameEnd, setGameEnd] = useState(false);
@@ -132,7 +135,7 @@ function MainScreen() {
       setLevel(1);
     }
   };
-  const pointsCounter = (points) => {};
+
 
   return (
     <>
