@@ -3,7 +3,13 @@ import WordCard from './WordCard';
 import Card from '../Card';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { saveUserWord, deleteUserWordsBIyd } from '../../utils/api/thunks';
+import {
+  saveUserWord,
+  getAllUserAgregatedWords,
+  updateUserWordsById,
+  getDifficultWords,
+  getLearnedWords,
+} from '../../utils/api/thunks';
 
 const WordsList = ({ currentWords }) => {
   const [activedWord, setActivedWord] = useState(currentWords[0]);
@@ -18,31 +24,101 @@ const WordsList = ({ currentWords }) => {
   }, [currentWords]);
 
   const addtoDifficultWords = async () => {
-    dispatch(
-      saveUserWord({
+    if (activedWord.userWord) {
+      await dispatch(
+        updateUserWordsById({
+          userId: user.userId,
+          wordId: activedWord._id,
+          difficulty: 'hard',
+          isLearned: false,
+        })
+      );
+      await dispatch(
+        getLearnedWords({
+          userId: user.userId,
+          difficulty: 'studied',
+          isLearned: true,
+        })
+      );
+    } else {
+      await dispatch(
+        saveUserWord({
+          userId: user.userId,
+          wordId: activedWord._id,
+          difficulty: 'hard',
+          isLearned: false,
+        })
+      );
+    }
+
+    await dispatch(
+      getAllUserAgregatedWords({
         userId: user.userId,
-        wordId: activedWord._id,
-        difficulty: 'hard',
-        isLearned: false,
+        group: Number(localStorage.getItem('langGroupNumber')),
+        page: Number(localStorage.getItem('bookPage')),
       })
     );
   };
   const addtoLearnedWords = async () => {
     localStorage.setItem('activeWordId', activedWord._id);
-    dispatch(
-      saveUserWord({
+    if (activedWord.userWord) {
+      await dispatch(
+        updateUserWordsById({
+          userId: user.userId,
+          wordId: activedWord._id,
+          difficulty: 'studied',
+          isLearned: true,
+        })
+      );
+      await dispatch(
+        getDifficultWords({
+          userId: user.userId,
+          difficulty: 'hard',
+          isLearned: false,
+        })
+      );
+    } else {
+      await dispatch(
+        saveUserWord({
+          userId: user.userId,
+          wordId: activedWord._id,
+          difficulty: 'studied',
+          isLearned: true,
+        })
+      );
+    }
+    await dispatch(
+      getAllUserAgregatedWords({
         userId: user.userId,
-        wordId: activedWord._id,
-        difficulty: 'easy',
-        isLearned: true,
+        group: Number(localStorage.getItem('langGroupNumber')),
+        page: Number(localStorage.getItem('bookPage')),
       })
     );
   };
-  const delSavedWord = async () => {
-    dispatch(
-      deleteUserWordsBIyd({
+  const delDifficultWord = async () => {
+    if (activedWord.userWord) {
+      await dispatch(
+        updateUserWordsById({
+          userId: user.userId,
+          wordId: activedWord._id,
+          difficulty: 'easy',
+          isLearned: false,
+        })
+      );
+      await dispatch(
+        getDifficultWords({
+          userId: user.userId,
+          difficulty: 'hard',
+          isLearned: false,
+        })
+      );
+    }
+
+    await dispatch(
+      getAllUserAgregatedWords({
         userId: user.userId,
-        wordId: activedWord._id,
+        group: Number(localStorage.getItem('langGroupNumber')),
+        page: Number(localStorage.getItem('bookPage')),
       })
     );
   };
@@ -59,14 +135,15 @@ const WordsList = ({ currentWords }) => {
                 name={wordItem.word}
                 translateName={wordItem.wordTranslate}
                 showCardInfo={() => setActiveWord(wordItem)}
-                activeWord={activedWord ? activedWord._id : ''}
+                activeWord={activedWord ? activedWord : ''}
+                word={wordItem}
               />
             ))}
         </div>
 
         {activedWord && (
           <Card
-            delSavedWordById={delSavedWord}
+            delDifficultWordById={delDifficultWord}
             addtoDifficultWords={addtoDifficultWords}
             addtoLearnedWords={addtoLearnedWords}
             activeWord={activedWord}

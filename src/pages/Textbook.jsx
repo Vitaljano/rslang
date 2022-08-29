@@ -21,7 +21,9 @@ export const TextBook = () => {
   );
   const { user, isAuth } = useSelector((state) => state.auth);
   const { allUserWords } = useSelector((state) => state.userWords);
-  const { difficultWords } = useSelector((state) => state.agregatingWords);
+  const { difficultWords, learnedWords } = useSelector(
+    (state) => state.agregatingWords
+  );
 
   useEffect(() => {
     if (isAuth) {
@@ -33,27 +35,12 @@ export const TextBook = () => {
             page: Number(localStorage.getItem('bookPage')),
           })
         );
-        dispatch(
-          getDifficultWords({
-            userId: user.userId,
-            difficulty: 'hard',
-            isLearned: false,
-          })
-        );
-        dispatch(
-          getLearnedWords({
-            userId: user.userId,
-            difficulty: 'easy',
-            isLearned: true,
-          })
-        );
-        // console.log(difficultWords && difficultWords.paginatedResults);
       } else {
         dispatch(
           getAllUserAgregatedWords({
             userId: user.userId,
-            group: Number(localStorage.getItem('langGroupNumber')),
-            page: Number(localStorage.getItem('bookPage')),
+            group: 0,
+            page: 0,
           })
         );
       }
@@ -74,8 +61,31 @@ export const TextBook = () => {
 
   const changeLevel = async (langLevel) => {
     localStorage.setItem('langGroupNumber', langLevel);
-    dispatch(setLangGroupNumber(langLevel));
-    dispatch(setPage(0));
+    if (langLevel == 7) {
+      await dispatch(
+        getDifficultWords({
+          userId: user.userId,
+          difficulty: 'hard',
+          isLearned: false,
+        })
+      );
+      dispatch(setLangGroupNumber(langLevel));
+      dispatch(setPage(0));
+    }
+    if (langLevel == 8) {
+      await dispatch(
+        getLearnedWords({
+          userId: user.userId,
+          difficulty: 'studied',
+          isLearned: true,
+        })
+      );
+      dispatch(setLangGroupNumber(langLevel));
+      dispatch(setPage(0));
+    } else {
+      dispatch(setLangGroupNumber(langLevel));
+      dispatch(setPage(0));
+    }
   };
 
   return (
@@ -83,17 +93,38 @@ export const TextBook = () => {
       <Header />
       <section className="bg-green-900 pt-10 flef flex-col gap-8">
         <Levels handleClick={changeLevel} activeLevel={langGroupNumber} />
-        <WordsList
-          currentWords={
-            isAuth && allUserWords.paginatedResults
-              ? allUserWords.paginatedResults
-              : currentWords
-          }
-          difficultWords={difficultWords && difficultWords.paginatedResults}
-        />
-        <div className="container mx-auto px-4 flex mt-8 justify-center ">
-          <Pagination itemsPerPage={itemsPerPage} pageCount={30} />
-        </div>
+        {langGroupNumber === 7 && (
+          <WordsList
+            currentWords={
+              difficultWords.paginatedResults && difficultWords.paginatedResults
+            }
+          />
+        )}
+        {langGroupNumber === 8 && (
+          <WordsList
+            currentWords={
+              learnedWords.paginatedResults && learnedWords.paginatedResults
+            }
+          />
+        )}
+        (
+        <>
+          <WordsList
+            currentWords={
+              isAuth && allUserWords.paginatedResults
+                ? allUserWords.paginatedResults
+                : currentWords
+            }
+          />
+          <div className="container mx-auto px-4 flex mt-8 justify-center ">
+            <Pagination
+              itemsPerPage={itemsPerPage}
+              pageCount={30}
+              // items={currentWords}
+            />
+          </div>
+        </>
+        )
       </section>
     </>
   );

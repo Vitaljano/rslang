@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 function Card({
   activeWord,
   addtoDifficultWords,
-  delSavedWordById,
+  delDifficultWordById,
   addtoLearnedWords,
 }) {
   const { isAuth } = useSelector((state) => state.auth);
@@ -67,27 +67,32 @@ function Card({
       </div>
       {isAuth && (
         <div className=" flex  flex-col my-3 text-sm font-medium gap-3 justify-items-center">
-          <button
-            onClick={addtoDifficultWords}
-            type="button"
-            className="flex  items-center justify-between px-3 text-white  border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg  bg-green-600 w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
-          >
-            <h2>Добавить в сложные слова</h2>
-          </button>
-          <button
-            onClick={delSavedWordById}
-            type="button"
-            className="flex items-center justify-between px-3 text-white  text-center  border-2 border-bg-white transition duration-300 ease-in-out font-medium bg-red rounded-lg w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
-          >
-            <h2>Удалить из сложных слов</h2>
-          </button>
-          <button
-            onClick={addtoLearnedWords}
-            type="button"
-            className="flex items-center justify-between px-3 text-white  text-center  border-2 border-bg-white transition duration-300 ease-in-out font-medium bg-red rounded-lg w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
-          >
-            <h2>Отметить как изученное</h2>
-          </button>
+          {activeWord.userWord?.difficulty === 'hard' ? (
+            <button
+              onClick={delDifficultWordById}
+              type="button"
+              className="flex items-center justify-between px-3 text-white  text-center  border-2 border-bg-white transition duration-300 ease-in-out font-medium bg-red rounded-lg w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+            >
+              <h2>Удалить из сложных слов</h2>
+            </button>
+          ) : (
+            <button
+              onClick={addtoDifficultWords}
+              type="button"
+              className="flex  items-center justify-between px-3 text-white  border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg  bg-yellow  w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+            >
+              <h2>Добавить в сложные слова</h2>
+            </button>
+          )}
+          {activeWord.userWord?.difficulty !== 'studied' && (
+            <button
+              onClick={addtoLearnedWords}
+              type="button"
+              className="flex items-center justify-between px-3 text-white  text-center  border-2 border-bg-white transition duration-300 ease-in-out font-medium bg-green-600 rounded-lg w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+            >
+              <h2>Отметить как изученное</h2>
+            </button>
+          )}
         </div>
       )}
     </div>

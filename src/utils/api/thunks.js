@@ -157,7 +157,7 @@ export const getAllUserAgregatedWords = createAsyncThunk(
     const { userId, group, page } = data;
     try {
       const response = await $authHost.get(
-        `/users/${userId}/aggregatedWords?group=${group}&page=${page}`
+        `/users/${userId}/aggregatedWords?wordsPerPage=20&group=${group}&page=${page}`
       );
 
       return response.data;
