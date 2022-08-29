@@ -6,6 +6,21 @@ module.exports = {
       fontFamily: {
         Mukta: ['Mukta', 'sans-serif'],
       },
+      keyframes: {
+        preloader: {
+          '0%': { opacity: '1' },
+          '10%': { opacity: '.8' },
+          '20%': { opacity: '.6' },
+          '30%': { opacity: '.2' },
+          '40%': { opacity: '.4' },
+          '50%': { opacity: '.6' },
+          '60%': { opacity: '.8' },
+          '100%': { opacity: '1' },
+        },
+      },
+      animation: {
+        preloader: 'preloader 2s linear infinite',
+      },
     },
     colors: {
       header: '#93A0CD',
@@ -20,15 +35,14 @@ module.exports = {
       success: '#06bfad',
       danger: '#e03168',
       sprint: '#f5c1d2',
+      sprintHover: '#F9D7E3',
       yellow: '#FFDC68',
       lightyellow: '#FFE489',
-
 
       violet: {
         900: '#93A0CD',
         700: '#4338ca',
       },
-      white: '#FFFFFF',
       green: {
         900: '#5EC1C6',
         600: '#0d9488',
