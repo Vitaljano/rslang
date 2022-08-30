@@ -10,7 +10,8 @@
     "ecmaVersion": 2020
   },
   "env": {
-    "browser": true
+    "browser": true,
+    "node": true
   },
   "settings": {
     "react": {
