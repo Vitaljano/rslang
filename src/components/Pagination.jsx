@@ -100,12 +100,12 @@ export const Pagination = ({ itemsPerPage }) => {
       breakLabel="..."
       nextLabel={arrowRight}
       onPageChange={handlePageClick}
-      pageRangeDisplayed={15}
+      pageRangeDisplayed={5}
       pageCount={pageCount}
       previousLabel={arrowLeft}
       renderOnZeroPageCount={null}
       containerClassName={
-        'flex my-2 text-white font-medium text-3xl  items-center'
+        ' container mx-auto flex my-2 text-white font-medium text-3xl  items-center'
       }
       nextLinkClassName={
         'bg-white rounded-full w-10 h-10 flex justify-center items-center'

@@ -9,10 +9,10 @@ function Card({
 }) {
   const { isAuth } = useSelector((state) => state.auth);
   return (
-    <div className="sm:max-w-xs rounded-xl  shadow-2xl  relative">
-      <div className="w-auto r-0 absolute z-1">
+    <div className=" sm:max-w-xs   rounded-xl  mt-5 shadow-2xl  relative">
+      <div className="w-full r-0 absolute z-1">
         <img
-          className="rounded-t-xl"
+          className="rounded-t-xl w-full  "
           src={`${API_URL}/${activeWord.image}`}
           alt=""
         />
@@ -62,16 +62,23 @@ function Card({
           </button>
         </div>
 
-        <div className="my-2 text-md font-medium">{activeWord.textExample}</div>
-        <div className="font-light">{activeWord.textExampleTranslate}</div>
+        <div
+          dangerouslySetInnerHTML={{ __html: activeWord.textExample }}
+          className="my-2 text-md font-medium"
+        ></div>
+
+        <div
+          dangerouslySetInnerHTML={{ __html: activeWord.textExampleTranslate }}
+          className="font-light"
+        ></div>
       </div>
       {isAuth && (
-        <div className=" flex  flex-col my-3 text-sm font-medium gap-3 justify-items-center">
+        <div className=" flex flex-col  my-3 text-sm font-medium gap-3 justify-items-center sm:flex-row">
           {activeWord.userWord?.difficulty === 'hard' ? (
             <button
               onClick={delDifficultWordById}
               type="button"
-              className="flex items-center justify-between px-3 text-white  text-center  border-2 border-bg-white transition duration-300 ease-in-out font-medium bg-red rounded-lg w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+              className="w-11/12 flex items-center justify-between px-3 text-white  text-center  border-2 border-bg-white transition duration-300 ease-in-out font-medium bg-red rounded-lg  h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
             >
               <h2>Удалить из сложных слов</h2>
             </button>
@@ -79,7 +86,7 @@ function Card({
             <button
               onClick={addtoDifficultWords}
               type="button"
-              className="flex  items-center justify-between px-3 text-white  border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg  bg-yellow  w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+              className=" w-11/12 flex  items-center justify-between px-3 text-white  border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg  bg-yellow   h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
             >
               <h2>Добавить в сложные слова</h2>
             </button>
@@ -88,7 +95,7 @@ function Card({
             <button
               onClick={addtoLearnedWords}
               type="button"
-              className="flex items-center justify-between px-3 text-white  text-center  border-2 border-bg-white transition duration-300 ease-in-out font-medium bg-green-600 rounded-lg w-32 h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+              className="w-11/12 flex items-center justify-between px-3 text-white  text-center  border-2 border-bg-white transition duration-300 ease-in-out font-medium bg-green-600 rounded-lg h-10 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
             >
               <h2>Отметить как изученное</h2>
             </button>

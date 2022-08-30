@@ -124,9 +124,9 @@ const WordsList = ({ currentWords }) => {
   };
   return (
     <div className="container  mx-auto mt-10">
-      СЛОВА
-      <div className=" container mt-5 flex columns-2 gap -3 justify-between">
-        <div className="flex w-2/3 flex-wrap gap-2 justify-items-center">
+      <h2 className="text-2xl uppercase p-8 text-white">слова</h2>
+      <div className=" container mt-5 flex flex-col-reverse sm:flex-row flex columns-2 gap -3 justify-between">
+        <div className="flex flex-wrap gap-2 w-full items-center justify-items-center sm:w-2/3 mt-5">
           {currentWords &&
             currentWords.map((wordItem) => (
               <WordCard

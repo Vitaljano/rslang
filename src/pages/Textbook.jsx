@@ -1,6 +1,8 @@
 import Header from '../components/Header';
 import Levels from '../components/TextBook/Levels';
 import WordsList from '../components/TextBook/WordsList';
+import GamesList from '../components/TextBook/GamesList';
+
 import { setLangGroupNumber, setPage } from '../store/reducers/WordSlice';
 import {
   getGroupWords,
@@ -107,24 +109,23 @@ export const TextBook = () => {
             }
           />
         )}
-        (
-        <>
-          <WordsList
-            currentWords={
-              isAuth && allUserWords.paginatedResults
-                ? allUserWords.paginatedResults
-                : currentWords
-            }
+
+        <WordsList
+          currentWords={
+            isAuth && allUserWords.paginatedResults
+              ? allUserWords.paginatedResults
+              : currentWords
+          }
+        />
+        <div className="container mx-auto px-4 flex mt-8 justify-center ">
+          <Pagination
+            itemsPerPage={itemsPerPage}
+            pageCount={30}
+            // items={currentWords}
           />
-          <div className="container mx-auto px-4 flex mt-8 justify-center ">
-            <Pagination
-              itemsPerPage={itemsPerPage}
-              pageCount={30}
-              // items={currentWords}
-            />
-          </div>
-        </>
-        )
+        </div>
+
+        <GamesList />
       </section>
     </>
   );
