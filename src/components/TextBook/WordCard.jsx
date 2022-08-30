@@ -16,8 +16,8 @@ const WordCard = ({
       type="button"
       className={
         (isAuth ? activeWord._id === id : activeWord.id === id)
-          ? ' bg-red flex  flex-col items-center  px-3 text-white  text-center text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg w-32 h-10 md:w-48 h-14 hover:bg-white hover:text-action hover:border-none  ml-4'
-          : ` flex  flex-col items-center  px-3 text-white  text-center text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg w-32 h-10 md:w-48 h-14 hover:bg-white hover:text-action hover:border-none  ml-4 ${
+          ? ' bg-red flex  flex-col items-center  px-3 text-white  text-center text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg w-5/12 h-10 md:w-48 h-14 hover:bg-white hover:text-action hover:border-none  ml-4'
+          : ` flex  flex-col items-center  px-3 text-white  text-center text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg w-5/12 h-10 md:w-48 h-14 hover:bg-white hover:text-action hover:border-none  ml-4 ${
               word.userWord?.difficulty === 'hard' ? ' bg-yellow ' : ''
             }${word.userWord?.difficulty === 'studied' ? 'bg-green-600' : ''}`
       }

@@ -28,7 +28,7 @@ const Levels = ({ handleClick, activeLevel }) => {
   const { isAuth } = useSelector((state) => state.auth);
   return (
     <div className="container  mx-auto mt-10">
-      УРОВНИ
+      <h2 className="text-2xl uppercase p-8 text-white">уровни</h2>
       <div className="container items-center mx-auto flex justify-center align-middle mb-4 flex-wrap gap-3">
         {levelCardsData.map((levelItem) => (
           <LevelCard
