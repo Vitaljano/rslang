@@ -38,6 +38,7 @@ module.exports = {
       sprintHover: '#F9D7E3',
       yellow: '#FFDC68',
       lightyellow: '#FFE489',
+      borderGray: '#e2e8f0',
 
       violet: {
         900: '#93A0CD',
