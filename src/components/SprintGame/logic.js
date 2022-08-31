@@ -1,31 +1,39 @@
 import { API_URL } from '../../utils/api/http';
 import axios from 'axios';
 
+async function getRandomIndex(length) {
+  return Math.floor(Math.random() * length);
+}
+
 const generateQuestion = async (words) => {
   const questions = [];
 
-  for (const item of words) {
+  for (let i = 0; i < words.length; i++) {
     const truthOrLie = Math.random() > 0.5 ? true : false;
 
     if (truthOrLie) {
-      item.truth = true;
-      questions.push(item);
+      words[i].truth = true;
+      questions.push(words[i]);
     } else {
       // fix if random get true index
-      const index = Math.floor(Math.random() * words.length);
+      const randomIndex = await getRandomIndex(words.length);
 
-      item.wordTranslate = words[index].wordTranslate;
-      item.truth = false;
+      if (randomIndex === i) {
+        generateQuestion(words);
+      }
 
-      questions.push(item);
+      words[i].wordTranslate = words[randomIndex].wordTranslate;
+      words[i].truth = false;
+
+      questions.push(words[i]);
     }
   }
   return questions;
 };
 
-export const getQuestions = async (page) => {
+export const getQuestions = async (page, group) => {
   const response = await axios.get(API_URL + '/words', {
-    params: { page: page, group: 0 },
+    params: { page: page, group: group },
   });
   const data = await response.data;
   const transformData = data.map((item) => {

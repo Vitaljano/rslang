@@ -8,6 +8,7 @@ import SoundMute from './SoundMute';
 
 function MainScreen() {
   const [isModalActive, setIsModalActive] = useState(true);
+  const [difficult, setDifficult] = useState(0);
   const [preLoader, setPreLoader] = useState(false);
   const [loadMore, setLoadMore] = useState(0);
   const [isGameStart, setGameStart] = useState(false);
@@ -24,23 +25,20 @@ function MainScreen() {
     process.env.PUBLIC_URL + '/audio/incorrect.mp3'
   );
 
+  //Load questions
   useEffect(() => {
-    async function generateQuestions() {
-      const result = await getQuestions();
-      setWords((prev) => [...prev, ...result]);
+    async function generateQuestions(loadMore, difficult) {
+      const result = await getQuestions(loadMore, difficult);
+      setWords([...result]);
     }
     try {
-      generateQuestions(loadMore);
+      generateQuestions(loadMore, difficult);
     } catch (e) {
       console.log(e);
     }
-  }, [loadMore]);
+  }, [loadMore, difficult]);
 
   const checkAnswer = (userAnswer) => {
-    if (words.length - 2 === questionNumber) {
-      setLoadMore((prev) => (prev += 1));
-    }
-
     if (words[questionNumber].truth === userAnswer) {
       setCorrectAnswersInRow((prev) => (prev += 1));
       if (!mute) {
@@ -52,14 +50,21 @@ function MainScreen() {
         inCorrectSound.play();
       }
     }
-    checkLevel();
 
+    checkLevel();
+    // logging user answer
     const userAnswerToLog = words[questionNumber];
-    userAnswerToLog.truth = userAnswer;
+    userAnswerToLog.userAnswer = userAnswer;
+    console.log(userAnswerLog);
 
     setUserAnswerLog((prev) => {
       return [...prev, userAnswerToLog];
     });
+
+    if (words.length - 1 === questionNumber) {
+      setLoadMore((prev) => (prev += 1));
+      setQuestionNumber(0);
+    }
   };
 
   const onAnswerHandle = (event) => {
@@ -96,6 +101,7 @@ function MainScreen() {
         <ModalStart
           setActiveModal={setIsModalActive}
           preLoader={setPreLoader}
+          setDifficult={setDifficult}
         />
       )}
       {preLoader && (
