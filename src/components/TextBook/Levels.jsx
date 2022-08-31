@@ -15,13 +15,13 @@ const difficultCard = {
   id: 7,
   name: 'Сложные слова',
   abbr: 'User',
-  langLevel: 7,
+  langLevel: 6,
 };
 const learnedCard = {
   id: 8,
   name: 'Изученные слова',
   abbr: 'User',
-  langLevel: 8,
+  langLevel: 7,
 };
 
 const Levels = ({ handleClick, activeLevel }) => {
@@ -43,12 +43,14 @@ const Levels = ({ handleClick, activeLevel }) => {
         {isAuth && (
           <>
             <LevelCard
+              key={difficultCard.id}
               name={difficultCard.name}
               langLevel={difficultCard.langLevel}
               handleClick={handleClick}
               activeLevel={activeLevel}
             />
             <LevelCard
+              key={learnedCard.id}
               name={learnedCard.name}
               langLevel={learnedCard.langLevel}
               handleClick={handleClick}

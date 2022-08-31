@@ -2,8 +2,10 @@ import Header from '../components/Header';
 import Levels from '../components/TextBook/Levels';
 import WordsList from '../components/TextBook/WordsList';
 import GamesList from '../components/TextBook/GamesList';
+// import { items } from '../data/words';
 
 import { setLangGroupNumber, setPage } from '../store/reducers/WordSlice';
+import { setAgregatedPageCount } from '../store/reducers/AgregatedWordsSlice';
 import {
   getGroupWords,
   getAllUserAgregatedWords,
@@ -23,7 +25,7 @@ export const TextBook = () => {
   );
   const { user, isAuth } = useSelector((state) => state.auth);
   const { allUserWords } = useSelector((state) => state.userWords);
-  const { difficultWords, learnedWords } = useSelector(
+  const { difficultWords, learnedWords, pageCount } = useSelector(
     (state) => state.agregatingWords
   );
 
@@ -35,6 +37,23 @@ export const TextBook = () => {
             userId: user.userId,
             group: Number(localStorage.getItem('langGroupNumber')),
             page: Number(localStorage.getItem('bookPage')),
+          })
+        );
+        dispatch(
+          getDifficultWords({
+            userId: user.userId,
+            difficulty: 'hard',
+            isLearned: false,
+            page: Number(localStorage.getItem('bookPage') || 0),
+          })
+        );
+
+        dispatch(
+          getLearnedWords({
+            userId: user.userId,
+            difficulty: 'studied',
+            isLearned: true,
+            page: Number(localStorage.getItem('bookPage') || 0),
           })
         );
       } else {
@@ -54,7 +73,14 @@ export const TextBook = () => {
         })
       );
     }
-  }, [isAuth, langGroupNumber, bookPage, getAllUserAgregatedWords]);
+  }, [
+    isAuth,
+    langGroupNumber,
+    bookPage,
+    getAllUserAgregatedWords,
+    getLearnedWords,
+    getDifficultWords,
+  ]);
 
   useEffect(() => {
     localStorage.setItem('bookPage', String(bookPage));
@@ -63,24 +89,37 @@ export const TextBook = () => {
 
   const changeLevel = async (langLevel) => {
     localStorage.setItem('langGroupNumber', langLevel);
-    if (langLevel == 7) {
+    if (langLevel == 6) {
       await dispatch(
         getDifficultWords({
           userId: user.userId,
           difficulty: 'hard',
           isLearned: false,
+          page: Number(localStorage.getItem('bookPage') || 0),
         })
+      );
+      await dispatch(
+        setAgregatedPageCount(
+          Math.ceil(difficultWords.totalCount[0].count / itemsPerPage)
+        )
       );
       dispatch(setLangGroupNumber(langLevel));
       dispatch(setPage(0));
     }
-    if (langLevel == 8) {
+    if (langLevel == 7) {
       await dispatch(
         getLearnedWords({
           userId: user.userId,
           difficulty: 'studied',
           isLearned: true,
+          page: Number(localStorage.getItem('bookPage') || 0),
         })
+      );
+
+      await dispatch(
+        setAgregatedPageCount(
+          Math.ceil(learnedWords.totalCount[0].count / itemsPerPage)
+        )
       );
       dispatch(setLangGroupNumber(langLevel));
       dispatch(setPage(0));
@@ -95,35 +134,57 @@ export const TextBook = () => {
       <Header />
       <section className="bg-green-900 pt-10 flef flex-col gap-8">
         <Levels handleClick={changeLevel} activeLevel={langGroupNumber} />
-        {langGroupNumber === 7 && (
-          <WordsList
-            currentWords={
-              difficultWords.paginatedResults && difficultWords.paginatedResults
-            }
-          />
-        )}
-        {langGroupNumber === 8 && (
-          <WordsList
-            currentWords={
-              learnedWords.paginatedResults && learnedWords.paginatedResults
-            }
-          />
-        )}
 
-        <WordsList
-          currentWords={
-            isAuth && allUserWords.paginatedResults
-              ? allUserWords.paginatedResults
-              : currentWords
-          }
-        />
-        <div className="container mx-auto px-4 flex mt-8 justify-center ">
-          <Pagination
-            itemsPerPage={itemsPerPage}
-            pageCount={30}
-            // items={currentWords}
-          />
-        </div>
+        {langGroupNumber === 6 && (
+          <>
+            <WordsList
+              currentWords={
+                difficultWords.paginatedResults &&
+                difficultWords.paginatedResults
+              }
+            />
+            <div className="container mx-auto px-4 flex mt-8 justify-center ">
+              <Pagination itemsPerPage={itemsPerPage} pageCount={pageCount} />
+            </div>
+          </>
+        )}
+        {langGroupNumber === 7 ? (
+          <>
+            <WordsList
+              currentWords={
+                learnedWords.paginatedResults && learnedWords.paginatedResults
+              }
+            />
+            <div className="container mx-auto px-4 flex mt-8 justify-center ">
+              <Pagination
+                itemsPerPage={itemsPerPage}
+                pageCount={pageCount}
+                itemsCount={600}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            {langGroupNumber !== 6 && (
+              <>
+                <WordsList
+                  currentWords={
+                    isAuth && allUserWords.paginatedResults
+                      ? allUserWords.paginatedResults
+                      : currentWords
+                  }
+                />
+                <div className="container mx-auto px-4 flex mt-8 justify-center ">
+                  <Pagination
+                    itemsPerPage={itemsPerPage}
+                    pageCount={30}
+                    itemsCount={600}
+                  />
+                </div>
+              </>
+            )}
+          </>
+        )}
 
         <GamesList />
       </section>

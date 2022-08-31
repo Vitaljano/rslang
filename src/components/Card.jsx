@@ -8,6 +8,12 @@ function Card({
   addtoLearnedWords,
 }) {
   const { isAuth } = useSelector((state) => state.auth);
+
+  const playText = (audioPath) => {
+    const audio = new Audio(`${API_URL}/${audioPath}`);
+
+    audio.play();
+  };
   return (
     <div className=" sm:max-w-xs   rounded-xl  mt-5 shadow-2xl  relative">
       <div className="w-full r-0 absolute z-1">
@@ -26,7 +32,7 @@ function Card({
             {activeWord.word}
             {activeWord.transcription}
           </span>
-          <button>
+          <button onClick={() => playText(activeWord.audio)}>
             <svg
               width="38"
               height="36"

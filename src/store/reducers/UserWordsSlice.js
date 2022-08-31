@@ -36,6 +36,4 @@ export const userWordsSlice = createSlice({
     },
   },
 });
-
-// export const { setLangGroupNumber, setPage } = wordsSlice.actions;
 export default userWordsSlice.reducer;
