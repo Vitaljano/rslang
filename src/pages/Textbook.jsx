@@ -36,7 +36,7 @@ export const TextBook = () => {
           getAllUserAgregatedWords({
             userId: user.userId,
             group: Number(localStorage.getItem('langGroupNumber')),
-            page: Number(localStorage.getItem('bookPage')),
+            page: bookPage,
           })
         );
         dispatch(
@@ -44,7 +44,7 @@ export const TextBook = () => {
             userId: user.userId,
             difficulty: 'hard',
             isLearned: false,
-            page: Number(localStorage.getItem('bookPage') || 0),
+            page: bookPage,
           })
         );
 
@@ -53,7 +53,7 @@ export const TextBook = () => {
             userId: user.userId,
             difficulty: 'studied',
             isLearned: true,
-            page: Number(localStorage.getItem('bookPage') || 0),
+            page: bookPage,
           })
         );
       } else {
@@ -88,6 +88,8 @@ export const TextBook = () => {
   }, [bookPage, langGroupNumber]);
 
   const changeLevel = async (langLevel) => {
+    dispatch(setLangGroupNumber(langLevel));
+    dispatch(setPage(0));
     localStorage.setItem('langGroupNumber', langLevel);
     if (langLevel == 6) {
       await dispatch(
@@ -95,7 +97,7 @@ export const TextBook = () => {
           userId: user.userId,
           difficulty: 'hard',
           isLearned: false,
-          page: Number(localStorage.getItem('bookPage') || 0),
+          page: 0,
         })
       );
       await dispatch(
@@ -112,7 +114,7 @@ export const TextBook = () => {
           userId: user.userId,
           difficulty: 'studied',
           isLearned: true,
-          page: Number(localStorage.getItem('bookPage') || 0),
+          page: 0,
         })
       );
 
