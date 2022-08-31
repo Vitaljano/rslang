@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
+import { setGamesSrartFlag } from '../../store/reducers/GamesSlice';
+// import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 function ModalStart({ setActiveModal, preLoader, setDifficult }) {
+  // const { isGameFromTextbook } = useSelector((state) => state.games);
+  const dispatch = useDispatch();
+
   const difficultHandle = (e) => {
     setDifficult(e.target.textContent - 1);
     setActiveModal(false);
@@ -13,7 +19,7 @@ function ModalStart({ setActiveModal, preLoader, setDifficult }) {
 
   return (
     <div className="modal w-3/6 h-80 mx-auto bg-white flex items-center justify-center relative top-24 rounded-xl shadow-xl">
-      <Link to="/">
+      <Link onclick={dispatch(setGamesSrartFlag(false))} to="/">
         <div className="close flex absolute bg-white bg-opacity-70 -top-8 -right-5 w-8 h-8 rounded-full shadow-xl items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
