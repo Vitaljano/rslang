@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-const Result = ({ word, transcription, userAnswer }) => {
+const Result = ({ word, transcription, truth, userAnswer }) => {
   return (
     <>
       <div className="res flex flex-row text-grey text-2xl m-6 justify-between gap-2">
@@ -28,7 +28,7 @@ const Result = ({ word, transcription, userAnswer }) => {
         </div>
         <p>{word}</p>
         <p>{transcription}</p>
-        {userAnswer && (
+        {userAnswer == truth && (
           <div className="checked">
             <svg
               width="30"
@@ -44,7 +44,7 @@ const Result = ({ word, transcription, userAnswer }) => {
             </svg>
           </div>
         )}
-        {!userAnswer && (
+        {userAnswer !== truth && (
           <div className="checked">
             <svg
               width="30"
@@ -70,12 +70,14 @@ function GameResult({ log, onRestart }) {
     <div className=" flex flex-col justify-center justify-items-center sm:flex-row ">
       <div className="res w-4/5 h-96 overflow-y-scroll sm:w-3/6 sm:h-5/ mx-auto sm:mx-0  sm:mr-20 bg-white flex flex-col relative  p-6 left-2 top-6 rounded-xl shadow-xl order-2 sm:order-none">
         {log.map((item) => {
+          console.log(item);
           return (
             <Result
               key={item.id}
               word={item.word}
               transcription={item.wordTranslate}
-              userAnswer={item.truth}
+              userAnswer={item.userAnswer}
+              truth={item.truth}
             />
           );
         })}

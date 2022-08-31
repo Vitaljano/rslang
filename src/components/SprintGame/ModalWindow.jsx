@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom';
 
-function ModalStart({ setActiveModal, preLoader }) {
+function ModalStart({ setActiveModal, preLoader, setDifficult }) {
+  const difficultHandle = (e) => {
+    setDifficult(e.target.textContent - 1);
+    setActiveModal(false);
+    preLoader(true);
+  };
   const onClickStart = () => {
     setActiveModal(false);
     preLoader(true);
@@ -25,8 +30,47 @@ function ModalStart({ setActiveModal, preLoader }) {
         </div>
       </Link>
       <div className="content p-10 flex items-center flex-col justify-center">
-        <div className="rules text-3xl text-grey my-10 text-center">
+        <div className="rules text-3xl text-grey mt-2 mb-4 text-center">
           В этой игре вам необходимо услышать слово и выбрать его перевод
+        </div>
+        <div className="text-xl text-grey mb-2">Выбери уровеь</div>
+        <div className="mb-7">
+          <button
+            onClick={difficultHandle}
+            className="w-12 h-12 mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
+          >
+            1
+          </button>
+          <button
+            onClick={difficultHandle}
+            className="w-12 h-12 mx-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
+          >
+            2
+          </button>
+          <button
+            onClick={difficultHandle}
+            className="w-12 h-12  mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
+          >
+            3
+          </button>
+          <button
+            onClick={difficultHandle}
+            className="w-12 h-12  mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
+          >
+            4
+          </button>
+          <button
+            onClick={difficultHandle}
+            className="w-12 h-12  mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
+          >
+            5
+          </button>
+          <button
+            onClick={difficultHandle}
+            className="w-12 h-12  mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
+          >
+            6
+          </button>
         </div>
         <button
           onClick={onClickStart}
