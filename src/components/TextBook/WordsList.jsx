@@ -38,6 +38,7 @@ const WordsList = ({ currentWords }) => {
           userId: user.userId,
           difficulty: 'studied',
           isLearned: true,
+          page: Number(localStorage.getItem('bookPage')),
         })
       );
     } else {
@@ -75,6 +76,7 @@ const WordsList = ({ currentWords }) => {
           userId: user.userId,
           difficulty: 'hard',
           isLearned: false,
+          page: Number(localStorage.getItem('bookPage')),
         })
       );
     } else {
@@ -110,6 +112,7 @@ const WordsList = ({ currentWords }) => {
           userId: user.userId,
           difficulty: 'hard',
           isLearned: false,
+          page: Number(localStorage.getItem('bookPage')),
         })
       );
     }
@@ -131,7 +134,7 @@ const WordsList = ({ currentWords }) => {
             currentWords.map((wordItem) => (
               <WordCard
                 id={isAuth ? wordItem._id : wordItem.id}
-                key={isAuth ? wordItem._id : wordItem.id}
+                key={isAuth & wordItem ? wordItem._id : wordItem.id}
                 name={wordItem.word}
                 translateName={wordItem.wordTranslate}
                 showCardInfo={() => setActiveWord(wordItem)}

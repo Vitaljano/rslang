@@ -169,10 +169,10 @@ export const getAllUserAgregatedWords = createAsyncThunk(
 export const getDifficultWords = createAsyncThunk(
   'user/getDifficaltWords',
   async (data, thunkAPI) => {
-    const { userId, difficulty, isLearned } = data;
+    const { userId, difficulty, isLearned, page } = data;
     try {
       const response = await $authHost.get(
-        `/users/${userId}/aggregatedWords?wordsPerPage=20&filter=%7B%22%24and%22%3A%5B%7B%22userWord.difficulty%22%3A%22${difficulty}%22%2C%20%22userWord.optional.isLearned%22%3A${isLearned}%7D%5D%7D`
+        `/users/${userId}/aggregatedWords?wordsPerPage=20&page=${page}&filter=%7B%22%24and%22%3A%5B%7B%22userWord.difficulty%22%3A%22${difficulty}%22%2C%20%22userWord.optional.isLearned%22%3A${isLearned}%7D%5D%7D`
       );
       console.log(response.data);
       return response.data;
@@ -184,10 +184,10 @@ export const getDifficultWords = createAsyncThunk(
 export const getLearnedWords = createAsyncThunk(
   'user/getlearnedWords',
   async (data, thunkAPI) => {
-    const { userId, difficulty, isLearned } = data;
+    const { userId, difficulty, isLearned, page } = data;
     try {
       const response = await $authHost.get(
-        `/users/${userId}/aggregatedWords?wordsPerPage=20&filter=%7B%22%24and%22%3A%5B%7B%22userWord.difficulty%22%3A%22${difficulty}%22%2C%20%22userWord.optional.isLearned%22%3A${isLearned}%7D%5D%7D`
+        `/users/${userId}/aggregatedWords?wordsPerPage=20&page=${page}&filter=%7B%22%24and%22%3A%5B%7B%22userWord.difficulty%22%3A%22${difficulty}%22%2C%20%22userWord.optional.isLearned%22%3A${isLearned}%7D%5D%7D`
       );
       return response.data;
     } catch (e) {
