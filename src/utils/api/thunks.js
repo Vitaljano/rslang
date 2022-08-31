@@ -157,7 +157,7 @@ export const getAllUserAgregatedWords = createAsyncThunk(
     const { userId, group, page } = data;
     try {
       const response = await $authHost.get(
-        `/users/${userId}/aggregatedWords?wordsPerPage=20&group=${group}&page=${page}`
+        `/users/${userId}/aggregatedWords?wordsPerPage=20&group=${group}&filter=%7B%22page%22%3A${page}%7D`
       );
 
       return response.data;
@@ -174,7 +174,6 @@ export const getDifficultWords = createAsyncThunk(
       const response = await $authHost.get(
         `/users/${userId}/aggregatedWords?wordsPerPage=20&page=${page}&filter=%7B%22%24and%22%3A%5B%7B%22userWord.difficulty%22%3A%22${difficulty}%22%2C%20%22userWord.optional.isLearned%22%3A${isLearned}%7D%5D%7D`
       );
-      console.log(response.data);
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
@@ -289,6 +288,41 @@ export const getWordByID = createAsyncThunk(
     // const { wordId } = data;
     try {
       const response = await $host.get(`/words/${wordId}`);
+      return response.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+///Games
+//for register User const { allUserWords } = useSelector((state) => state.userWords);
+//allUserWords.paginatedResults
+
+export const getWordsForRegUserGame = createAsyncThunk(
+  'getWordsForRegUserGame',
+
+  async (data, thunkAPI) => {
+    const { group, userId } = data;
+    try {
+      const response = await $authHost.get(
+        `/users/${userId}/aggregatedWords?wordsPerPage=100&group=${group}`
+      );
+      console.log(response.data);
+      return response.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
+
+//for any user
+export const getWordsForUserGame = createAsyncThunk(
+  'getWordsForAnyUserGame',
+
+  async (data, thunkAPI) => {
+    const { page, group } = data;
+    try {
+      const response = await $host.get(`/words?group=${group}&page=${page}`);
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
