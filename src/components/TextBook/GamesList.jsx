@@ -11,18 +11,20 @@ const GamesList = () => {
   };
 
   return (
-    <div className="container mx-auto mt-10 flex justify-center gap-5 flex-col sm:flex-row">
-      <h2 className="text-2xl uppercase p-8 text-white">Игры</h2>
-      {gamesInfoData.map((gameItem) => (
-        <GameCard
-          link={gameItem.link}
-          name={gameItem.name}
-          description={gameItem.description}
-          img={gameItem.img}
-          key={gameItem.id}
-          onClick={setGameMode}
-        />
-      ))}
+    <div className="container  mx-auto mt-10">
+      <h2 className="text-2xl uppercase p-2 text-white">Игры</h2>
+      <div className="container mx-auto mt-10 flex justify-center gap-5 flex-col sm:flex-row">
+        {gamesInfoData.map((gameItem) => (
+          <GameCard
+            link={gameItem.link}
+            name={gameItem.name}
+            description={gameItem.description}
+            img={gameItem.img}
+            key={gameItem.id}
+            onClick={setGameMode}
+          />
+        ))}
+      </div>
     </div>
   );
 };
