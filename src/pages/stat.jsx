@@ -7,7 +7,6 @@ function Stat() {
   const userName = useSelector((state) => state.auth.user.name);
   const userID = useSelector((state) => state.auth.user.userId);
 
-  console.log(userID);
   return (
     <>
       <Header />

@@ -8,7 +8,7 @@ const GameCard = ({ link, name, description, img, onClick }) => {
         <div className="flex">
           <h2 className="mt-2 text-2xl p-8">{name}</h2>
         </div>
-        onClick={onClick}
+
         <img
           className="h-48 w-full object-cover   rounded-lg "
           src={img}

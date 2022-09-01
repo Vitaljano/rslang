@@ -5,8 +5,13 @@ import GameResult from './GameResult';
 import ModalStart from './ModalWindow';
 import { getQuestions } from './logic';
 import SoundMute from './SoundMute';
+import { useSelector } from 'react-redux/es/exports';
 
 function MainScreen() {
+  const { isGameFromTextbook } = useSelector((state) => state.games);
+  const wordsTextbookPage = useSelector((state) => state.words.bookPage);
+  const wordsTextbookLangGroup = useSelector((state) => state.words);
+
   const [isModalActive, setIsModalActive] = useState(true);
   const [difficult, setDifficult] = useState(0);
   const [preLoader, setPreLoader] = useState(false);
@@ -32,7 +37,11 @@ function MainScreen() {
       setWords([...result]);
     }
     try {
-      generateQuestions(loadMore, difficult);
+      if (isGameFromTextbook) {
+        generateQuestions(wordsTextbookPage, difficult);
+      } else {
+        generateQuestions(loadMore, difficult);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -55,7 +64,6 @@ function MainScreen() {
     // logging user answer
     const userAnswerToLog = words[questionNumber];
     userAnswerToLog.userAnswer = userAnswer;
-    console.log(userAnswerLog);
 
     setUserAnswerLog((prev) => {
       return [...prev, userAnswerToLog];
