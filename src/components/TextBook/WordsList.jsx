@@ -18,6 +18,7 @@ const WordsList = ({ currentWords }) => {
   };
   const dispatch = useDispatch();
   const { isAuth, user } = useSelector((state) => state.auth);
+  const { langGroupNumber, bookPage } = useSelector((state) => state.words);
 
   useEffect(() => {
     setActivedWord(currentWords[0]);
@@ -38,7 +39,7 @@ const WordsList = ({ currentWords }) => {
           userId: user.userId,
           difficulty: 'studied',
           isLearned: true,
-          page: Number(localStorage.getItem('bookPage')),
+          page: bookPage,
         })
       );
     } else {
@@ -55,8 +56,8 @@ const WordsList = ({ currentWords }) => {
     await dispatch(
       getAllUserAgregatedWords({
         userId: user.userId,
-        group: Number(localStorage.getItem('langGroupNumber')),
-        page: Number(localStorage.getItem('bookPage')),
+        group: langGroupNumber,
+        page: bookPage,
       })
     );
   };
@@ -76,7 +77,7 @@ const WordsList = ({ currentWords }) => {
           userId: user.userId,
           difficulty: 'hard',
           isLearned: false,
-          page: Number(localStorage.getItem('bookPage')),
+          page: bookPage,
         })
       );
     } else {
@@ -92,8 +93,8 @@ const WordsList = ({ currentWords }) => {
     await dispatch(
       getAllUserAgregatedWords({
         userId: user.userId,
-        group: Number(localStorage.getItem('langGroupNumber')),
-        page: Number(localStorage.getItem('bookPage')),
+        group: langGroupNumber,
+        page: bookPage,
       })
     );
   };
@@ -112,7 +113,7 @@ const WordsList = ({ currentWords }) => {
           userId: user.userId,
           difficulty: 'hard',
           isLearned: false,
-          page: Number(localStorage.getItem('bookPage')),
+          page: bookPage,
         })
       );
     }
@@ -120,16 +121,16 @@ const WordsList = ({ currentWords }) => {
     await dispatch(
       getAllUserAgregatedWords({
         userId: user.userId,
-        group: Number(localStorage.getItem('langGroupNumber')),
-        page: Number(localStorage.getItem('bookPage')),
+        group: langGroupNumber,
+        page: bookPage,
       })
     );
   };
   return (
     <div className="container  mx-auto mt-10">
-      <h2 className="text-2xl uppercase p-8 text-white">слова</h2>
-      <div className=" container mt-5 flex flex-col-reverse sm:flex-row flex columns-2 gap -3 justify-between">
-        <div className="flex flex-wrap gap-2 w-full items-center justify-items-center sm:w-2/3 mt-5">
+      <h2 className="text-2xl uppercase p-2 text-white">слова</h2>
+      <div className=" container flex flex-col-reverse sm:flex-row columns-2 gap -3 justify-center">
+        <div className=" flex flex-wrap gap-2 w-full items-center justify-items-center sm:w-2/3 mt-5">
           {currentWords &&
             currentWords.map((wordItem) => (
               <WordCard

@@ -2,7 +2,7 @@ import Header from '../components/Header';
 import Levels from '../components/TextBook/Levels';
 import WordsList from '../components/TextBook/WordsList';
 import GamesList from '../components/TextBook/GamesList';
-// import { items } from '../data/words';
+import Footer from '../components/Footer';
 
 import { setLangGroupNumber, setPage } from '../store/reducers/WordSlice';
 import { setAgregatedPageCount } from '../store/reducers/AgregatedWordsSlice';
@@ -18,7 +18,6 @@ import Pagination from '../components/Pagination';
 import { useDispatch } from 'react-redux';
 
 export const TextBook = () => {
-  console.log('render');
   const dispatch = useDispatch();
   const { langGroupNumber, bookPage, currentWords, itemsPerPage } = useSelector(
     (state) => state.words
@@ -35,7 +34,7 @@ export const TextBook = () => {
         dispatch(
           getAllUserAgregatedWords({
             userId: user.userId,
-            group: Number(localStorage.getItem('langGroupNumber')),
+            group: langGroupNumber,
             page: bookPage,
           })
         );
@@ -68,8 +67,8 @@ export const TextBook = () => {
     } else {
       dispatch(
         getGroupWords({
-          group: Number(localStorage.getItem('langGroupNumber') || 0),
-          page: Number(localStorage.getItem('bookPage') || 0),
+          group: langGroupNumber,
+          page: bookPage,
         })
       );
     }
@@ -77,9 +76,8 @@ export const TextBook = () => {
     isAuth,
     langGroupNumber,
     bookPage,
-    getAllUserAgregatedWords,
-    getLearnedWords,
     getDifficultWords,
+    getAllUserAgregatedWords,
   ]);
 
   useEffect(() => {
@@ -90,44 +88,19 @@ export const TextBook = () => {
   const changeLevel = async (langLevel) => {
     dispatch(setLangGroupNumber(langLevel));
     dispatch(setPage(0));
-    localStorage.setItem('langGroupNumber', langLevel);
     if (langLevel == 6) {
-      await dispatch(
-        getDifficultWords({
-          userId: user.userId,
-          difficulty: 'hard',
-          isLearned: false,
-          page: 0,
-        })
-      );
       await dispatch(
         setAgregatedPageCount(
           Math.ceil(difficultWords.totalCount[0].count / itemsPerPage)
         )
       );
-      dispatch(setLangGroupNumber(langLevel));
-      dispatch(setPage(0));
     }
     if (langLevel == 7) {
-      await dispatch(
-        getLearnedWords({
-          userId: user.userId,
-          difficulty: 'studied',
-          isLearned: true,
-          page: 0,
-        })
-      );
-
       await dispatch(
         setAgregatedPageCount(
           Math.ceil(learnedWords.totalCount[0].count / itemsPerPage)
         )
       );
-      dispatch(setLangGroupNumber(langLevel));
-      dispatch(setPage(0));
-    } else {
-      dispatch(setLangGroupNumber(langLevel));
-      dispatch(setPage(0));
     }
   };
 
@@ -190,6 +163,7 @@ export const TextBook = () => {
 
         <GamesList />
       </section>
+      <Footer className="bg-green-600" />
     </>
   );
 };
