@@ -5,13 +5,13 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { authSlice } from '../store/reducers/AuthSlice';
 import { userLogout } from '../services/authService';
+import { setLangGroupNumber, setPage } from '../store/reducers/WordSlice';
 import { APP_PAGES } from '../App';
 
 const pageRoutes = {
   '/textbook': 'bg-green-900',
   '/sprint': 'bg-sprint',
   '/audiogame': 'bg-yellow',
-
 };
 
 function Header() {
@@ -30,6 +30,8 @@ function Header() {
   const logOut = () => {
     dispatch(authSlice.actions.setIsAuth(false));
     dispatch(authSlice.actions.setUserData({}));
+    dispatch(setLangGroupNumber(0));
+    dispatch(setPage(0));
     userLogout();
   };
 
@@ -67,18 +69,33 @@ function Header() {
 
         <div className="actions flex items-center flex-row">
           {isAuth ? (
-            <div className=" flex justify-center align-middle gap-3">
-              <img
-                className="inline-block h-8 w-8 rounded-full ring-2 ring-white"
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80"
-                alt=""
-              ></img>
-              <p className=" font-medium text-white text-xl text-center transition cursor-pointer duration-300 ease-in-out hover:text-action hover:border-none">
+            <div className=" flex justify-center align-middle gap-3 ">
+              <div className="w-10 h-10 mx-auto opacity-50">
+                <svg
+                  version="1.1"
+                  id="Layer_1"
+                  x="0px"
+                  y="0px"
+                  fill="white"
+                  viewBox="0 0 512 512"
+                  xmlSpace="preserve"
+                >
+                  <g>
+                    <path
+                      d="M256,31C131.7,31,31,131.7,31,256s100.7,225,225,225s225-100.7,225-225S380.3,31,256,31z M256,118.1
+		c44.1,0,79.8,35.7,79.8,79.8s-35.7,79.8-79.8,79.8s-79.8-35.7-79.8-79.8S211.9,118.1,256,118.1z M256,430.2
+		c-53.3,0-101-24.1-132.9-61.9c17.1-32.1,50.4-54.3,89.4-54.3c2.2,0,4.4,0.4,6.4,1c11.8,3.8,24.1,6.3,37.1,6.3s25.4-2.4,37.1-6.3
+		c2.1-0.6,4.3-1,6.4-1c38.9,0,72.3,22.1,89.4,54.3C357,406.1,309.3,430.2,256,430.2z"
+                    />
+                  </g>
+                </svg>
+              </div>
+              <p className=" flex font-medium text-white text-xl  align-middle transition cursor-pointer duration-300 ease-in-out hover:text-action hover:border-none">
                 {user.name}
               </p>
               <p
                 onClick={logOut}
-                className=" font-medium text-white text-xl text-center transition cursor-pointer duration-300 ease-in-out hover:text-action hover:border-none"
+                className=" font-medium text-white text-center align-text-bottom text-xl   transition cursor-pointer duration-300 ease-in-out hover:text-action hover:border-none"
               >
                 выход
               </p>
@@ -87,7 +104,7 @@ function Header() {
             <NavLink to={APP_PAGES.login}>
               <button
                 type="button"
-                className="text-white text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+                className="text-white  md:text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
               >
                 Начать учиться
               </button>
