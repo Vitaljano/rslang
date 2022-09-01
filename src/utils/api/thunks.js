@@ -180,6 +180,21 @@ export const getDifficultWords = createAsyncThunk(
     }
   }
 );
+
+export const getAllDifficultWords = createAsyncThunk(
+  'user/getAllDifficaltWords',
+  async (data, thunkAPI) => {
+    const { userId, difficulty, isLearned } = data;
+    try {
+      const response = await $authHost.get(
+        `/users/${userId}/aggregatedWords?wordsPerPage=600&filter=%7B%22%24and%22%3A%5B%7B%22userWord.difficulty%22%3A%22${difficulty}%22%2C%20%22userWord.optional.isLearned%22%3A${isLearned}%7D%5D%7D`
+      );
+      return response.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
 export const getLearnedWords = createAsyncThunk(
   'user/getlearnedWords',
   async (data, thunkAPI) => {
@@ -305,7 +320,7 @@ export const getWordsForRegUserGame = createAsyncThunk(
     const { group, userId } = data;
     try {
       const response = await $authHost.get(
-        `/users/${userId}/aggregatedWords?wordsPerPage=100&group=${group}`
+        `/users/${userId}/aggregatedWords?wordsPerPage=600&group=${group}`
       );
 
       return response.data;

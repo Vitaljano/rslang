@@ -2,12 +2,33 @@ import React from 'react';
 import { gamesInfoData } from '../../data/gamesInfo';
 import GameCard from './GameCard';
 import { setGamesSrartFlag } from '../../store/reducers/GamesSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getWordsForRegUserGame,
+  // getDifficultWords,
+  getAllDifficultWords,
+} from '../../utils/api/thunks';
 
 const GamesList = () => {
+  const { langGroupNumber } = useSelector((state) => state.words);
+  const { user } = useSelector((state) => state.auth);
+
   const dispatch = useDispatch();
   const setGameMode = () => {
     dispatch(setGamesSrartFlag(true));
+    if (langGroupNumber === 6) {
+      dispatch(
+        getAllDifficultWords({
+          userId: user.userId,
+          difficulty: 'hard',
+          isLearned: false,
+        })
+      );
+    } else {
+      dispatch(
+        getWordsForRegUserGame({ userId: user.userId, group: langGroupNumber })
+      );
+    }
   };
 
   return (
