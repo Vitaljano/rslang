@@ -1,25 +1,32 @@
 import { Link } from 'react-router-dom';
 import { setGamesSrartFlag } from '../../store/reducers/GamesSlice';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 
 function ModalStart({ setActiveModal, preLoader, setDifficult }) {
-  // const { isGameFromTextbook } = useSelector((state) => state.games);
+  const { isGameFromTextbook } = useSelector((state) => state.games);
+
   const dispatch = useDispatch();
+
+  const dropIsGameFromTextbookHandle = () => {
+    dispatch(setGamesSrartFlag(false));
+  };
 
   const difficultHandle = (e) => {
     setDifficult(e.target.textContent - 1);
     setActiveModal(false);
     preLoader(true);
   };
+
   const onClickStart = () => {
+    dropIsGameFromTextbookHandle();
     setActiveModal(false);
     preLoader(true);
   };
 
   return (
     <div className="modal w-3/6 h-80 mx-auto bg-white flex items-center justify-center relative top-24 rounded-xl shadow-xl">
-      <Link onclick={dispatch(setGamesSrartFlag(false))} to="/">
+      <Link onClick={dropIsGameFromTextbookHandle} to="/">
         <div className="close flex absolute bg-white bg-opacity-70 -top-8 -right-5 w-8 h-8 rounded-full shadow-xl items-center justify-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -36,48 +43,60 @@ function ModalStart({ setActiveModal, preLoader, setDifficult }) {
         </div>
       </Link>
       <div className="content p-10 flex items-center flex-col justify-center">
-        <div className="rules text-3xl text-grey mt-2 mb-4 text-center">
-          В этой игре вам необходимо услышать слово и выбрать его перевод
-        </div>
-        <div className="text-xl text-grey mb-2">Выбери уровеь</div>
-        <div className="mb-7">
-          <button
-            onClick={difficultHandle}
-            className="w-12 h-12 mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
-          >
-            1
-          </button>
-          <button
-            onClick={difficultHandle}
-            className="w-12 h-12 mx-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
-          >
-            2
-          </button>
-          <button
-            onClick={difficultHandle}
-            className="w-12 h-12  mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
-          >
-            3
-          </button>
-          <button
-            onClick={difficultHandle}
-            className="w-12 h-12  mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
-          >
-            4
-          </button>
-          <button
-            onClick={difficultHandle}
-            className="w-12 h-12  mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
-          >
-            5
-          </button>
-          <button
-            onClick={difficultHandle}
-            className="w-12 h-12  mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
-          >
-            6
-          </button>
-        </div>
+        {!isGameFromTextbook && (
+          <div className="rules text-3xl text-grey mt-2 mb-4 text-center">
+            В этой игре вам необходимо услышать слово и выбрать его перевод
+          </div>
+        )}
+        {isGameFromTextbook && (
+          <div className="rules text-3xl text-grey mt-2 mb-4 text-center">
+            Ну что, погнали учить слова ?
+          </div>
+        )}
+        {!isGameFromTextbook && (
+          <>
+            <div className="text-xl text-grey mb-2">Выбери уровеь</div>
+
+            <div className="mb-7">
+              <button
+                onClick={difficultHandle}
+                className="w-12 h-12 mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
+              >
+                1
+              </button>
+              <button
+                onClick={difficultHandle}
+                className="w-12 h-12 mx-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
+              >
+                2
+              </button>
+              <button
+                onClick={difficultHandle}
+                className="w-12 h-12  mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
+              >
+                3
+              </button>
+              <button
+                onClick={difficultHandle}
+                className="w-12 h-12  mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
+              >
+                4
+              </button>
+              <button
+                onClick={difficultHandle}
+                className="w-12 h-12  mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
+              >
+                5
+              </button>
+              <button
+                onClick={difficultHandle}
+                className="w-12 h-12  mx-2 my-2 bg-sprint text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-sprintHover hover:shadow-lg"
+              >
+                6
+              </button>
+            </div>
+          </>
+        )}
         <button
           onClick={onClickStart}
           type="button"

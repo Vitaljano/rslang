@@ -307,7 +307,7 @@ export const getWordsForRegUserGame = createAsyncThunk(
       const response = await $authHost.get(
         `/users/${userId}/aggregatedWords?wordsPerPage=100&group=${group}`
       );
-      console.log(response.data);
+
       return response.data;
     } catch (e) {
       return thunkAPI.rejectWithValue(e);
