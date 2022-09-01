@@ -49,7 +49,7 @@ export const Pagination = ({ pageCount }) => {
       previousLabel={arrowLeft}
       renderOnZeroPageCount={null}
       containerClassName={
-        ' container mx-auto flex my-2 text-white font-medium text-3xl  items-center'
+        ' container mx-auto flex my-2 text-white font-medium text-l md:text-3xl  justify-center items-center'
       }
       nextLinkClassName={
         'bg-white rounded-full w-10 h-10 flex justify-center items-center'

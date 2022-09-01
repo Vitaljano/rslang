@@ -6,8 +6,8 @@ import SprintGame from './pages/sprint';
 import Stat from './pages/stat';
 import AudioGame from './pages/AudioGame';
 import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { getNewUserTokens } from './utils/api/thunks';
+import { useEffect, useCallback } from 'react';
+import { getUserById } from './utils/api/thunks';
 
 import {
   authSlice,
@@ -30,14 +30,22 @@ export const APP_PAGES = {
 function App() {
   const dispatch = useDispatch();
 
+  const authCheck = useCallback(
+    async () => {
+      if (localStorage.getItem('token')) {
+        dispatch(authSlice.actions.setIsAuth(true));
+        dispatch(setAuthUserId(localStorage.getItem('userId')));
+        dispatch(setAuthUserName(localStorage.getItem('name')));
+        dispatch(getUserById(localStorage.getItem('userId')));
+      }
+    },
+    [setAuthUserId],
+    localStorage.getItem('token')
+  );
+
   useEffect(() => {
-    if (localStorage.getItem('token')) {
-      dispatch(authSlice.actions.setIsAuth(true));
-      dispatch(setAuthUserId(localStorage.getItem('userId')));
-      dispatch(setAuthUserName(localStorage.getItem('name')));
-      dispatch(getNewUserTokens(localStorage.getItem('userId')));
-    }
-  }, [localStorage.getItem('userId')]);
+    authCheck();
+  }, [authCheck]);
   return (
     <BrowserRouter>
       <Routes>
