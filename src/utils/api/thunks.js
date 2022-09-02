@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { toastr } from 'react-redux-toastr';
 import { $authHost, $host } from './http';
 import AuthService from '../../services/authService';
 
@@ -9,11 +8,11 @@ export const registration = createAsyncThunk(
   async ({ name, email, password }, thunkAPI) => {
     try {
       const response = await AuthService.registration(name, email, password);
-      toastr.success('Регистрация', 'Успешно выполнена');
       return response.data;
     } catch (e) {
-      toastr.error('Регистрация', 'не выполнена');
-      if (e instanceof Error) console.error(e.message);
+      if (e instanceof Error) {
+        console.error(e.message);
+      }
       return thunkAPI.rejectWithValue(
         'Не удалось создать нового пользователя!'
       );
@@ -27,7 +26,6 @@ export const login = createAsyncThunk('auth/login', async (data, thunkAPI) => {
     const response = await AuthService.login(email, password);
     return response.data;
   } catch (e) {
-    toastr.error('Неверный логин или пароль');
     return thunkAPI.rejectWithValue('Неверный логин или пароль');
   }
 });

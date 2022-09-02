@@ -9,6 +9,7 @@ const $host = axios.create({
 
 const $authHost = axios.create({
   baseURL: API_URL,
+
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -17,6 +18,7 @@ const $authHost = axios.create({
 
 const $authHostRefresh = axios.create({
   baseURL: API_URL,
+
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -36,6 +38,7 @@ const authRefInterceptor = (config) => {
 };
 
 $authHost.interceptors.request.use(authInterceptor);
+$authHostRefresh.interceptors.request.use(authRefInterceptor);
 
 $authHost.interceptors.response.use(
   (config) => {
@@ -63,6 +66,5 @@ $authHost.interceptors.response.use(
     throw error;
   }
 );
-$authHostRefresh.interceptors.request.use(authRefInterceptor);
 
 export { $host, $authHost, $authHostRefresh };
