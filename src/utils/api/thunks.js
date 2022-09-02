@@ -1,5 +1,4 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { toastr } from 'react-redux-toastr';
 import { $authHost, $host } from './http';
 import AuthService from '../../services/authService';
 
@@ -9,11 +8,11 @@ export const registration = createAsyncThunk(
   async ({ name, email, password }, thunkAPI) => {
     try {
       const response = await AuthService.registration(name, email, password);
-      toastr.success('Регистрация', 'Успешно выполнена');
       return response.data;
     } catch (e) {
-      toastr.error('Регистрация', 'не выполнена');
-      if (e instanceof Error) console.error(e.message);
+      if (e instanceof Error) {
+        console.error(e.message);
+      }
       return thunkAPI.rejectWithValue(
         'Не удалось создать нового пользователя!'
       );
@@ -27,7 +26,6 @@ export const login = createAsyncThunk('auth/login', async (data, thunkAPI) => {
     const response = await AuthService.login(email, password);
     return response.data;
   } catch (e) {
-    toastr.error('Неверный логин или пароль');
     return thunkAPI.rejectWithValue('Неверный логин или пароль');
   }
 });
@@ -180,6 +178,21 @@ export const getDifficultWords = createAsyncThunk(
     }
   }
 );
+
+export const getAllDifficultWords = createAsyncThunk(
+  'user/getAllDifficaltWords',
+  async (data, thunkAPI) => {
+    const { userId, difficulty, isLearned } = data;
+    try {
+      const response = await $authHost.get(
+        `/users/${userId}/aggregatedWords?wordsPerPage=600&filter=%7B%22%24and%22%3A%5B%7B%22userWord.difficulty%22%3A%22${difficulty}%22%2C%20%22userWord.optional.isLearned%22%3A${isLearned}%7D%5D%7D`
+      );
+      return response.data;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e);
+    }
+  }
+);
 export const getLearnedWords = createAsyncThunk(
   'user/getlearnedWords',
   async (data, thunkAPI) => {
@@ -305,7 +318,7 @@ export const getWordsForRegUserGame = createAsyncThunk(
     const { group, userId } = data;
     try {
       const response = await $authHost.get(
-        `/users/${userId}/aggregatedWords?wordsPerPage=100&group=${group}`
+        `/users/${userId}/aggregatedWords?wordsPerPage=600&group=${group}`
       );
 
       return response.data;
