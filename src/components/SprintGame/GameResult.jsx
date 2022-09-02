@@ -10,7 +10,7 @@ const Result = ({ word, transcription, truth, userAnswer }) => {
             id="Layer_1"
             viewBox="0 0 24 24"
             width="30"
-            height="3-"
+            height="30"
           >
             <path
               fill="#676060"
