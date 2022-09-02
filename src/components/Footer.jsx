@@ -1,6 +1,14 @@
+const pageRoutes = {
+  '/textbook': 'bg-green-900',
+  '/sprint': 'bg-sprint',
+  '/audiogame': 'bg-yellow',
+};
+
 function Footer() {
+  const bgColor = pageRoutes[location.pathname] || 'bg-header';
+
   return (
-    <footer className="bg-header px-2 py-5 text-action">
+    <footer className={`${bgColor} px-2 py-5 text-action`}>
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center ">
           <div className="opacity-50">
