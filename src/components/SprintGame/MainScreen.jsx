@@ -127,6 +127,7 @@ function MainScreen() {
             gameStart={isGameStart}
             gameEnd={onGameEndHandle}
             level={level}
+            audio={words[questionNumber].audio}
           />
         </>
       )}

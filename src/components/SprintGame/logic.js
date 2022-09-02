@@ -37,7 +37,12 @@ export const getQuestions = async (page, group) => {
   });
   const data = await response.data;
   const transformData = data.map((item) => {
-    return { id: item.id, word: item.word, wordTranslate: item.wordTranslate };
+    return {
+      id: item.id,
+      word: item.word,
+      wordTranslate: item.wordTranslate,
+      audio: item.audio,
+    };
   });
 
   const questions = await generateQuestion(transformData);
