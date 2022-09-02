@@ -69,7 +69,7 @@ function Header() {
 
         <div className="actions flex items-center flex-row">
           {isAuth ? (
-            <div className=" flex justify-center align-middle gap-3 ">
+            <div className=" flex justify-center items-center  gap-3 ">
               <div className="w-10 h-10 mx-auto opacity-50">
                 <svg
                   version="1.1"
