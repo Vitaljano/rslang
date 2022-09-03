@@ -1,28 +1,48 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getAllUserAgregatedWords } from '../../utils/api/thunks';
+import { getDifficultWords, getLearnedWords } from '../../utils/api/thunks';
 
 const initialState = {
   isLoading: false,
-  dificultWords: null,
-  leaningWords: null,
+  difficultWords: [],
+  learnedWords: [],
+  pageNumber: 0,
+  pageCount: 0,
 };
 
 export const agregatedWordsSlice = createSlice({
   name: 'agregatedWords',
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    setAgregatedPage: (state, action) => {
+      state.pageNumber = action.payload;
+    },
+    setAgregatedPageCount: (state, action) => {
+      state.pageCount = action.payload;
+    },
+  },
   extraReducers: {
-    [getAllUserAgregatedWords.pending.type]: (state) => {
+    [getDifficultWords.pending.type]: (state) => {
       state.isLoading = true;
     },
-    [getAllUserAgregatedWords.fulfilled.type]: (state, action) => {
+    [getDifficultWords.fulfilled.type]: (state, { payload }) => {
       state.isLoading = false;
-      state.leaningWords = action.payload;
+      state.difficultWords = payload[0];
     },
-    [getAllUserAgregatedWords.rejected.type]: (state) => {
+    [getDifficultWords.rejected.type]: (state) => {
+      state.isLoading = false;
+    },
+    [getLearnedWords.pending.type]: (state) => {
+      state.isLoading = true;
+    },
+    [getLearnedWords.fulfilled.type]: (state, { payload }) => {
+      state.isLoading = false;
+      state.learnedWords = payload[0];
+    },
+    [getLearnedWords.rejected.type]: (state) => {
       state.isLoading = false;
     },
   },
 });
-
+export const { setAgregatedPage, setAgregatedPageCount } =
+  agregatedWordsSlice.actions;
 export default agregatedWordsSlice.reducer;

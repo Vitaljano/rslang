@@ -1,24 +1,27 @@
-import { API_URL } from '../../utils/api/http';
 import Card from './Card';
-
-import WindowToStartGame from './WindowToStartGame';
 import PreLoader from './PreLoader';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import GameResult from './GameResult';
+import ModalStart from './ModalWindow';
+import { getQuestions } from './logic';
+import SoundMute from './SoundMute';
+import { useSelector } from 'react-redux/es/exports';
 
 function MainScreen() {
-  const [isOpenModal, setIsOpenModal] = useState(true);
-  const [preLoader, setPreLoader] = useState(true);
+  const { isGameFromTextbook } = useSelector((state) => state.games);
+  const wordsTextbookPage = useSelector((state) => state.words.bookPage);
+  const wordsTextbookLangGroup = useSelector((state) => state.words);
 
-  const [isGameStart, setGameStart] = useState(true);
+  const [isModalActive, setIsModalActive] = useState(true);
+  const [difficult, setDifficult] = useState(0);
+  const [preLoader, setPreLoader] = useState(false);
+  const [loadMore, setLoadMore] = useState(0);
+  const [isGameStart, setGameStart] = useState(false);
   const [isGameEnd, setGameEnd] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [words, setWords] = useState([]);
-  const [wordToGuess, setWordToGuess] = useState(null);
-  const [wordAnswer, setWordAnswer] = useState(null);
+  const [mute, setMute] = useState(false);
   const [questionNumber, setQuestionNumber] = useState(0);
-  const [isCorrect, setIsCorrect] = useState();
   const [userAnswerLog, setUserAnswerLog] = useState([]);
   const [level, setLevel] = useState(1);
   const [correctAnswersInRow, setCorrectAnswersInRow] = useState(0);
@@ -26,96 +29,57 @@ function MainScreen() {
   const inCorrectSound = new Audio(
     process.env.PUBLIC_URL + '/audio/incorrect.mp3'
   );
-  useEffect(() => {
-    setTimeout(() => {
-      setPreLoader(false);
-    }, 3000);
-  }, [preLoader]);
 
+  //Load questions
   useEffect(() => {
-    async function getData() {
-      const response = await axios.get(API_URL + '/words', {
-        params: { page: 1, group: 0 },
-      });
-      const data = await response.data;
-      const transformData = data.map((item) => {
-        return [item.word, item.wordTranslate];
-      });
-      setWords(transformData);
+    async function generateQuestions(loadMore, difficult) {
+      const result = await getQuestions(loadMore, difficult);
+      setWords([...result]);
     }
     try {
-      getData();
+      if (isGameFromTextbook) {
+        generateQuestions(wordsTextbookPage, difficult);
+      } else {
+        generateQuestions(loadMore, difficult);
+      }
     } catch (e) {
       console.log(e);
     }
-  }, []);
+  }, [loadMore, difficult]);
 
-  useEffect(() => {
-    generateQuestion();
-  }, [questionNumber]);
-
-  /* const randomNumbers = () => {
-    const ranNums = [];
-    const nums = [
-      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-    ];
-    let i = nums.length;
-    let j = 0;
-
-    while (i--) {
-      j = Math.floor(Math.random() * (i + 1));
-      ranNums.push(nums[j]);
-      nums.splice(j, 1);
-    }
-    return ranNums;
-  };*/
-
-  const generateQuestion = () => {
-    if (words.length !== 0) {
-      const trueOrNot = Math.random() > 0.5 ? true : false;
-
-      if (trueOrNot) {
-        const index = Math.floor(Math.random() * 20);
-        setWordToGuess(words[index][0]);
-        setWordAnswer(words[index][1]);
-        setIsCorrect(true);
-      } else {
-        const indexFalseEng = Math.floor(Math.random() * 20);
-        const indexFalseRu = Math.floor(Math.random() * 20);
-        setWordToGuess(words[indexFalseEng][0]);
-        setWordAnswer(words[indexFalseRu][1]);
-        setIsCorrect(false);
+  const checkAnswer = (userAnswer) => {
+    if (words[questionNumber].truth === userAnswer) {
+      setCorrectAnswersInRow((prev) => (prev += 1));
+      if (!mute) {
+        correctSound.play();
       }
+    } else {
+      setCorrectAnswersInRow(0);
+      if (!mute) {
+        inCorrectSound.play();
+      }
+    }
+
+    checkLevel();
+    // logging user answer
+    const userAnswerToLog = words[questionNumber];
+    userAnswerToLog.userAnswer = userAnswer;
+
+    setUserAnswerLog((prev) => {
+      return [...prev, userAnswerToLog];
+    });
+
+    if (words.length - 1 === questionNumber) {
+      setLoadMore((prev) => (prev += 1));
+      setQuestionNumber(0);
     }
   };
 
   const onAnswerHandle = (event) => {
-    setQuestionNumber((current) => {
-      return current + 1;
-    });
-    const userAnswer = event.target.dataset.answer === 'true' ? true : false;
-
-    setUserAnswerLog((prevArr) => {
-      return [
-        ...prevArr,
-        {
-          word: wordToGuess,
-          transcription: wordAnswer,
-          userAnswer: userAnswer,
-        },
-      ];
-    });
-
-    if (userAnswer === isCorrect) {
-      setCorrectAnswersInRow((prev) => prev + 1);
-      checkLevel();
-      correctSound.play();
-    } else {
-      setCorrectAnswersInRow(0);
-      checkLevel();
-      inCorrectSound.play();
-    }
+    checkAnswer(event.target.dataset.answer === 'true');
+    setQuestionNumber((prev) => (prev += 1));
   };
+
   const onGameEndHandle = () => {
     setGameEnd(true);
     setShowResult(true);
@@ -124,7 +88,7 @@ function MainScreen() {
     setPreLoader(true);
     setGameEnd(false);
     setShowResult(false);
-    setGameStart(true);
+    setGameStart(false);
   };
 
   const checkLevel = () => {
@@ -138,29 +102,36 @@ function MainScreen() {
       setLevel(1);
     }
   };
-  const pointsCounter = (points) => {};
-
-  const clickHandle = () => {
-    setIsOpenModal(false);
-    setPreLoader(true);
-  };
 
   return (
     <>
-      {/*isOpenModal && <WindowToStartGame onClick={clickHandle} />*/}
-      {preLoader && <PreLoader />}
-      {!isGameEnd && !showResult && !preLoader && (
-        <Card
-          question={wordToGuess}
-          answer={wordAnswer}
-          onAnswer={onAnswerHandle}
-          gameStart={isGameStart}
-          gameEnd={onGameEndHandle}
-          level={level}
-          pointsCounter={pointsCounter}
+      {isModalActive && (
+        <ModalStart
+          setActiveModal={setIsModalActive}
+          preLoader={setPreLoader}
+          setDifficult={setDifficult}
         />
       )}
-      {showResult && (
+      {preLoader && (
+        <PreLoader startGame={setGameStart} preLoader={setPreLoader} />
+      )}
+      {isGameStart && !isGameEnd && (
+        <>
+          <div className="container">
+            <SoundMute isMute={mute} setMute={setMute} />
+          </div>
+          <Card
+            question={words[questionNumber].word}
+            answer={words[questionNumber].wordTranslate}
+            onAnswer={onAnswerHandle}
+            gameStart={isGameStart}
+            gameEnd={onGameEndHandle}
+            level={level}
+            audio={words[questionNumber].audio}
+          />
+        </>
+      )}
+      {showResult && isGameEnd && (
         <GameResult onRestart={onRestartHandle} log={userAnswerLog} />
       )}
     </>

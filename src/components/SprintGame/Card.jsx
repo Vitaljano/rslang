@@ -1,8 +1,23 @@
 import Button from './Button';
 import Points from './Points';
 import Timer from './Timer';
+import { API_URL } from '../../utils/api/http';
 
-function Card({ question, answer, onAnswer, gameStart, gameEnd, level }) {
+function Card({
+  question,
+  answer,
+  audio,
+  onAnswer,
+  gameStart,
+  gameEnd,
+  level,
+}) {
+  const audioFile = new Audio(`${API_URL}/${audio}`);
+
+  const playButtonHandle = () => {
+    audioFile.play();
+  };
+
   const endTimerHandle = (value) => {
     gameEnd(value);
   };
@@ -14,7 +29,7 @@ function Card({ question, answer, onAnswer, gameStart, gameEnd, level }) {
       </div>
       <div className="bg-white rounded-md shadow  pt-20 pb-20 w-96 h-full mx-auto">
         <div className="text-center text-2xl">{question}</div>
-        <button className="m-auto block my-4 ">
+        <button onClick={playButtonHandle} className="m-auto block my-4 ">
           <svg
             width="38"
             height="36"

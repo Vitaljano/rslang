@@ -19,6 +19,7 @@ function Button({ className, content, type, onAnswer }) {
       typeSet = def;
   }
   const style = className || '';
+
   return (
     <button
       onClick={onAnswer}

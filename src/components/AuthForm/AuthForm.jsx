@@ -7,6 +7,7 @@ import { registration, login } from '../../utils/api/thunks';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
 const AuthForm = () => {
   const location = useLocation();
@@ -16,31 +17,37 @@ const AuthForm = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
-    mode: 'all',
+    mode: 'onBlur',
   });
 
   const { isLoading } = useSelector((state) => state.auth);
 
-  const onSubmit = (data) => {
-    try {
-      if (isLogin) {
-        dispatch(login(data));
+  const onSubmit = async (data) => {
+    if (isLogin) {
+      const result = await dispatch(login(data));
+      if (result.meta.requestStatus === 'fulfilled') {
+        history(APP_PAGES.main);
       } else {
-        dispatch(registration(data));
+        toast.error('Неверный логин или пароль!');
+        reset();
       }
-      history(APP_PAGES.main);
-    } catch (e) {
-      console.log(e);
-    } finally {
-      // dispatch(getNewUserTokens(user.userId));
+    } else {
+      const result = await dispatch(registration(data));
+      if (result.meta.requestStatus === 'fulfilled') {
+        history(APP_PAGES.main);
+      } else {
+        toast.error('Не удалось создать нового пользователя!');
+        reset();
+      }
     }
   };
 
   return (
-    <div className="relative flex flex-col justify-center min-h-screen overflow-hidden">
-      <div className="w-full p-6 m-auto bg-violet-900 rounded-md shadow-md lg:max-w-xl">
+    <div className="relative flex flex-col justify-center min-h-screen overflow-hidden ">
+      <div className="w-full p-6 m-auto bg-violet-900 rounded-md shadow-2xl  lg:max-w-xl">
         <h1 className="text-3xl font-semibold text-center text-white">
           {isLogin ? 'Вход' : 'Регистрация'}
         </h1>
@@ -53,14 +60,29 @@ const AuthForm = () => {
                   Email
                 </label>
                 <input
-                  {...register('email', { required: true })}
+                  {...register('email', {
+                    required: 'Поле обязательно к заполнению',
+                    minLength: {
+                      value: 4,
+                      message: 'Длинна почты должна быть от 4 до 8 символов',
+                    },
+                    maxLength: {
+                      value: 24,
+                      message: 'Длинна почты должна быть от 2 до 24 символов',
+                    },
+                    pattern: {
+                      value:
+                        /^(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6})$/i,
+                      message: 'Некорректная почта',
+                    },
+                  })}
                   placeholder="Введите вашу почту"
                   type="text"
                   className="block w-full px-4 py-2 mt-2  bg-white border rounded-md border-white focus:border-green-600 focus:ring-green-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
               </div>
               <div className="text-sm text-red">
-                {errors.email && <p>Поле обязательно к заполнению</p>}
+                {errors?.email && <p>{errors?.email?.message || 'Error: '}</p>}
               </div>
 
               <div className="mb-2">
@@ -68,14 +90,32 @@ const AuthForm = () => {
                   Пароль
                 </label>
                 <input
-                  {...register('password', { required: true })}
+                  {...register('password', {
+                    required: 'Поле обязательно к заполнению',
+                    minLength: {
+                      value: 8,
+                      message: 'Длинна должна быть от 8 до 16 символов',
+                    },
+                    maxLength: {
+                      value: 16,
+                      message: 'Длинна должна быть от 8 до 16 символов',
+                    },
+                    // pattern: {
+                    //   value:
+                    //     /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g,
+                    //   message:
+                    //     'Пароль должен содержать: числа, латинские буквы в верхнем и нижнем регистре, спецсимволы',
+                    // },
+                  })}
                   type="password"
                   name="password"
                   placeholder="Введите пароль"
                   className="block w-full px-4 py-2 mt-2  bg-white border-white rounded-md focus:border-green-600 focus:ring-green-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
                 <div className="text-sm text-red mt-2">
-                  {errors.password && <p>Поле обязательно к заполнению</p>}
+                  {errors.password && (
+                    <p>{errors?.password?.message || 'Error: '}</p>
+                  )}
                 </div>
               </div>
             </>
@@ -86,14 +126,29 @@ const AuthForm = () => {
                   Имя пользователя
                 </label>
                 <input
-                  {...register('name', { required: true })}
+                  {...register('name', {
+                    required: 'Поле обязательно к заполнению',
+                    minLength: {
+                      value: 2,
+                      message: 'Длинна имени должна быть от 2 до 16 символов',
+                    },
+                    maxLength: {
+                      value: 16,
+                      message: 'Длинна имени должна быть от 2 до 16 символов',
+                    },
+                    pattern: {
+                      value: /^[а-яёa-z]+$/iu,
+                      message:
+                        'Имя должно состоять из букв кирриллицы или латинского алфавита, содержать только буквенные символы',
+                    },
+                  })}
                   name="name"
                   placeholder="Введите имя"
                   type="text"
                   className="block w-full px-4 py-2 mt-2  bg-white border-white rounded-md focus:border-green-600 focus:ring-green-400 focus:outline-none focus:ring focus:ring-opacity-40 "
                 />
                 <div className="text-sm text-red mt-2">
-                  {errors.name && <p>Поле обязательно к заполнению</p>}
+                  {errors?.name && <p>{errors?.name?.message || 'Error: '}</p>}
                 </div>
               </div>
               <div className="mb-4 ">
@@ -101,29 +156,61 @@ const AuthForm = () => {
                   Email
                 </label>
                 <input
-                  {...register('email', { required: true })}
-                  name="email"
+                  {...register('email', {
+                    required: 'Поле обязательно к заполнению',
+                    minLength: {
+                      value: 4,
+                      message: 'Длинна почты должна быть от 4 до 8 символов',
+                    },
+                    maxLength: {
+                      value: 24,
+                      message: 'Длинна почты должна быть от 2 до 24 символов',
+                    },
+                    pattern: {
+                      value:
+                        /^(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6})$/i,
+                      message: 'Некорректная почта',
+                    },
+                  })}
                   placeholder="Введите вашу почту"
                   type="text"
                   className="block w-full px-4 py-2 mt-2  bg-white border rounded-md border-white focus:border-green-600 focus:ring-green-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
-                <div className="text-sm text-red mt-2">
-                  {errors.email && <p>Поле обязательно к заполнению</p>}
-                </div>
+              </div>
+              <div className="text-sm text-red">
+                {errors?.email && <p>{errors?.email?.message || 'Error: '}</p>}
               </div>
               <div className="mb-2">
                 <label className="block text-xl sm:text-xl font-semibold text-white">
                   Пароль
                 </label>
                 <input
-                  {...register('password', { required: true })}
+                  {...register('password', {
+                    required: 'Поле обязательно к заполнению',
+                    minLength: {
+                      value: 8,
+                      message: 'Длинна должна быть от 8 до 16 символов',
+                    },
+                    maxLength: {
+                      value: 16,
+                      message: 'Длинна должна быть от 8 до 16 символов',
+                    },
+                    // pattern: {
+                    //   value:
+                    //     /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g,
+                    //   message:
+                    //     'Пароль должен содержать: числа, латинские буквы в верхнем и нижнем регистре, спецсимволы',
+                    // },
+                  })}
                   type="password"
                   name="password"
                   placeholder="Введите пароль"
                   className="block w-full px-4 py-2 mt-2  bg-white border-white rounded-md focus:border-green-600 focus:ring-green-400 focus:outline-none focus:ring focus:ring-opacity-40"
                 />
                 <div className="text-sm text-red mt-2">
-                  {errors.password && <p>Поле обязательно к заполнению</p>}
+                  {errors.password && (
+                    <p>{errors?.password?.message || 'Error: '}</p>
+                  )}
                 </div>
               </div>
             </>
@@ -163,6 +250,7 @@ const AuthForm = () => {
           </div>
         </form>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </div>
   );
 };
