@@ -5,9 +5,10 @@ function ModalStart({ setActiveModal }) {
   const onClickStart = () => {
     setActiveModal(false);
   };
+  const levels = [1, 2, 3, 4, 5];
 
   return (
-    <div className="modal w-3/6 h-80 bg-white flex items-center justify-center relative fixed top-14 rounded-xl shadow-xl">
+    <div className="modal w-3/6 h-96 bg-white flex items-center justify-center relative fixed top-14 rounded-xl shadow-xl">
       <Link to="/">
         <div className="close flex absolute bg-white bg-opacity-70 -top-8 -right-5 w-8 h-8 rounded-full shadow-xl items-center justify-center">
           <svg
@@ -28,10 +29,23 @@ function ModalStart({ setActiveModal }) {
         <div className="rules text-3xl text-grey my-10 text-center">
           В этой игре вам необходимо услышать слово и выбрать его перевод
         </div>
+        <div className="text-xl text-grey mb-2">Выбери уровеь</div>
+        <div className="mb-7">
+          {levels.map((el, index) => (
+            <button
+              onClick={() => console.log(index)}
+              key={index}
+              className="w-12 h-12 mx-2 my-2 bg-yellow text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-lightyellow hover:shadow-lg"
+            >
+              {el}
+            </button>
+          ))}
+        </div>
+
         <button
           onClick={onClickStart}
           type="button"
-          className="text-white text-2xl bg-yellow transition duration-300 ease-in-out font-medium rounded-lg w-48 h-12 hover:bg-white hover:bg-lightyellow hover:shadow-lg ml-4"
+          className="text-white text-2xl bg-yellow transition duration-300 ease-in-out font-medium rounded-lg w-48 h-12 hover:bg-lightyellow hover:shadow-lg ml-4"
         >
           Поехали!
         </button>
