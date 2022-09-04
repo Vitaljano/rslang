@@ -4,6 +4,11 @@ function PreLoader({ startGame, preLoader }) {
   const [countDown, setCountDown] = useState(3); // 3 seconds
 
   useEffect(() => {
+    const prev = localStorage.getItem('totalGames');
+    localStorage.setItem('totalGames', Number(prev) + 1);
+  }, []);
+
+  useEffect(() => {
     const timer = setInterval(() => {
       setCountDown((prev) => prev - 1);
     }, 1000);
