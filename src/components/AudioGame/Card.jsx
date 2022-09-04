@@ -1,21 +1,29 @@
 import React from 'react';
 import { API_URL } from '../../utils/api/http';
 
-function Card({ answer, audio, onRightAnswer }) {
+function Card({ answer, audio, onRightAnswer, onWrongAnswer, wrongAns }) {
   const wordAudio = new Audio(API_URL + '/' + audio);
-  // const n = 5;
+  const onClickPlay = () => {
+    wordAudio.play();
+  };
 
-  // const onClickPlay = () => {
-  // console.log(API_URL + '/' + audio);
   React.useEffect(() => {
     wordAudio.play();
   }, [audio]);
-  // };
+
+  //getting random answers
+  const allAns = [...wrongAns].sort(() => 0.5 - Math.random()).slice(0, 5);
+  if (!allAns.includes(answer)) {
+    allAns.pop();
+    allAns.push(answer);
+  }
+  const randomAns = allAns.sort(() => 0.5 - Math.random());
 
   return (
     <>
       <div
-        /* onClick={onClickPlay} */ className="listen mx-auto my-4 cursor-pointer"
+        onClick={onClickPlay}
+        className="listen mx-auto my-4 cursor-pointer transition-all hover:drop-shadow-md"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -39,33 +47,15 @@ function Card({ answer, audio, onRightAnswer }) {
         </svg>
       </div>
       <div className="answers flex gap-10 flex-wrap items-center justify-center mt-16">
-        {[...Array(5)].map((e, i) => (
+        {randomAns.map((el, i) => (
           <button
             key={i}
-            onClick={onRightAnswer}
+            onClick={el !== answer ? onWrongAnswer : onRightAnswer}
             className="answer1 text-grey text-2xl bg-white transition duration-300 ease-in-out font-medium rounded-lg w-56 h-14 hover:bg-white hover:shadow-lg ml-4"
           >
-            {answer}
+            {el}
           </button>
         ))}
-        {/* <button className="answer1 text-grey text-2xl bg-white transition duration-300 ease-in-out font-medium rounded-lg w-56 h-14 hover:bg-white hover:shadow-lg ml-4">
-          answer
-        </button>
-        <button className="answer1 text-grey text-2xl bg-white transition duration-300 ease-in-out font-medium rounded-lg w-56 h-14 hover:bg-white hover:shadow-lg ml-4">
-          answer
-        </button>
-        <button className="answer1 text-grey text-2xl bg-white transition duration-300 ease-in-out font-medium rounded-lg w-56 h-14 hover:bg-white hover:shadow-lg ml-4">
-          {answer}
-        </button>
-        <button className="answer1 text-grey text-2xl bg-white transition duration-300 ease-in-out font-medium rounded-lg w-56 h-14 hover:bg-white hover:shadow-lg ml-4">
-          answer
-        </button>
-        <button
-          // onClick={onClickRightAns}
-          className="answer1 text-grey text-2xl bg-white transition duration-300 ease-in-out font-medium rounded-lg w-56 h-14 hover:bg-white hover:shadow-lg ml-4"
-        >
-          answer
-        </button> */}
       </div>
     </>
   );
