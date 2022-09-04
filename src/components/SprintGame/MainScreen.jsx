@@ -11,7 +11,7 @@ function MainScreen() {
   const { isGameFromTextbook } = useSelector((state) => state.games);
   const wordsTextbookPage = useSelector((state) => state.words.bookPage);
   const wordsTextbookLangGroup = useSelector((state) => state.words);
-
+  const [points, setPoints] = useState(0);
   const [isModalActive, setIsModalActive] = useState(true);
   const [difficult, setDifficult] = useState(0);
   const [preLoader, setPreLoader] = useState(false);
@@ -25,10 +25,23 @@ function MainScreen() {
   const [userAnswerLog, setUserAnswerLog] = useState([]);
   const [level, setLevel] = useState(1);
   const [correctAnswersInRow, setCorrectAnswersInRow] = useState(0);
+  const [saveStat, setSaveStat] = useState(0);
   const correctSound = new Audio(process.env.PUBLIC_URL + '/audio/correct.mp3');
   const inCorrectSound = new Audio(
     process.env.PUBLIC_URL + '/audio/incorrect.mp3'
   );
+  // update stat if is max score
+  useEffect(() => {
+    const maxPoints = localStorage.getItem('maxScore');
+    const correctAnswers = localStorage.getItem('correctAnswers');
+
+    if (correctAnswers <= correctAnswersInRow) {
+      localStorage.setItem('correctAnswers', correctAnswersInRow);
+    }
+    if (maxPoints <= points) {
+      localStorage.setItem('maxScore', points);
+    }
+  }, [saveStat]);
 
   //Load questions
   useEffect(() => {
@@ -48,7 +61,12 @@ function MainScreen() {
   }, [loadMore, difficult]);
 
   const checkAnswer = (userAnswer) => {
+    // check is user answer true
     if (words[questionNumber].truth === userAnswer) {
+      setPoints((prev) => {
+        return prev + 5 * level;
+      });
+
       setCorrectAnswersInRow((prev) => (prev += 1));
       if (!mute) {
         correctSound.play();
@@ -81,10 +99,13 @@ function MainScreen() {
   };
 
   const onGameEndHandle = () => {
+    setSaveStat((prev) => (prev += 1));
+
     setGameEnd(true);
     setShowResult(true);
   };
   const onRestartHandle = () => {
+    setPoints(0);
     setPreLoader(true);
     setGameEnd(false);
     setShowResult(false);
@@ -92,11 +113,14 @@ function MainScreen() {
   };
 
   const checkLevel = () => {
-    if (correctAnswersInRow > 2) {
+    if (correctAnswersInRow > 5) {
       setLevel(2);
     }
-    if (correctAnswersInRow > 12) {
+    if (correctAnswersInRow > 10) {
       setLevel(3);
+    }
+    if (correctAnswersInRow > 20) {
+      setLevel(4);
     }
     if (correctAnswersInRow === 0) {
       setLevel(1);
@@ -126,13 +150,17 @@ function MainScreen() {
             onAnswer={onAnswerHandle}
             gameStart={isGameStart}
             gameEnd={onGameEndHandle}
-            level={level}
+            points={points}
             audio={words[questionNumber].audio}
           />
         </>
       )}
       {showResult && isGameEnd && (
-        <GameResult onRestart={onRestartHandle} log={userAnswerLog} />
+        <GameResult
+          score={points}
+          onRestart={onRestartHandle}
+          log={userAnswerLog}
+        />
       )}
     </>
   );

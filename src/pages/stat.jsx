@@ -1,12 +1,26 @@
 import { useSelector } from 'react-redux/es/exports';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 function Stat() {
   const isAuth = useSelector((state) => state.auth.isAuth);
   const userName = useSelector((state) => state.auth.user.name);
   const userID = useSelector((state) => state.auth.user.userId);
+  const [totalGames, setTotalGames] = useState(0);
+  const [maxScore, setMaxScore] = useState(0);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
 
+  useEffect(() => {
+    const maxScoreLocal = localStorage.getItem('maxScore') || 0;
+    const totalGamesLocal = localStorage.getItem('totalGames') || 0;
+    const correctAnswersLocal = localStorage.getItem('totalGames') || 0;
+
+    setCorrectAnswers(correctAnswersLocal);
+    setTotalGames(totalGamesLocal);
+    setMaxScore(maxScoreLocal);
+  }, [totalGames, maxScore]);
   return (
     <>
       <Header />
@@ -52,13 +66,19 @@ function Stat() {
               <div className="w-60 h-60 m-4 rounded-full p-10 bg-danger flex justify-center items-center shadow-md">
                 <div className="w-40 h-40 rounded-full bg-white flex justify-center items-center flex-col">
                   <div>Всего игр: </div>
-                  <div className="font-bold text-2xl">340</div>
+                  <div className="font-bold text-2xl">{totalGames}</div>
+                </div>
+              </div>
+              <div className="w-60 h-60 m-4 rounded-full p-10 bg-grey flex justify-center items-center shadow-md">
+                <div className="w-40 h-40 rounded-full bg-white flex justify-center items-center flex-col">
+                  <div>Максимум очков: </div>
+                  <div className="font-bold text-2xl">{maxScore}</div>
                 </div>
               </div>
               <div className="w-60 h-60 m-4 rounded-full p-10 bg-footer flex justify-center items-center shadow-md">
                 <div className="w-40 h-40 rounded-full bg-white flex justify-center items-center flex-col text-center">
                   <div>Максимум без ощибок: </div>
-                  <div className="font-bold text-2xl">340</div>
+                  <div className="font-bold text-2xl">{correctAnswers}</div>
                 </div>
               </div>
               <div className="w-60 h-60 m-4 rounded-full p-10 bg-success flex justify-center items-center shadow-md">

@@ -10,7 +10,7 @@ function Card({
   onAnswer,
   gameStart,
   gameEnd,
-  level,
+  points,
 }) {
   const audioFile = new Audio(`${API_URL}/${audio}`);
 
@@ -25,7 +25,7 @@ function Card({
     <div>
       <div className="mx-auto w-96 flex justify-between pb-2">
         <Timer start={gameStart} end={endTimerHandle} />
-        <Points level={level} />
+        <Points points={points} />
       </div>
       <div className="bg-white rounded-md shadow  pt-20 pb-20 w-96 h-full mx-auto">
         <div className="text-center text-2xl">{question}</div>
