@@ -1,11 +1,29 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setLangGroupNumber, setPage } from '../../store/reducers/WordSlice';
+
+export const levels = [1, 2, 3, 4, 5, 6];
 
 function ModalStart({ setActiveModal }) {
+  function randomInteger(min, max) {
+    // получить случайное число от (min-0.5) до (max+0.5)
+    let rand = min - 0.5 + Math.random() * (max - min + 1);
+    return Math.round(rand);
+  }
+
+  const dispatch = useDispatch();
+
   const onClickStart = () => {
     setActiveModal(false);
+    dispatch(setLangGroupNumber(randomInteger(0, 5)));
+    dispatch(setPage(randomInteger(0, 29)));
   };
-  const levels = [1, 2, 3, 4, 5];
+  const onClickDifficulty = (e) => {
+    setActiveModal(false);
+    dispatch(setLangGroupNumber(e.target.textContent - 1));
+    dispatch(setPage(randomInteger(0, 29)));
+  };
 
   return (
     <div className="modal w-3/6 h-96 bg-white flex items-center justify-center relative fixed top-14 rounded-xl shadow-xl">
@@ -33,8 +51,8 @@ function ModalStart({ setActiveModal }) {
         <div className="mb-7">
           {levels.map((el, index) => (
             <button
-              onClick={() => console.log(index)}
               key={index}
+              onClick={onClickDifficulty}
               className="w-12 h-12 mx-2 my-2 bg-yellow text-white text-2xl transition duration-300 ease-in-out font-medium rounded-lg hover:bg-white hover:bg-lightyellow hover:shadow-lg"
             >
               {el}

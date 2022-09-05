@@ -1,11 +1,15 @@
 import React from 'react';
 import { API_URL } from '../../utils/api/http';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 import Card from './Card';
 import AudioResults from './AudioResults';
+// import levels from './ModalStart';
 
 function AudioCall() {
+  const difficulty = useSelector((state) => state.words.langGroupNumber);
+
   const correctSound = new Audio(process.env.PUBLIC_URL + '/audio/correct.mp3');
   const inorrectSound = new Audio(
     process.env.PUBLIC_URL + '/audio/incorrect.mp3'
@@ -17,6 +21,10 @@ function AudioCall() {
   const [log, setLog] = React.useState([]);
 
   const [lives, setLives] = React.useState(5);
+
+  console.log(difficulty);
+  // const randomGroup = Math.random(1, 5);
+  const randomPage = Math.random(1, 30);
 
   const onRightAnswer = () => {
     correctSound.play();
@@ -36,7 +44,6 @@ function AudioCall() {
         },
       ];
     });
-    console.log(log);
   };
   const onWrongAnswer = () => {
     inorrectSound.play();
@@ -57,7 +64,6 @@ function AudioCall() {
         },
       ];
     });
-    console.log(log);
   };
   const onRestartHandle = () => {
     setLives(5);
@@ -68,7 +74,7 @@ function AudioCall() {
   React.useEffect(() => {
     axios
       .get(API_URL + '/words', {
-        params: { page: 2, group: 2 },
+        params: { page: randomPage, group: difficulty },
       })
       .then((responce) => {
         const data = responce.data;

@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux/es/exports';
 function MainScreen() {
   const { isGameFromTextbook } = useSelector((state) => state.games);
   const wordsTextbookPage = useSelector((state) => state.words.bookPage);
-  const wordsTextbookLangGroup = useSelector((state) => state.words);
+  // const wordsTextbookLangGroup = useSelector((state) => state.words);
   const [points, setPoints] = useState(0);
   const [isModalActive, setIsModalActive] = useState(true);
   const [difficult, setDifficult] = useState(0);
