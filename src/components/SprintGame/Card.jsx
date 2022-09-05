@@ -11,6 +11,7 @@ function Card({
   gameStart,
   gameEnd,
   points,
+  level,
 }) {
   const audioFile = new Audio(`${API_URL}/${audio}`);
 
@@ -27,7 +28,12 @@ function Card({
         <Timer start={gameStart} end={endTimerHandle} />
         <Points points={points} />
       </div>
-      <div className="bg-white rounded-md shadow  pt-20 pb-20 w-96 h-full mx-auto">
+      <div className="bg-white rounded-md shadow  pt-10 pb-20 w-96 h-full mx-auto">
+        <div className="mb-10 text-center">
+          <div className="mx-auto w-10 h-10 bg-success rounded-full flex justify-center items-center font-semibold text-white">
+            x {level}
+          </div>
+        </div>
         <div className="text-center text-2xl">{question}</div>
         <button onClick={playButtonHandle} className="m-auto block my-4 ">
           <svg
