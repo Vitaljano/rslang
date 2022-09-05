@@ -32,6 +32,10 @@ function AudioCall() {
       setResults(true);
     }
   };
+  const onRestartHandle = () => {
+    setLives(5);
+    setResults(false);
+  };
 
   React.useEffect(() => {
     axios
@@ -48,12 +52,11 @@ function AudioCall() {
         setWrongAns(result);
       });
   }, [questionNumber, lives]);
-
   return (
     <>
       <div className="container w-4/6 h-5/6 flex flex-col items-center relative fixed top-4">
         {results ? (
-          <AudioResults setResults={setResults} />
+          <AudioResults onRestartHandle={onRestartHandle} />
         ) : (
           <>
             <div className="lives flex flex-row gap-2 mb-2">

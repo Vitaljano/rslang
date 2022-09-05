@@ -87,7 +87,7 @@ const Result = ({ word, transcription, translate }) => {
   );
 };
 
-function AudioResults({ setResults }) {
+function AudioResults({ onRestartHandle }) {
   return (
     <>
       <div className="flex flex-row w-10/12">
@@ -98,7 +98,7 @@ function AudioResults({ setResults }) {
         </div>
         <div className="actions ml-20 flex flex-col justify-evenly text-white text-center text-lg">
           <div
-            onClick={() => setResults(false)}
+            onClick={onRestartHandle}
             className="again cursor-pointer hover:drop-shadow-lg"
           >
             <svg
