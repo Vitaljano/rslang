@@ -1,13 +1,6 @@
 /* eslint-disable */
 
-// import { API_URL } from '../../utils/api/http';
-// import axios from 'axios';
 import GameService from '../../services/gamesService';
-import { useSelector } from 'react-redux';
-
-// const { ssss } = useSelector(
-//   (state) => state.games.AllWordsOfGroupforRegisterUser.paginatedResults
-// );
 
 async function getRandomIndex(length) {
   return Math.floor(Math.random() * length);
@@ -54,8 +47,6 @@ export const getQuestionsForUserTextBookService = async (
     group,
     userId,
   });
-  // console.log(notLearnedWords);
-  // console.log(gamesRoundWords);
 
   const transformData = [...notLearnedWords, ...gamesRoundWords].map((item) => {
     return {
@@ -65,7 +56,6 @@ export const getQuestionsForUserTextBookService = async (
       audio: item.audio,
     };
   });
-  // console.log(transformData);
 
   const questions = await generateQuestion(transformData);
   return questions;
@@ -78,10 +68,27 @@ export const getQuestionsForUserService = async (page, group, userId) => {
     userId,
   });
 
-  // const gamesRoundWords = await response;
-  console.log(gamesRoundWords);
-
   const transformData = gamesRoundWords.map((item) => {
+    return {
+      id: item.id,
+      word: item.word,
+      wordTranslate: item.wordTranslate,
+      audio: item.audio,
+    };
+  });
+
+  const questions = await generateQuestion(transformData);
+  return questions;
+};
+
+//// not login
+
+export const getQuestionsForMenuService = async (page, group) => {
+  const gamesRoundWords = await GameService.questionsForMenu({
+    page,
+    group,
+  });
+  const transformData = [...gamesRoundWords].map((item) => {
     return {
       id: item.id,
       word: item.word,
@@ -95,8 +102,20 @@ export const getQuestionsForUserService = async (page, group, userId) => {
   return questions;
 };
 
-// export const getQuestionsForUser = async (page, group) => {
-//   const response = await axios.get(API_URL + '/words', {
-//     params: { page: page, group: group },
-//   });
-// };
+export const getQuestionsForTextBookService = async (page, group) => {
+  const gamesRoundWords = await GameService.questionsForTextbook({
+    page,
+    group,
+  });
+  const transformData = [...gamesRoundWords].map((item) => {
+    return {
+      id: item.id,
+      word: item.word,
+      wordTranslate: item.wordTranslate,
+      audio: item.audio,
+    };
+  });
+
+  const questions = await generateQuestion(transformData);
+  return questions;
+};

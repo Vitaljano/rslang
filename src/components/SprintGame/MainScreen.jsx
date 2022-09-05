@@ -8,29 +8,17 @@ import ModalStart from './ModalWindow';
 import {
   getQuestionsForUserTextBookService,
   getQuestionsForUserService,
+  getQuestionsForMenuService,
+  getQuestionsForTextBookService,
 } from './logic';
 import SoundMute from './SoundMute';
 import { useSelector } from 'react-redux/es/exports';
-
-// import{}
 
 function MainScreen() {
   const { langGroupNumber, bookPage } = useSelector((state) => state.words);
 
   const { isAuth } = useSelector((state) => state.auth);
   const { isGameFromTextbook } = useSelector((state) => state.games);
-  // const wordsTextbookPage = useSelector(
-  //   (state) => state.userWords.allUserWords.paginatedResults
-  // );
-  // const wordsTextbookPageUser = useSelector(
-  //   (state) => state.userWords.allUserWords.paginatedResults
-  // );
-
-  // const wordsMenuUser = useSelector(
-  //   (state) => state.userWords.allUserWords.paginatedResults
-  // );
-
-  // const wordsTextbookLangGroup = useSelector((state) => state.words);
   const [points, setPoints] = useState(0);
   const [isModalActive, setIsModalActive] = useState(true);
   const [difficult, setDifficult] = useState(0);
@@ -62,23 +50,6 @@ function MainScreen() {
       localStorage.setItem('maxScore', points);
     }
   }, [saveStat]);
-
-  //Load questions
-  // useEffect(() => {
-  //   async function generateQuestions(loadMore, difficult) {
-  //     const result = await getQuestions(loadMore, difficult);
-  //     setWords([...result]);
-  //   }
-  //   try {
-  //     if (isGameFromTextbook) {
-  //       generateQuestions(wordsTextbookPage, difficult);
-  //     } else {
-  //       generateQuestions(loadMore, difficult);
-  //     }
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // }, [loadMore, difficult]);
 
   useEffect(() => {
     if (isAuth) {
@@ -121,19 +92,26 @@ function MainScreen() {
         console.log(e);
       }
     } else {
-      // async function generateQuestions(loadMore, difficult) {
-      //   const result = await getQuestions(loadMore, difficult);
-      //   setWords([...result]);
-      // }
-      // try {
-      //   if (isGameFromTextbook) {
-      //     generateQuestions(bookPage, langGroupNumber);
-      //   } else {
-      //     generateQuestions(loadMore, difficult);
-      //   }
-      // } catch (e) {
-      //   console.log(e);
-      // }
+      async function generateQuestionsTextbook(loadMore, difficult) {
+        const result = await getQuestionsForTextBookService(
+          loadMore,
+          difficult
+        );
+        setWords([...result]);
+      }
+      async function generateQuestionsMenu(loadMore, difficult) {
+        const result = await getQuestionsForMenuService(loadMore, difficult);
+        setWords([...result]);
+      }
+      try {
+        if (isGameFromTextbook) {
+          generateQuestionsTextbook(bookPage, langGroupNumber);
+        } else {
+          generateQuestionsMenu(loadMore, difficult);
+        }
+      } catch (e) {
+        console.log(e);
+      }
     }
   }, [loadMore, difficult]);
 
