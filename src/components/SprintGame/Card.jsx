@@ -2,6 +2,7 @@ import Button from './Button';
 import Points from './Points';
 import Timer from './Timer';
 import { API_URL } from '../../utils/api/http';
+import { useCallback, useEffect } from 'react';
 
 function Card({
   question,
@@ -11,7 +12,26 @@ function Card({
   gameStart,
   gameEnd,
   points,
+  level,
 }) {
+  let trueButton = null;
+  let falseButton = null;
+
+  const keyPressHandle = useCallback((e) => {
+    if (e.code === 'KeyN') {
+      trueButton.click();
+    }
+    if (e.code === 'KeyV') {
+      falseButton.click();
+    }
+  });
+
+  useEffect(() => {
+    trueButton = document.querySelector('.button-true');
+    falseButton = document.querySelector('.button-false');
+
+    document.addEventListener('keydown', keyPressHandle);
+  }, []);
   const audioFile = new Audio(`${API_URL}/${audio}`);
 
   const playButtonHandle = () => {
@@ -27,7 +47,12 @@ function Card({
         <Timer start={gameStart} end={endTimerHandle} />
         <Points points={points} />
       </div>
-      <div className="bg-white rounded-md shadow  pt-20 pb-20 w-96 h-full mx-auto">
+      <div className="bg-white rounded-md shadow  pt-10 pb-20 w-96 h-full mx-auto">
+        <div className="mb-10 text-center">
+          <div className="mx-auto w-10 h-10 bg-success rounded-full flex justify-center items-center font-semibold text-white">
+            x {level}
+          </div>
+        </div>
         <div className="text-center text-2xl">{question}</div>
         <button onClick={playButtonHandle} className="m-auto block my-4 ">
           <svg
@@ -65,9 +90,22 @@ function Card({
         </button>
         <div className="text-center text-2xl">{answer}</div>
         <div className="flex mt-10 justify-around">
-          <Button content={'Не Верно'} type={'danger'} onAnswer={onAnswer} />
-          <Button content={'Верно'} type={'success'} onAnswer={onAnswer} />
+          <Button
+            className="button-false"
+            content={'Не Верно'}
+            type={'danger'}
+            onAnswer={onAnswer}
+          />
+          <Button
+            className="button-true"
+            content={'Верно'}
+            type={'success'}
+            onAnswer={onAnswer}
+          />
         </div>
+      </div>
+      <div className="flex justify-center items-center text-grey text-xs p-4">
+        V и N кнопки для быстрого выбора ответа
       </div>
     </div>
   );
