@@ -41,6 +41,7 @@ export const getUserById = createAsyncThunk(
     }
   }
 );
+
 export const updateUserById = createAsyncThunk(
   'user/updateUserById',
   async (userId, thunkAPI) => {
@@ -68,7 +69,7 @@ export const getNewUserTokens = createAsyncThunk(
   'user/getUserTokens',
   async (userId, thunkAPI) => {
     try {
-      const response = await AuthService.check(userId, {});
+      const response = await AuthService.getNewTokens(userId, {});
 
       return response.data;
     } catch (e) {

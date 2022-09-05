@@ -1,13 +1,23 @@
+/* eslint-disable */
+
 import Card from './Card';
 import PreLoader from './PreLoader';
 import { useEffect, useState } from 'react';
 import GameResult from './GameResult';
 import ModalStart from './ModalWindow';
-import { getQuestions } from './logic';
+import {
+  getQuestionsForUserTextBookService,
+  getQuestionsForUserService,
+  getQuestionsForMenuService,
+  getQuestionsForTextBookService,
+} from './logic';
 import SoundMute from './SoundMute';
 import { useSelector } from 'react-redux/es/exports';
 
 function MainScreen() {
+  const { langGroupNumber, bookPage } = useSelector((state) => state.words);
+
+  const { isAuth } = useSelector((state) => state.auth);
   const { isGameFromTextbook } = useSelector((state) => state.games);
   const wordsTextbookPage = useSelector((state) => state.words.bookPage);
   // const wordsTextbookLangGroup = useSelector((state) => state.words);
@@ -43,20 +53,67 @@ function MainScreen() {
     }
   }, [saveStat]);
 
-  //Load questions
   useEffect(() => {
-    async function generateQuestions(loadMore, difficult) {
-      const result = await getQuestions(loadMore, difficult);
-      setWords([...result]);
-    }
-    try {
-      if (isGameFromTextbook) {
-        generateQuestions(wordsTextbookPage, difficult);
-      } else {
-        generateQuestions(loadMore, difficult);
+    if (isAuth) {
+      async function generateQuestionsForUser(loadMore, difficult, userId) {
+        const result = await getQuestionsForUserService(
+          loadMore,
+          difficult,
+          userId
+        );
+        setWords([...result]);
       }
-    } catch (e) {
-      console.log(e);
+
+      async function generateQuestionsForUserTextbook(
+        loadMore,
+        difficult,
+        userId
+      ) {
+        const result = await getQuestionsForUserTextBookService(
+          loadMore,
+          difficult,
+          userId
+        );
+        setWords([...result]);
+      }
+      try {
+        if (isGameFromTextbook) {
+          generateQuestionsForUserTextbook(
+            bookPage,
+            langGroupNumber,
+            localStorage.getItem('userId')
+          );
+        } else {
+          generateQuestionsForUser(
+            loadMore,
+            difficult,
+            localStorage.getItem('userId')
+          );
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      async function generateQuestionsTextbook(loadMore, difficult) {
+        const result = await getQuestionsForTextBookService(
+          loadMore,
+          difficult
+        );
+        setWords([...result]);
+      }
+      async function generateQuestionsMenu(loadMore, difficult) {
+        const result = await getQuestionsForMenuService(loadMore, difficult);
+        setWords([...result]);
+      }
+      try {
+        if (isGameFromTextbook) {
+          generateQuestionsTextbook(bookPage, langGroupNumber);
+        } else {
+          generateQuestionsMenu(loadMore, difficult);
+        }
+      } catch (e) {
+        console.log(e);
+      }
     }
   }, [loadMore, difficult]);
 
