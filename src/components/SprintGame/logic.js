@@ -1,5 +1,13 @@
-import { API_URL } from '../../utils/api/http';
-import axios from 'axios';
+/* eslint-disable */
+
+// import { API_URL } from '../../utils/api/http';
+// import axios from 'axios';
+import GameService from '../../services/gamesService';
+import { useSelector } from 'react-redux';
+
+// const { ssss } = useSelector(
+//   (state) => state.games.AllWordsOfGroupforRegisterUser.paginatedResults
+// );
 
 async function getRandomIndex(length) {
   return Math.floor(Math.random() * length);
@@ -31,12 +39,25 @@ const generateQuestion = async (words) => {
   return questions;
 };
 
-export const getQuestions = async (page, group) => {
-  const response = await axios.get(API_URL + '/words', {
-    params: { page: page, group: group },
+export const getQuestionsForUserTextBookService = async (
+  page,
+  group,
+  userId
+) => {
+  const notLearnedWords = await GameService.questionsForUserTextbook({
+    page,
+    group,
+    userId,
   });
-  const data = await response.data;
-  const transformData = data.map((item) => {
+  const gamesRoundWords = await GameService.getAllWordsForFilter({
+    page,
+    group,
+    userId,
+  });
+  // console.log(notLearnedWords);
+  // console.log(gamesRoundWords);
+
+  const transformData = [...notLearnedWords, ...gamesRoundWords].map((item) => {
     return {
       id: item.id,
       word: item.word,
@@ -44,7 +65,38 @@ export const getQuestions = async (page, group) => {
       audio: item.audio,
     };
   });
+  // console.log(transformData);
 
   const questions = await generateQuestion(transformData);
   return questions;
 };
+
+export const getQuestionsForUserService = async (page, group, userId) => {
+  const gamesRoundWords = await GameService.questionsForUserMenu({
+    page,
+    group,
+    userId,
+  });
+
+  // const gamesRoundWords = await response;
+  console.log(gamesRoundWords);
+
+  const transformData = gamesRoundWords.map((item) => {
+    return {
+      id: item.id,
+      word: item.word,
+      wordTranslate: item.wordTranslate,
+      audio: item.audio,
+    };
+  });
+  console.log(transformData);
+
+  const questions = await generateQuestion(transformData);
+  return questions;
+};
+
+// export const getQuestionsForUser = async (page, group) => {
+//   const response = await axios.get(API_URL + '/words', {
+//     params: { page: page, group: group },
+//   });
+// };

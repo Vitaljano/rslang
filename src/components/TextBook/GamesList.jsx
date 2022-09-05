@@ -5,14 +5,12 @@ import { setGamesSrartFlag } from '../../store/reducers/GamesSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getWordsForRegUserGame,
-  // getDifficultWords,
   getAllDifficultWords,
 } from '../../utils/api/thunks';
 
-const GamesList = () => {
+const GamesList = (currentWords) => {
   const { langGroupNumber } = useSelector((state) => state.words);
   const { user } = useSelector((state) => state.auth);
-
   const dispatch = useDispatch();
   const setGameMode = () => {
     dispatch(setGamesSrartFlag(true));
@@ -32,7 +30,16 @@ const GamesList = () => {
   };
 
   return (
-    <div className="container  mx-auto mt-10">
+    <div
+      className={`container  mx-auto mt-10
+      ${
+        currentWords.currentWords.length
+          ? ''
+          : 'opacity-40 pointer-events-none grayscale'
+      }`}
+      ребята
+      привет
+    >
       <h2 className="text-2xl uppercase p-2 text-white">Игры</h2>
       <div className="container mx-auto mt-10 flex justify-center gap-5 flex-col sm:flex-row">
         {gamesInfoData.map((gameItem) => (
