@@ -1,5 +1,4 @@
 import { $authHost, $host } from '../utils/api/http';
-/* eslint-disable */
 
 export const checkIsLearnedWordItem = (wordItem) => {
   return wordItem.userWord && wordItem.userWord.difficulty === 'studied';
@@ -11,7 +10,7 @@ export const getNotLearnedWords = (wordsArray) => {
   });
 };
 
-export const getAllWords = (group, page, wordsArray) => {
+export const getAllWords = (group, wordsArray) => {
   const currentWords = wordsArray.filter(
     (wordItem) =>
       (wordItem.group === group || wordItem.group < group) &&
@@ -20,7 +19,7 @@ export const getAllWords = (group, page, wordsArray) => {
 
   return currentWords;
 };
-export const getWordsFromUserTextbook = (group, page, wordsArray) => {
+export const getWordsFromUserTextbook = (group, wordsArray) => {
   const currentWords = wordsArray.filter(
     (wordItem) =>
       (wordItem.group === group || wordItem.group < group) &&
@@ -29,7 +28,7 @@ export const getWordsFromUserTextbook = (group, page, wordsArray) => {
 
   return currentWords;
 };
-export const getWordsFromUserMenu = (group, page, wordsArray) => {
+export const getWordsFromUserMenu = (group, wordsArray) => {
   const currentWords = wordsArray.filter((wordItem) => wordItem.group < group);
 
   return currentWords;
@@ -41,9 +40,6 @@ export default class GameService {
     try {
       const response = await $authHost.get(
         `/users/${userId}/aggregatedWords?wordsPerPage=3600`
-      );
-      console.log(
-        getWordsFromUserTextbook(group, page, response.data[0].paginatedResults)
       );
 
       return getWordsFromUserTextbook(
@@ -86,10 +82,8 @@ export default class GameService {
 
   static async questionsForMenu({ group, page }) {
     try {
-      const response = await $host.get(`/words?wordsPerPage=3600`);
-      // console.log(response);
-
-      return getWordsFromUserMenu(group, page, response.data);
+      const response = await $host.get(`/words?group=${group}&page=${page}`);
+      return response.data;
     } catch (e) {
       console.log(e);
     }
@@ -103,12 +97,5 @@ export default class GameService {
     } catch (e) {
       console.log(e);
     }
-  }
-
-  static async questionsForMenu(email, password) {
-    const response = await $host.post('/signin', {
-      email,
-      password,
-    });
   }
 }
