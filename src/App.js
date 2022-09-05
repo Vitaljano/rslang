@@ -2,13 +2,16 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Main from './pages/main';
 import TextBook from './pages/Textbook';
 import AuthPage from './pages/Auth';
+
+import Loader from './components/Loader/Loader';
 import SprintGame from './pages/sprint';
 import Stat from './pages/stat';
 import AudioGame from './pages/AudioGame';
 import { useDispatch } from 'react-redux';
-import { useEffect, useCallback } from 'react';
-import { getUserById } from './utils/api/thunks';
-
+import { useEffect, useCallback, useState } from 'react';
+// import { getUserById } from './utils/api/thunks';
+import AuthService from './services/authService';
+// import { useLayoutEffect } from 'react';
 import {
   authSlice,
   setAuthUserName,
@@ -29,23 +32,30 @@ export const APP_PAGES = {
 
 function App() {
   const dispatch = useDispatch();
-
-  const authCheck = useCallback(
-    async () => {
-      if (localStorage.getItem('token')) {
-        dispatch(authSlice.actions.setIsAuth(true));
-        dispatch(setAuthUserId(localStorage.getItem('userId')));
-        dispatch(setAuthUserName(localStorage.getItem('name')));
-        dispatch(getUserById(localStorage.getItem('userId')));
-      }
-    },
-    [setAuthUserId],
-    localStorage.getItem('token')
-  );
+  const [isLoading, setLoading] = useState(true);
+  const authCheck = useCallback(async () => {
+    if (localStorage.getItem('token')) {
+      AuthService.check(localStorage.getItem('userId'))
+        .then(() => {
+          dispatch(authSlice.actions.setIsAuth(true));
+          dispatch(setAuthUserId(localStorage.getItem('userId')));
+          dispatch(setAuthUserName(localStorage.getItem('name')));
+        })
+        .finally(() => setLoading(false));
+    } else {
+      dispatch(authSlice.actions.setIsAuth(false));
+      setLoading(false);
+    }
+  }, [setAuthUserId]);
 
   useEffect(() => {
     authCheck();
   }, [authCheck]);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>

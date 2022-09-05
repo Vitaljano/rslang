@@ -1,4 +1,4 @@
-import { $host, $authHostRefresh } from '../utils/api/http';
+import { $host, $authHostRefresh, $authHost } from '../utils/api/http';
 
 export default class AuthService {
   static async login(email, password) {
@@ -27,6 +27,13 @@ export default class AuthService {
   }
 
   static async check(userId) {
+    const response = await $authHost.get(`/users/${userId}`);
+    // localStorage.setItem('token', response.data.token);
+    // localStorage.setItem('refreshtoken', response.data.refreshToken);
+    return response;
+  }
+
+  static async getNewTokens(userId) {
     const response = await $authHostRefresh.get(`/users/${userId}/tokens`);
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('refreshtoken', response.data.refreshToken);
