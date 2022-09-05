@@ -10,7 +10,7 @@ export const getNotLearnedWords = (wordsArray) => {
   });
 };
 
-export const getAllWords = (group, wordsArray) => {
+export const getAllWords = (group, page, wordsArray) => {
   const currentWords = wordsArray.filter(
     (wordItem) =>
       (wordItem.group === group || wordItem.group < group) &&
@@ -19,7 +19,7 @@ export const getAllWords = (group, wordsArray) => {
 
   return currentWords;
 };
-export const getWordsFromUserTextbook = (group, wordsArray) => {
+export const getWordsFromUserTextbook = (group, page, wordsArray) => {
   const currentWords = wordsArray.filter(
     (wordItem) =>
       (wordItem.group === group || wordItem.group < group) &&
@@ -28,7 +28,7 @@ export const getWordsFromUserTextbook = (group, wordsArray) => {
 
   return currentWords;
 };
-export const getWordsFromUserMenu = (group, wordsArray) => {
+export const getWordsFromUserMenu = (group, page, wordsArray) => {
   const currentWords = wordsArray.filter((wordItem) => wordItem.group < group);
 
   return currentWords;
