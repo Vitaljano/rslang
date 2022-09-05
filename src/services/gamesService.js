@@ -1,5 +1,4 @@
 import { $authHost, $host } from '../utils/api/http';
-/* eslint-disable */
 
 export const checkIsLearnedWordItem = (wordItem) => {
   return wordItem.userWord && wordItem.userWord.difficulty === 'studied';
@@ -42,9 +41,6 @@ export default class GameService {
       const response = await $authHost.get(
         `/users/${userId}/aggregatedWords?wordsPerPage=3600`
       );
-      console.log(
-        getWordsFromUserTextbook(group, page, response.data[0].paginatedResults)
-      );
 
       return getWordsFromUserTextbook(
         group,
@@ -86,10 +82,8 @@ export default class GameService {
 
   static async questionsForMenu({ group, page }) {
     try {
-      const response = await $host.get(`/words?wordsPerPage=3600`);
-      // console.log(response);
-
-      return getWordsFromUserMenu(group, page, response.data);
+      const response = await $host.get(`/words?group=${group}&page=${page}`);
+      return response.data;
     } catch (e) {
       console.log(e);
     }
@@ -103,12 +97,5 @@ export default class GameService {
     } catch (e) {
       console.log(e);
     }
-  }
-
-  static async questionsForMenu(email, password) {
-    const response = await $host.post('/signin', {
-      email,
-      password,
-    });
   }
 }

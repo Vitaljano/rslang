@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import Card from './Card';
 import PreLoader from './PreLoader';
 import { useEffect, useState } from 'react';
@@ -16,11 +14,8 @@ import { useSelector } from 'react-redux/es/exports';
 
 function MainScreen() {
   const { langGroupNumber, bookPage } = useSelector((state) => state.words);
-
   const { isAuth } = useSelector((state) => state.auth);
   const { isGameFromTextbook } = useSelector((state) => state.games);
-  const wordsTextbookPage = useSelector((state) => state.words.bookPage);
-  // const wordsTextbookLangGroup = useSelector((state) => state.words);
   const [points, setPoints] = useState(0);
   const [isModalActive, setIsModalActive] = useState(true);
   const [difficult, setDifficult] = useState(0);
@@ -55,27 +50,27 @@ function MainScreen() {
 
   useEffect(() => {
     if (isAuth) {
-      async function generateQuestionsForUser(loadMore, difficult, userId) {
+      const generateQuestionsForUser = async (loadMore, difficult, userId) => {
         const result = await getQuestionsForUserService(
           loadMore,
           difficult,
           userId
         );
         setWords([...result]);
-      }
+      };
 
-      async function generateQuestionsForUserTextbook(
+      const generateQuestionsForUserTextbook = async (
         loadMore,
         difficult,
         userId
-      ) {
+      ) => {
         const result = await getQuestionsForUserTextBookService(
           loadMore,
           difficult,
           userId
         );
         setWords([...result]);
-      }
+      };
       try {
         if (isGameFromTextbook) {
           generateQuestionsForUserTextbook(
@@ -94,17 +89,17 @@ function MainScreen() {
         console.log(e);
       }
     } else {
-      async function generateQuestionsTextbook(loadMore, difficult) {
+      const generateQuestionsTextbook = async (loadMore, difficult) => {
         const result = await getQuestionsForTextBookService(
           loadMore,
           difficult
         );
         setWords([...result]);
-      }
-      async function generateQuestionsMenu(loadMore, difficult) {
+      };
+      const generateQuestionsMenu = async (loadMore, difficult) => {
         const result = await getQuestionsForMenuService(loadMore, difficult);
         setWords([...result]);
-      }
+      };
       try {
         if (isGameFromTextbook) {
           generateQuestionsTextbook(bookPage, langGroupNumber);
