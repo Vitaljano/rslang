@@ -5,7 +5,10 @@ function SoundMute({ isMute, setMute }) {
   return (
     <>
       {isMute && (
-        <div onClick={setMuteHandle} className="cursor-pointer">
+        <div
+          onClick={setMuteHandle}
+          className="cursor-pointer p-2 flex justify-center"
+        >
           <svg
             version="1.1"
             id="Layer_1"
@@ -59,7 +62,10 @@ function SoundMute({ isMute, setMute }) {
         </div>
       )}
       {!isMute && (
-        <div onClick={setMuteHandle} className="cursor-pointer">
+        <div
+          onClick={setMuteHandle}
+          className="cursor-pointer p-2 flex justify-center"
+        >
           <svg
             version="1.1"
             id="Layer_1"

@@ -1,32 +1,39 @@
 import { Link } from 'react-router-dom';
+import { API_URL } from '../../utils/api/http';
 
-const Result = ({ word, transcription, truth, userAnswer }) => {
+const Result = ({ word, transcription, truth, userAnswer, audioPath }) => {
+  const audioPlayHandle = () => {
+    const audio = new Audio(`${API_URL}/${audioPath}`);
+    audio.play();
+  };
   return (
     <>
       <div className="res flex flex-row text-grey text-2xl m-6 justify-between gap-2">
-        <div className="listen cursor-pointer">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            id="Layer_1"
-            viewBox="0 0 24 24"
-            width="30"
-            height="30"
-          >
-            <path
-              fill="#676060"
-              d="M2,6A2,2,0,0,0,0,8v8a2,2,0,0,0,2,2H4.8L12,23.977V.017L4.8,6Z"
-            />
-            <path
-              fill="#676060"
-              d="M20,12a5.006,5.006,0,0,0-5-5H14V9h1a3,3,0,0,1,0,6H14v2h1A5.006,5.006,0,0,0,20,12Z"
-            />
-            <path
-              fill="#676060"
-              d="M15,3H14V5h1a7,7,0,0,1,0,14H14v2h1A9,9,0,0,0,15,3Z"
-            />
-          </svg>
+        <div className="flex">
+          <div className="listen cursor-pointer" onClick={audioPlayHandle}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              id="Layer_1"
+              viewBox="0 0 24 24"
+              width="30"
+              height="30"
+            >
+              <path
+                fill="#676060"
+                d="M2,6A2,2,0,0,0,0,8v8a2,2,0,0,0,2,2H4.8L12,23.977V.017L4.8,6Z"
+              />
+              <path
+                fill="#676060"
+                d="M20,12a5.006,5.006,0,0,0-5-5H14V9h1a3,3,0,0,1,0,6H14v2h1A5.006,5.006,0,0,0,20,12Z"
+              />
+              <path
+                fill="#676060"
+                d="M15,3H14V5h1a7,7,0,0,1,0,14H14v2h1A9,9,0,0,0,15,3Z"
+              />
+            </svg>
+          </div>
+          <div className="ml-8">{word}</div>
         </div>
-        <p>{word}</p>
         <p>{transcription}</p>
         {userAnswer == truth && (
           <div className="checked">
@@ -65,10 +72,13 @@ const Result = ({ word, transcription, truth, userAnswer }) => {
   );
 };
 
-function GameResult({ log, onRestart }) {
+function GameResult({ log, onRestart, score }) {
   return (
     <div className=" flex flex-col justify-center justify-items-center sm:flex-row ">
       <div className="res w-4/5 h-96 overflow-y-scroll sm:w-3/6 sm:h-5/ mx-auto sm:mx-0  sm:mr-20 bg-white flex flex-col relative  p-6 left-2 top-6 rounded-xl shadow-xl order-2 sm:order-none">
+        <div className="container text-center">
+          <h2 className="font-bold text-2xl text-grey">Очки: {score}</h2>
+        </div>
         {log.map((item) => {
           return (
             <Result
@@ -77,6 +87,7 @@ function GameResult({ log, onRestart }) {
               transcription={item.wordTranslate}
               userAnswer={item.userAnswer}
               truth={item.truth}
+              audioPath={item.audio}
             />
           );
         })}

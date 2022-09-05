@@ -1,8 +1,14 @@
 import { API_URL } from '../../utils/api/http';
 import axios from 'axios';
 
-async function getRandomIndex(length) {
-  return Math.floor(Math.random() * length);
+async function getRandomIndex(length, besides) {
+  let randomIndex = Math.floor(Math.random() * length);
+  if (randomIndex === besides && besides > 1) {
+    randomIndex -= 1;
+  } else if (randomIndex === besides && besides < 19) {
+    randomIndex += 1;
+  }
+  return randomIndex;
 }
 
 const generateQuestion = async (words) => {
@@ -16,11 +22,7 @@ const generateQuestion = async (words) => {
       questions.push(words[i]);
     } else {
       // fix if random get true index
-      const randomIndex = await getRandomIndex(words.length);
-
-      if (randomIndex === i) {
-        generateQuestion(words);
-      }
+      const randomIndex = await getRandomIndex(words.length, i);
 
       words[i].wordTranslate = words[randomIndex].wordTranslate;
       words[i].truth = false;
