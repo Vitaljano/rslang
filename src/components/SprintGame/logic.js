@@ -1,4 +1,5 @@
 import GameService from '../../services/gamesService';
+import { shuffleArray } from '../../utils/helpers/shuffle';
 
 async function getRandomIndex(length, besides) {
   let randomIndex = Math.floor(Math.random() * length);
@@ -50,14 +51,14 @@ export const getQuestionsForUserTextBookService = async (
 
   const transformData = [...notLearnedWords, ...gamesRoundWords].map((item) => {
     return {
-      id: item.id,
+      id: item._id,
       word: item.word,
       wordTranslate: item.wordTranslate,
       audio: item.audio,
     };
   });
 
-  const questions = await generateQuestion(transformData);
+  const questions = await generateQuestion(shuffleArray(transformData));
   return questions;
 };
 
@@ -70,14 +71,14 @@ export const getQuestionsForUserService = async (page, group, userId) => {
 
   const transformData = gamesRoundWords.map((item) => {
     return {
-      id: item.id,
+      id: item._id,
       word: item.word,
       wordTranslate: item.wordTranslate,
       audio: item.audio,
     };
   });
 
-  const questions = await generateQuestion(transformData);
+  const questions = await generateQuestion(shuffleArray(transformData));
   return questions;
 };
 
@@ -96,9 +97,8 @@ export const getQuestionsForMenuService = async (page, group) => {
       audio: item.audio,
     };
   });
-  console.log(transformData);
 
-  const questions = await generateQuestion(transformData);
+  const questions = await generateQuestion(shuffleArray(transformData));
   return questions;
 };
 
@@ -116,6 +116,6 @@ export const getQuestionsForTextBookService = async (page, group) => {
     };
   });
 
-  const questions = await generateQuestion(transformData);
+  const questions = await generateQuestion(shuffleArray(transformData));
   return questions;
 };

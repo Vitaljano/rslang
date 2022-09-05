@@ -11,6 +11,7 @@ import {
 } from './logic';
 import SoundMute from './SoundMute';
 import { useSelector } from 'react-redux/es/exports';
+import { getRandomInt } from '../../utils/helpers/random';
 
 function MainScreen() {
   const { langGroupNumber, bookPage } = useSelector((state) => state.words);
@@ -35,6 +36,13 @@ function MainScreen() {
   const inCorrectSound = new Audio(
     process.env.PUBLIC_URL + '/audio/incorrect.mp3'
   );
+
+  // function getRandomInt(min, max) {
+  //   min = Math.ceil(min);
+  //   max = Math.floor(max);
+  //   return Math.floor(Math.random() * (max - min)) + min;
+  // }
+
   // update stat if is max score
   useEffect(() => {
     const maxPoints = localStorage.getItem('maxScore');
@@ -80,7 +88,7 @@ function MainScreen() {
           );
         } else {
           generateQuestionsForUser(
-            loadMore,
+            getRandomInt(0, 29),
             difficult,
             localStorage.getItem('userId')
           );
@@ -104,7 +112,7 @@ function MainScreen() {
         if (isGameFromTextbook) {
           generateQuestionsTextbook(bookPage, langGroupNumber);
         } else {
-          generateQuestionsMenu(loadMore, difficult);
+          generateQuestionsMenu(getRandomInt(0, 29), difficult);
         }
       } catch (e) {
         console.log(e);
