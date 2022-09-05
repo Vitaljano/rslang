@@ -14,6 +14,7 @@ function AudioCall() {
   const [questions, setQuestions] = React.useState([]);
   const [wrongAns, setWrongAns] = React.useState([]);
   const [questionNumber, setQuestionNumber] = React.useState(0);
+  const [log, setLog] = React.useState([]);
 
   const [lives, setLives] = React.useState(5);
 
@@ -23,6 +24,19 @@ function AudioCall() {
     if (questionNumber > 18 || lives === 1) {
       setResults(true);
     }
+    setLog((prev) => {
+      return [
+        ...prev,
+        {
+          id: questions.id,
+          translate: questions.wordTranslate,
+          audio: questions.audio,
+          word: questions.word,
+          check: true,
+        },
+      ];
+    });
+    console.log(log);
   };
   const onWrongAnswer = () => {
     inorrectSound.play();
@@ -31,10 +45,24 @@ function AudioCall() {
     if (questionNumber > 18 || lives === 1) {
       setResults(true);
     }
+    setLog((prev) => {
+      return [
+        ...prev,
+        {
+          id: questions.id,
+          translate: questions.wordTranslate,
+          audio: questions.audio,
+          word: questions.word,
+          check: false,
+        },
+      ];
+    });
+    console.log(log);
   };
   const onRestartHandle = () => {
     setLives(5);
     setResults(false);
+    setLog([]);
   };
 
   React.useEffect(() => {
@@ -56,7 +84,7 @@ function AudioCall() {
     <>
       <div className="container w-4/6 h-5/6 flex flex-col items-center relative fixed top-4">
         {results ? (
-          <AudioResults onRestartHandle={onRestartHandle} />
+          <AudioResults onRestartHandle={onRestartHandle} log={log} />
         ) : (
           <>
             <div className="lives flex flex-row gap-2 mb-2">

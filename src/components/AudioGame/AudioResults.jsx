@@ -1,49 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../../utils/api/http';
 
-const fakeRes = [
-  {
-    id: 1,
-    word: 'duck',
-    audio: '',
-    transcription: '[dʌk]',
-    translate: 'утка',
-  },
-  {
-    id: 2,
-    word: 'duck',
-    audio: '',
-    transcription: '[dʌk]',
-    translate: 'утка',
-  },
-  {
-    id: 3,
-    word: 'duck',
-    audio: '',
-    transcription: '[dʌk]',
-    translate: 'утка',
-  },
-  {
-    id: 4,
-    word: 'duck',
-    audio: '',
-    transcription: '[dʌk]',
-    translate: 'шутка',
-  },
-  {
-    id: 5,
-    word: 'duck',
-    audio: '',
-    transcription: '[dʌk]',
-    translate: 'ienrf',
-  },
-];
+const Result = ({ word, audio, translate, check }) => {
+  const wordAudio = new Audio(API_URL + '/' + audio);
+  const onClickPlay = () => {
+    wordAudio.play();
+  };
 
-const Result = ({ word, transcription, translate }) => {
   return (
     <>
       <div className="res flex flex-row text-grey text-2xl m-6 justify-between gap-2">
-        <div className="listen cursor-pointer">
+        <div onClick={onClickPlay} className="listen cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             id="Layer_1"
@@ -66,9 +34,41 @@ const Result = ({ word, transcription, translate }) => {
           </svg>
         </div>
         <p>{word}</p>
-        <p>{transcription}</p>
         <p>{translate}</p>
-        <div className="checked">
+        {check && (
+          <div className="checked">
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 83 58"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M26.7993 58C24.4433 58.0009 22.1837 57.0944 20.5192 55.4804L1.53225 37.1076C-0.510751 35.1294 -0.510751 31.9226 1.53225 29.9443C3.57591 27.9666 6.88867 27.9666 8.93233 29.9443L26.7993 47.2397L74.0677 1.48324C76.1113 -0.494414 79.4241 -0.494414 81.4677 1.48324C83.5107 3.46153 83.5107 6.66834 81.4677 8.64662L33.0794 55.4804C31.4148 57.0944 29.1553 58.0009 26.7993 58Z"
+                fill="#06BFAD"
+              />
+            </svg>
+          </div>
+        )}
+        {!check && (
+          <div className="checked">
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 83 68"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M48.8347 33.9999L81.4801 7.25721C83.5065 5.59699 83.5065 2.90525 81.4801 1.24517C79.4536 -0.415055 76.1681 -0.415055 74.1419 1.24517L41.4999 27.9906L8.85806 1.24517C6.83162 -0.415055 3.54612 -0.415055 1.51983 1.24517C-0.506449 2.90539 -0.506612 5.59712 1.51983 7.25721L34.1651 33.9999L1.51983 60.7427C-0.506612 62.403 -0.506612 65.0947 1.51983 66.7548C3.54628 68.4149 6.83178 68.415 8.85806 66.7548L41.4999 40.0092L74.1417 66.7548C76.1681 68.415 79.4536 68.415 81.4799 66.7548C83.5064 65.0946 83.5064 62.4028 81.4799 60.7427L48.8347 33.9999Z"
+                fill="#E03168"
+              />
+            </svg>
+          </div>
+        )}
+
+        {/* <div className="checked">
           <svg
             width="30"
             height="30"
@@ -81,20 +81,25 @@ const Result = ({ word, transcription, translate }) => {
               fill="#06BFAD"
             />
           </svg>
-        </div>
+        </div> */}
       </div>
     </>
   );
 };
 
-function AudioResults({ onRestartHandle }) {
+function AudioResults({ onRestartHandle, log }) {
   return (
     <>
-      <div className="flex flex-row w-10/12">
+      <div className="flex flex-row w-10/12 overflow-scroll">
         <div className="res w-10/12 h-5/6 bg-white flex flex-col relative fixed p-6 left-2 top-6 rounded-xl shadow-xl overflow-y-scroll">
-          {fakeRes.map((item) => (
+          {/* {log.map((item, index) => (
+            <div key={index} className="text-action text-lg">
+              {item}
+            </div>
+          ))} */}
+          {log.map((item) => (
             <Result key={item.id} {...item} />
-          ))}{' '}
+          ))}
         </div>
         <div className="actions ml-20 flex flex-col justify-evenly text-white text-center text-lg">
           <div
