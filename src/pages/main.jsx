@@ -67,10 +67,10 @@ function Main() {
                 Эта аудиотренировка больше похожа на игру где ты эффективно
                 обучаешься языку!
               </p>
-              <Link to="/">
+              <Link to="/audiogame">
                 <button
                   type="button"
-                  className="text-white text-xl bg-header transition duration-300 ease-in-out font-medium rounded-lg px-4 w-40 h-10 hover:bg-white hover:bg-violet-700 self-end"
+                  className="text-white text-xl bg-header transition duration-300 ease-in-out font-medium rounded-lg px-4 w-40 h-10 hover:bg-white hover:bg-violet-700 "
                 >
                   Смотреть
                 </button>
@@ -87,7 +87,7 @@ function Main() {
                 Тренировка на скорость - узнавай больше переводов слов за
                 ограниченное время
               </div>
-              <Link to="/">
+              <Link to="/sprint">
                 <button
                   type="button"
                   className="text-white text-xl bg-header transition duration-300 ease-in-out font-medium rounded-lg px-4 w-40 h-10 hover:bg-white hover:bg-violet-700 justify-end"
@@ -108,7 +108,7 @@ function Main() {
               <p className="text-grey text-xl mb-5">
                 С RSLang добно следить за своим прогрессом и не терять мотивацию
               </p>
-              <Link to="/">
+              <Link to="/stat">
                 <button
                   type="button"
                   className="text-white text-xl bg-header transition duration-300 ease-in-out font-medium rounded-lg px-4 w-40 h-10 hover:bg-white hover:bg-violet-700 self-end"
