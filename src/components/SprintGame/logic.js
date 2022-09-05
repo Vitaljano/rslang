@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import GameService from '../../services/gamesService';
 
 async function getRandomIndex(length, besides) {
