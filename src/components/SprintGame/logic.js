@@ -23,7 +23,6 @@ const generateQuestion = async (words) => {
     } else {
       // fix if random get true index
       const randomIndex = await getRandomIndex(words.length, i);
-      console.log(randomIndex);
 
       words[i].wordTranslate = words[randomIndex].wordTranslate;
       words[i].truth = false;
