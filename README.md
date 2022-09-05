@@ -1,6 +1,6 @@
 # [RS Lang](https://github.com/rolling-scopes-school/tasks/blob/master/tasks/react/react-rslang.md)
 
-[Deploy]()
+[Deploy](https://quiet-griffin-652377.netlify.app/)
 
 ## Languages, tools, utils, frameworks and libraries
 ### Main stack
