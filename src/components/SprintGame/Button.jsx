@@ -23,7 +23,7 @@ function Button({ className, content, type, onAnswer }) {
   return (
     <button
       onClick={onAnswer}
-      className={typeSet + ' ' + style}
+      className={className + ' ' + typeSet + ' ' + style}
       data-answer={type === 'success' ? true : false}
     >
       {content}

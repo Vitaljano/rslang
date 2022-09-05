@@ -1,11 +1,15 @@
 import React from 'react';
 import { API_URL } from '../../utils/api/http';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 import Card from './Card';
 import AudioResults from './AudioResults';
+// import levels from './ModalStart';
 
 function AudioCall() {
+  const difficulty = useSelector((state) => state.words.langGroupNumber);
+
   const correctSound = new Audio(process.env.PUBLIC_URL + '/audio/correct.mp3');
   const inorrectSound = new Audio(
     process.env.PUBLIC_URL + '/audio/incorrect.mp3'
@@ -14,8 +18,13 @@ function AudioCall() {
   const [questions, setQuestions] = React.useState([]);
   const [wrongAns, setWrongAns] = React.useState([]);
   const [questionNumber, setQuestionNumber] = React.useState(0);
+  const [log, setLog] = React.useState([]);
 
   const [lives, setLives] = React.useState(5);
+
+  console.log(difficulty);
+  // const randomGroup = Math.random(1, 5);
+  const randomPage = Math.random(1, 30);
 
   const onRightAnswer = () => {
     correctSound.play();
@@ -23,6 +32,18 @@ function AudioCall() {
     if (questionNumber > 18 || lives === 1) {
       setResults(true);
     }
+    setLog((prev) => {
+      return [
+        ...prev,
+        {
+          id: questions.id,
+          translate: questions.wordTranslate,
+          audio: questions.audio,
+          word: questions.word,
+          check: true,
+        },
+      ];
+    });
   };
   const onWrongAnswer = () => {
     inorrectSound.play();
@@ -31,12 +52,29 @@ function AudioCall() {
     if (questionNumber > 18 || lives === 1) {
       setResults(true);
     }
+    setLog((prev) => {
+      return [
+        ...prev,
+        {
+          id: questions.id,
+          translate: questions.wordTranslate,
+          audio: questions.audio,
+          word: questions.word,
+          check: false,
+        },
+      ];
+    });
+  };
+  const onRestartHandle = () => {
+    setLives(5);
+    setResults(false);
+    setLog([]);
   };
 
   React.useEffect(() => {
     axios
       .get(API_URL + '/words', {
-        params: { page: 2, group: 2 },
+        params: { page: randomPage, group: difficulty },
       })
       .then((responce) => {
         const data = responce.data;
@@ -48,12 +86,11 @@ function AudioCall() {
         setWrongAns(result);
       });
   }, [questionNumber, lives]);
-
   return (
     <>
       <div className="container w-4/6 h-5/6 flex flex-col items-center relative fixed top-4">
         {results ? (
-          <AudioResults setResults={setResults} />
+          <AudioResults onRestartHandle={onRestartHandle} log={log} />
         ) : (
           <>
             <div className="lives flex flex-row gap-2 mb-2">

@@ -10,6 +10,7 @@
     ". stats stats";
 }
 
+
 .textbook { 
   grid-area: textbook; 
 }
@@ -20,7 +21,7 @@
 }
 
 .sprint { 
-  margin-top: -100px;
+  margin-top: -70px;
   grid-area: sprint; }
 
 .stats { 
