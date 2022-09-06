@@ -43,7 +43,7 @@ function Header() {
     <header
       className={bgColor + ' z-50 max-w-1400px relative w-full h-20 text-white'}
     >
-      <div className="container h-full items-center my-0 mx-auto w-11/12 flex justify-between ">
+      <div className="container h-full items-center my-0 mx-auto w-11/12 flex justify-between gap-3 ">
         <Link onClick={onClickLink} to="/">
           <div className="logo flex flex-row items-center">
             <div className="logo-img">
@@ -106,7 +106,7 @@ function Header() {
             <NavLink to={APP_PAGES.login}>
               <button
                 type="button"
-                className="text-white  p-2 md:text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+                className="text-white   md:text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg  w-36 md:w-48 h-12 hover:bg-white hover:text-action hover:border-none "
               >
                 Начать учиться
               </button>

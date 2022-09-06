@@ -44,7 +44,6 @@ export const authSlice = createSlice({
       state.user = action.payload;
       state.isLoading = false;
       state.userCreationError = null;
-      state.isAuth = true;
     },
 
     [registration.rejected.type]: (state, action) => {
