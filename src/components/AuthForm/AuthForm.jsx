@@ -3,7 +3,6 @@ import { useLocation, NavLink } from 'react-router-dom';
 import { APP_PAGES } from '../../App';
 import { useForm } from 'react-hook-form';
 import { registration, login } from '../../utils/api/thunks';
-
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -37,7 +36,8 @@ const AuthForm = () => {
     } else {
       const result = await dispatch(registration(data));
       if (result.meta.requestStatus === 'fulfilled') {
-        history(APP_PAGES.main);
+        toast.success('Регистрация прошла успешно!');
+        history(APP_PAGES.login);
       } else {
         toast.error('Не удалось создать нового пользователя!');
         reset();
@@ -64,11 +64,11 @@ const AuthForm = () => {
                     required: 'Поле обязательно к заполнению',
                     minLength: {
                       value: 4,
-                      message: 'Длинна почты должна быть от 4 до 8 символов',
+                      message: 'Длина почты должна быть от 4 до 32 символов',
                     },
                     maxLength: {
-                      value: 24,
-                      message: 'Длинна почты должна быть от 2 до 24 символов',
+                      value: 32,
+                      message: 'Длина почты должна быть от 4 до 32 символов',
                     },
                     pattern: {
                       value:
@@ -94,18 +94,12 @@ const AuthForm = () => {
                     required: 'Поле обязательно к заполнению',
                     minLength: {
                       value: 8,
-                      message: 'Длинна должна быть от 8 до 16 символов',
+                      message: 'Длина должна быть от 8 до 16 символов',
                     },
                     maxLength: {
                       value: 16,
-                      message: 'Длинна должна быть от 8 до 16 символов',
+                      message: 'Длина должна быть от 8 до 16 символов',
                     },
-                    // pattern: {
-                    //   value:
-                    //     /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g,
-                    //   message:
-                    //     'Пароль должен содержать: числа, латинские буквы в верхнем и нижнем регистре, спецсимволы',
-                    // },
                   })}
                   type="password"
                   name="password"
@@ -130,11 +124,11 @@ const AuthForm = () => {
                     required: 'Поле обязательно к заполнению',
                     minLength: {
                       value: 2,
-                      message: 'Длинна имени должна быть от 2 до 16 символов',
+                      message: 'Длина имени должна быть от 2 до 16 символов',
                     },
                     maxLength: {
                       value: 16,
-                      message: 'Длинна имени должна быть от 2 до 16 символов',
+                      message: 'Длина имени должна быть от 2 до 16 символов',
                     },
                     pattern: {
                       value: /^[а-яёa-z]+$/iu,
@@ -160,11 +154,11 @@ const AuthForm = () => {
                     required: 'Поле обязательно к заполнению',
                     minLength: {
                       value: 4,
-                      message: 'Длинна почты должна быть от 4 до 8 символов',
+                      message: 'Длина почты должна быть от от 2 до 32 символов',
                     },
                     maxLength: {
-                      value: 24,
-                      message: 'Длинна почты должна быть от 2 до 24 символов',
+                      value: 32,
+                      message: 'Длина почты должна быть от 2 до 32 символов',
                     },
                     pattern: {
                       value:
@@ -189,18 +183,12 @@ const AuthForm = () => {
                     required: 'Поле обязательно к заполнению',
                     minLength: {
                       value: 8,
-                      message: 'Длинна должна быть от 8 до 16 символов',
+                      message: 'Длина должна быть от 8 до 16 символов',
                     },
                     maxLength: {
                       value: 16,
-                      message: 'Длинна должна быть от 8 до 16 символов',
+                      message: 'Длина должна быть от 8 до 16 символов',
                     },
-                    // pattern: {
-                    //   value:
-                    //     /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g,
-                    //   message:
-                    //     'Пароль должен содержать: числа, латинские буквы в верхнем и нижнем регистре, спецсимволы',
-                    // },
                   })}
                   type="password"
                   name="password"

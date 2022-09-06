@@ -1,5 +1,5 @@
-import { API_URL } from '../../utils/api/http';
-import axios from 'axios';
+import GameService from '../../services/gamesService';
+import { shuffleArray } from '../../utils/helpers/shuffle';
 
 async function getRandomIndex(length, besides) {
   let randomIndex = Math.floor(Math.random() * length);
@@ -33,12 +33,68 @@ const generateQuestion = async (words) => {
   return questions;
 };
 
-export const getQuestions = async (page, group) => {
-  const response = await axios.get(API_URL + '/words', {
-    params: { page: page, group: group },
+export const getQuestionsForUserTextBookService = async (
+  page,
+  group,
+  userId
+) => {
+  const notLearnedWords = await GameService.questionsForUserTextbook({
+    page,
+    group,
+    userId,
   });
-  const data = await response.data;
-  const transformData = data.map((item) => {
+  const gamesRoundWords = await GameService.getAllWordsForFilter({
+    page,
+    group,
+    userId,
+  });
+
+  const transformData = [
+    ...notLearnedWords,
+    ...shuffleArray(gamesRoundWords),
+  ].map((item) => {
+    return {
+      id: item._id,
+      word: item.word,
+      wordTranslate: item.wordTranslate,
+      audio: item.audio,
+      userWord: item.userWord,
+    };
+  });
+
+  const questions = await generateQuestion(transformData);
+  return questions;
+};
+
+export const getQuestionsForUserService = async (page, group, userId) => {
+  const gamesRoundWords = await GameService.questionsForUserMenu({
+    page,
+    group,
+    userId,
+  });
+
+  const transformData = gamesRoundWords.map((item) => {
+    return {
+      id: item._id,
+      word: item.word,
+      wordTranslate: item.wordTranslate,
+      audio: item.audio,
+      userWord: item.userWord,
+    };
+  });
+
+  const questions = await generateQuestion(shuffleArray(transformData));
+  return questions;
+};
+
+//// not login
+
+export const getQuestionsForMenuService = async (page, group) => {
+  const gamesRoundWords = await GameService.questionsForMenu({
+    page,
+    group,
+  });
+  const transformData = [...gamesRoundWords].map((item) => {
     return {
       id: item.id,
       word: item.word,
@@ -47,6 +103,24 @@ export const getQuestions = async (page, group) => {
     };
   });
 
-  const questions = await generateQuestion(transformData);
+  const questions = await generateQuestion(shuffleArray(transformData));
+  return questions;
+};
+
+export const getQuestionsForTextBookService = async (page, group) => {
+  const gamesRoundWords = await GameService.questionsForTextbook({
+    page,
+    group,
+  });
+  const transformData = [...gamesRoundWords].map((item) => {
+    return {
+      id: item.id,
+      word: item.word,
+      wordTranslate: item.wordTranslate,
+      audio: item.audio,
+    };
+  });
+
+  const questions = await generateQuestion(shuffleArray(transformData));
   return questions;
 };

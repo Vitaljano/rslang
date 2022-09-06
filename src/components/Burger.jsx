@@ -4,19 +4,21 @@ import { Link } from 'react-router-dom';
 function Burger({ onClickLink, bgColor }) {
   return (
     <>
-      <div className={bgColor + ' w-full absolute h-full z-50'}>
-        <ul className="my-0 mx-auto flex items-center flex-row text-3xl w-11/12 justify-between">
+      <div className={bgColor + ' w-full absolute h-60 md:h-full z-50 '}>
+        <ul className="my-0 mx-auto flex items-center flex-col  md:flex-row text-3xl w-11/12 justify-between">
           <Link onClick={onClickLink} to="/textbook">
-            <li className="hover:opacity-80 transition-all">Учебник</li>
+            <li className="mt-3 hover:opacity-80 transition-all">Учебник</li>
           </Link>
           <Link onClick={onClickLink} to="/sprint">
-            <li className="hover:opacity-80 transition-all">Спринт</li>
+            <li className="mt-3 hover:opacity-80 transition-all">Спринт</li>
           </Link>
           <Link onClick={onClickLink} to="/audiogame">
-            <li className="hover:opacity-80 transition-all">Аудиовызов</li>
+            <li className="mt-3 hover:opacity-80 transition-all">Аудиовызов</li>
           </Link>
           <Link onClick={onClickLink} to="/stat">
-            <li className="hover:opacity-80 transition-all">Статистика</li>
+            <li className={'mt-3 hover:opacity-80 transition-all'}>
+              Статистика
+            </li>
           </Link>
         </ul>
       </div>
