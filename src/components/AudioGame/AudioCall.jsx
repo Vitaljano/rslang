@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 
 import Card from './Card';
 import AudioResults from './AudioResults';
-// import levels from './ModalStart';
 
 function AudioCall() {
   const difficulty = useSelector((state) => state.words.langGroupNumber);
+  const page = useSelector((state) => state.words.bookPage);
 
   const correctSound = new Audio(process.env.PUBLIC_URL + '/audio/correct.mp3');
   const inorrectSound = new Audio(
@@ -24,7 +24,6 @@ function AudioCall() {
 
   console.log(difficulty);
   // const randomGroup = Math.random(1, 5);
-  const randomPage = Math.random(1, 30);
 
   const onRightAnswer = () => {
     correctSound.play();
@@ -74,16 +73,19 @@ function AudioCall() {
   React.useEffect(() => {
     axios
       .get(API_URL + '/words', {
-        params: { page: randomPage, group: difficulty },
+        params: { page, group: difficulty },
       })
       .then((responce) => {
         const data = responce.data;
         return data;
       })
       .then((data) => {
-        setQuestions(data[questionNumber]);
-        let result = data.map(({ wordTranslate }) => wordTranslate);
-        setWrongAns(result);
+        const a = data[questionNumber];
+        if (a) {
+          setQuestions(a);
+          let result = data.map(({ wordTranslate }) => wordTranslate);
+          setWrongAns(result);
+        }
       });
   }, [questionNumber, lives]);
   return (
@@ -94,7 +96,7 @@ function AudioCall() {
         ) : (
           <>
             <div className="lives flex flex-row gap-2 mb-2">
-              {[...Array(lives)].map((el, i) => (
+              {[...Array(lives)].map((_el, i) => (
                 <svg
                   key={i}
                   xmlns="http://www.w3.org/2000/svg"

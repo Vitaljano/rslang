@@ -75,13 +75,8 @@ const Result = ({ word, audio, translate, check }) => {
 function AudioResults({ onRestartHandle, log }) {
   return (
     <>
-      <div className="flex flex-row w-10/12 overflow-scroll">
+      <div className="flex flex-row w-10/12 ">
         <div className="res w-10/12 h-5/6 bg-white flex flex-col relative fixed p-6 left-2 top-6 rounded-xl shadow-xl overflow-y-scroll">
-          {/* {log.map((item, index) => (
-            <div key={index} className="text-action text-lg">
-              {item}
-            </div>
-          ))} */}
           {log.map((item) => (
             <Result key={item.id} {...item} />
           ))}
