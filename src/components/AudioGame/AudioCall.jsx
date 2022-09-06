@@ -1,12 +1,13 @@
 import React from 'react';
-import { API_URL } from '../../utils/api/http';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
-
+import { shuffleArray } from '../../utils/helpers/shuffle';
 import Card from './Card';
 import AudioResults from './AudioResults';
+import GameService from '../../services/gamesService';
 
 function AudioCall() {
+  const { isAuth } = useSelector((state) => state.auth);
+  const { isGameFromTextbook } = useSelector((state) => state.games);
   const difficulty = useSelector((state) => state.words.langGroupNumber);
   const page = useSelector((state) => state.words.bookPage);
 
@@ -22,27 +23,39 @@ function AudioCall() {
 
   const [lives, setLives] = React.useState(5);
 
-  console.log(difficulty);
-  // const randomGroup = Math.random(1, 5);
-
   const onRightAnswer = () => {
     correctSound.play();
     setQuestionNumber(questionNumber + 1);
     if (questionNumber > 18 || lives === 1) {
       setResults(true);
     }
-    setLog((prev) => {
-      return [
-        ...prev,
-        {
-          id: questions.id,
-          translate: questions.wordTranslate,
-          audio: questions.audio,
-          word: questions.word,
-          check: true,
-        },
-      ];
-    });
+    if (isAuth) {
+      setLog((prev) => {
+        return [
+          ...prev,
+          {
+            id: questions._id,
+            translate: questions.wordTranslate,
+            audio: questions.audio,
+            word: questions.word,
+            check: true,
+          },
+        ];
+      });
+    } else {
+      setLog((prev) => {
+        return [
+          ...prev,
+          {
+            id: questions.id,
+            translate: questions.wordTranslate,
+            audio: questions.audio,
+            word: questions.word,
+            check: true,
+          },
+        ];
+      });
+    }
   };
   const onWrongAnswer = () => {
     inorrectSound.play();
@@ -51,18 +64,33 @@ function AudioCall() {
     if (questionNumber > 18 || lives === 1) {
       setResults(true);
     }
-    setLog((prev) => {
-      return [
-        ...prev,
-        {
-          id: questions.id,
-          translate: questions.wordTranslate,
-          audio: questions.audio,
-          word: questions.word,
-          check: false,
-        },
-      ];
-    });
+    if (isAuth) {
+      setLog((prev) => {
+        return [
+          ...prev,
+          {
+            id: questions._id,
+            translate: questions.wordTranslate,
+            audio: questions.audio,
+            word: questions.word,
+            check: false,
+          },
+        ];
+      });
+    } else {
+      setLog((prev) => {
+        return [
+          ...prev,
+          {
+            id: questions.id,
+            translate: questions.wordTranslate,
+            audio: questions.audio,
+            word: questions.word,
+            check: false,
+          },
+        ];
+      });
+    }
   };
   const onRestartHandle = () => {
     setLives(5);
@@ -71,22 +99,114 @@ function AudioCall() {
   };
 
   React.useEffect(() => {
-    axios
-      .get(API_URL + '/words', {
-        params: { page, group: difficulty },
-      })
-      .then((responce) => {
-        const data = responce.data;
-        return data;
-      })
-      .then((data) => {
-        const a = data[questionNumber];
+    if (isAuth) {
+      const generateQuestionsForUserMenu = async (page, difficulty, userId) => {
+        const gamesRoundWords = await GameService.questionsForUserMenuSprint({
+          page: page,
+          group: difficulty,
+          userId: userId,
+        });
+        const a = gamesRoundWords[questionNumber];
         if (a) {
           setQuestions(a);
-          let result = data.map(({ wordTranslate }) => wordTranslate);
+          let result = gamesRoundWords.map(
+            ({ wordTranslate }) => wordTranslate
+          );
           setWrongAns(result);
         }
-      });
+      };
+      const generateQuestionsForUserTextBook = async (
+        page,
+        difficulty,
+        userId
+      ) => {
+        const notLearnedWords = await GameService.questionsForUserTexbook({
+          page: page,
+          group: difficulty,
+          userId: userId,
+        });
+
+        const generatedNotLearnedWords = await GameService.getAllWordsForFilter(
+          {
+            page: page,
+            group: difficulty,
+            userId: userId,
+          }
+        );
+
+        const gamesRoundWords = [
+          ...notLearnedWords,
+          ...shuffleArray(generatedNotLearnedWords),
+        ];
+
+        const a = gamesRoundWords[questionNumber];
+        if (a) {
+          setQuestions(a);
+          let result = gamesRoundWords.map(
+            ({ wordTranslate }) => wordTranslate
+          );
+          setWrongAns(result);
+        }
+      };
+
+      try {
+        if (isGameFromTextbook) {
+          generateQuestionsForUserTextBook(
+            page,
+            difficulty,
+            localStorage.getItem('userId')
+          );
+        } else {
+          generateQuestionsForUserMenu(
+            page,
+            difficulty,
+            localStorage.getItem('userId')
+          );
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      const generateQuestionsTextbook = async (page, difficulty) => {
+        const gamesRoundWords = await GameService.questionsForTextbook({
+          page: page,
+          group: difficulty,
+        });
+
+        const a = gamesRoundWords[questionNumber];
+        if (a) {
+          setQuestions(a);
+          let result = gamesRoundWords.map(
+            ({ wordTranslate }) => wordTranslate
+          );
+          setWrongAns(result);
+        }
+      };
+
+      const generateQuestionsMenu = async (page, difficulty) => {
+        const gamesRoundWords = await GameService.questionsForMenu({
+          page: page,
+          group: difficulty,
+        });
+        const a = gamesRoundWords[questionNumber];
+        if (a) {
+          setQuestions(a);
+          let result = gamesRoundWords.map(
+            ({ wordTranslate }) => wordTranslate
+          );
+          setWrongAns(result);
+        }
+      };
+      try {
+        if (isGameFromTextbook) {
+          generateQuestionsTextbook(page, difficulty);
+        } else {
+          generateQuestionsMenu(page, difficulty);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
   }, [questionNumber, lives]);
   return (
     <>
