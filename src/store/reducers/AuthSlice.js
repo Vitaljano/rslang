@@ -22,6 +22,9 @@ export const authSlice = createSlice({
     setIsAuth: (state, action) => {
       state.isAuth = action.payload;
     },
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
     setUserData(state, action) {
       state.user = action.payload;
     },
@@ -41,7 +44,6 @@ export const authSlice = createSlice({
       state.user = action.payload;
       state.isLoading = false;
       state.userCreationError = null;
-      state.isAuth = true;
     },
 
     [registration.rejected.type]: (state, action) => {

@@ -3,7 +3,6 @@ import { useLocation, NavLink } from 'react-router-dom';
 import { APP_PAGES } from '../../App';
 import { useForm } from 'react-hook-form';
 import { registration, login } from '../../utils/api/thunks';
-
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -37,7 +36,8 @@ const AuthForm = () => {
     } else {
       const result = await dispatch(registration(data));
       if (result.meta.requestStatus === 'fulfilled') {
-        history(APP_PAGES.main);
+        toast.success('Регистрация прошла успешно!');
+        history(APP_PAGES.login);
       } else {
         toast.error('Не удалось создать нового пользователя!');
         reset();

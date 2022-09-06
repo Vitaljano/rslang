@@ -8,7 +8,7 @@ const Result = ({ word, transcription, truth, userAnswer, audioPath }) => {
   };
   return (
     <>
-      <div className="res flex flex-row text-grey text-2xl m-6 justify-between gap-2">
+      <div className="res flex flex-row text-grey md:text-2xl m-6 justify-between gap-2">
         <div className="flex">
           <div className="listen cursor-pointer" onClick={audioPlayHandle}>
             <svg
@@ -75,7 +75,7 @@ const Result = ({ word, transcription, truth, userAnswer, audioPath }) => {
 function GameResult({ log, onRestart, score }) {
   return (
     <div className=" flex flex-col justify-center justify-items-center sm:flex-row ">
-      <div className="res w-4/5 h-96 overflow-y-scroll sm:w-3/6 sm:h-5/ mx-auto sm:mx-0  sm:mr-20 bg-white flex flex-col relative  p-6 left-2 top-6 rounded-xl shadow-xl order-2 sm:order-none">
+      <div className="res w-4/5 h-96 overflow-y-scroll sm:w-3/6 sm:h-5/ mx-auto sm:mx-0  sm:mr-20 bg-white flex flex-col relative  p-4 md:p-6 left-2 top-6 rounded-xl shadow-xl order-2 sm:order-none">
         <div className="container text-center">
           <h2 className="font-bold text-2xl text-grey">Очки: {score}</h2>
         </div>

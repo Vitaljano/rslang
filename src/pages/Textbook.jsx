@@ -91,14 +91,14 @@ export const TextBook = () => {
     if (langLevel == 6) {
       await dispatch(
         setAgregatedPageCount(
-          Math.ceil(difficultWords.totalCount[0].count / itemsPerPage)
+          Math.ceil((difficultWords.totalCount[0]?.count || 0) / itemsPerPage)
         )
       );
     }
     if (langLevel == 7) {
       await dispatch(
         setAgregatedPageCount(
-          Math.ceil(learnedWords.totalCount[0].count / itemsPerPage)
+          Math.ceil((learnedWords.totalCount[0]?.count || 0) / itemsPerPage)
         )
       );
     }
@@ -121,6 +121,13 @@ export const TextBook = () => {
             <div className="container mx-auto px-4 flex mt-8 justify-center ">
               <Pagination itemsPerPage={itemsPerPage} pageCount={pageCount} />
             </div>
+
+            <GamesList
+              currentWords={
+                difficultWords.paginatedResults &&
+                difficultWords.paginatedResults
+              }
+            />
           </>
         )}
         {langGroupNumber === 7 ? (
@@ -137,6 +144,8 @@ export const TextBook = () => {
                 itemsCount={600}
               />
             </div>
+
+            <GamesList currentWords={[]} />
           </>
         ) : (
           <>
@@ -156,12 +165,17 @@ export const TextBook = () => {
                     itemsCount={600}
                   />
                 </div>
+                <GamesList
+                  currentWords={
+                    isAuth && allUserWords.paginatedResults
+                      ? allUserWords.paginatedResults
+                      : currentWords
+                  }
+                />
               </>
             )}
           </>
         )}
-
-        <GamesList />
       </section>
       <Footer className="bg-green-600" />
     </>

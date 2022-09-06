@@ -10,7 +10,7 @@ const Result = ({ word, audio, translate, check }) => {
 
   return (
     <>
-      <div className="res flex flex-row text-grey text-2xl m-6 justify-between gap-2">
+      <div className="res flex flex-row text-grey md:text-2xl m-6 justify-between gap-2">
         <div onClick={onClickPlay} className="listen cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -81,7 +81,7 @@ function AudioResults({ onRestartHandle, log }) {
             <Result key={item.id} {...item} />
           ))}
         </div>
-        <div className="actions ml-20 flex flex-col justify-evenly text-white text-center text-lg">
+        <div className="actions  flex flex-row sm:flex-col justify-evenly text-white text-center mt-4 text-lg">
           <div
             onClick={onRestartHandle}
             className="again cursor-pointer hover:drop-shadow-lg"
