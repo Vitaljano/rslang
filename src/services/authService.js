@@ -19,17 +19,14 @@ export default class AuthService {
       email,
       password,
     });
+
+    console.log(response);
     localStorage.setItem('name', response.data.name);
-    localStorage.setItem('userId', response.data.userId);
-    localStorage.setItem('token', response.data.token);
-    localStorage.setItem('refreshToken', response.data.refreshToken);
     return response;
   }
 
   static async check(userId) {
     const response = await $authHost.get(`/users/${userId}`);
-    // localStorage.setItem('token', response.data.token);
-    // localStorage.setItem('refreshtoken', response.data.refreshToken);
     return response;
   }
 

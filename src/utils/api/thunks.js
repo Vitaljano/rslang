@@ -5,7 +5,9 @@ import AuthService from '../../services/authService';
 //Auth
 export const registration = createAsyncThunk(
   'auth/createUser',
-  async ({ name, email, password }, thunkAPI) => {
+
+  async (data, thunkAPI) => {
+    const { name, email, password } = data;
     try {
       const response = await AuthService.registration(name, email, password);
       return response.data;
@@ -309,9 +311,6 @@ export const getWordByID = createAsyncThunk(
   }
 );
 ///Games
-//for register User const { allUserWords } = useSelector((state) => state.userWords);
-//allUserWords.paginatedResults
-
 export const getWordsForRegUserGame = createAsyncThunk(
   'getWordsForRegUserGame',
 
