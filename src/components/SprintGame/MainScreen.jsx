@@ -12,6 +12,8 @@ import {
 import SoundMute from './SoundMute';
 import { useSelector } from 'react-redux/es/exports';
 import { getRandomInt } from '../../utils/helpers/random';
+import { useDispatch } from 'react-redux';
+import { updateUserWordsById, saveUserWord } from '../../utils/api/thunks';
 
 function MainScreen() {
   const { langGroupNumber, bookPage } = useSelector((state) => state.words);
@@ -32,16 +34,12 @@ function MainScreen() {
   const [level, setLevel] = useState(1);
   const [correctAnswersInRow, setCorrectAnswersInRow] = useState(0);
   const [saveStat, setSaveStat] = useState(0);
+  const [currentAnswerId, setCurrentAnswerId] = useState();
   const correctSound = new Audio(process.env.PUBLIC_URL + '/audio/correct.mp3');
   const inCorrectSound = new Audio(
     process.env.PUBLIC_URL + '/audio/incorrect.mp3'
   );
-
-  // function getRandomInt(min, max) {
-  //   min = Math.ceil(min);
-  //   max = Math.floor(max);
-  //   return Math.floor(Math.random() * (max - min)) + min;
-  // }
+  const dispatch = useDispatch();
 
   // update stat if is max score
   useEffect(() => {
@@ -187,6 +185,54 @@ function MainScreen() {
     }
   };
 
+  const setCurrentAnswer = (userAnswerLog) => {
+    const currentWords = [];
+    userAnswerLog.map((item) => {
+      if (item.userAnswer === item.truth) {
+        currentWords.push(item);
+      }
+    });
+
+    return setCurrentAnswerId(currentWords);
+  };
+
+  useEffect(() => {
+    if (isAuth) {
+      setCurrentAnswer(userAnswerLog);
+    }
+  }, [userAnswerLog]);
+
+  useEffect(() => {
+    if (isAuth) {
+      updateWordsDifficulty(currentAnswerId);
+    }
+  }, [saveStat]);
+
+  const updateWordsDifficulty = async (array) => {
+    array &&
+      (await array.map(async (item) => {
+        if (item.userWord) {
+          await dispatch(
+            updateUserWordsById({
+              userId: localStorage.getItem('userId'),
+              wordId: item.id,
+              difficulty: 'studied',
+              isLearned: true,
+            })
+          );
+        } else {
+          await dispatch(
+            saveUserWord({
+              userId: localStorage.getItem('userId'),
+              wordId: item.id,
+              difficulty: 'studied',
+              isLearned: true,
+            })
+          );
+        }
+      }));
+  };
+
   return (
     <>
       {isModalActive && (
@@ -221,6 +267,7 @@ function MainScreen() {
           score={points}
           onRestart={onRestartHandle}
           log={userAnswerLog}
+          updateWordsDifficulty={updateWordsDifficulty}
         />
       )}
     </>

@@ -49,16 +49,20 @@ export const getQuestionsForUserTextBookService = async (
     userId,
   });
 
-  const transformData = [...notLearnedWords, ...gamesRoundWords].map((item) => {
+  const transformData = [
+    ...notLearnedWords,
+    ...shuffleArray(gamesRoundWords),
+  ].map((item) => {
     return {
       id: item._id,
       word: item.word,
       wordTranslate: item.wordTranslate,
       audio: item.audio,
+      userWord: item.userWord,
     };
   });
 
-  const questions = await generateQuestion(shuffleArray(transformData));
+  const questions = await generateQuestion(transformData);
   return questions;
 };
 
@@ -75,6 +79,7 @@ export const getQuestionsForUserService = async (page, group, userId) => {
       word: item.word,
       wordTranslate: item.wordTranslate,
       audio: item.audio,
+      userWord: item.userWord,
     };
   });
 

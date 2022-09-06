@@ -29,7 +29,7 @@ export const getWordsFromUserTextbook = (group, page, wordsArray) => {
   return currentWords;
 };
 export const getWordsFromUserMenu = (group, page, wordsArray) => {
-  const currentWords = wordsArray.filter((wordItem) => wordItem.group < group);
+  const currentWords = wordsArray.filter((wordItem) => wordItem.group <= group);
 
   return currentWords;
 };
