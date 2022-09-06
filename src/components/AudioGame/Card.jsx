@@ -47,9 +47,9 @@ function Card({ answer, audio, onRightAnswer, onWrongAnswer, wrongAns }) {
         </svg>
       </div>
       <div className="answers flex gap-10 flex-wrap items-center justify-center mt-16">
-        {randomAns.map((el, i) => (
+        {randomAns.map((el) => (
           <button
-            key={i}
+            key={el}
             onClick={el !== answer ? onWrongAnswer : onRightAnswer}
             className="answer1 text-grey text-2xl bg-white transition duration-300 ease-in-out font-medium rounded-lg w-56 h-14 hover:bg-white hover:shadow-lg ml-4"
           >

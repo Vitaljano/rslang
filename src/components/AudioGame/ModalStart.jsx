@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLangGroupNumber, setPage } from '../../store/reducers/WordSlice';
 
-export const levels = [1, 2, 3, 4, 5, 6];
-
 function ModalStart({ setActiveModal }) {
+  const levels = Array.from({ length: 6 }, (_, i) => i + 1);
+
   function randomInteger(min, max) {
-    // получить случайное число от (min-0.5) до (max+0.5)
     let rand = min - 0.5 + Math.random() * (max - min + 1);
     return Math.round(rand);
   }
