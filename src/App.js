@@ -9,9 +9,9 @@ import Stat from './pages/stat';
 import AudioGame from './pages/AudioGame';
 import { useDispatch } from 'react-redux';
 import { useEffect, useCallback, useState } from 'react';
-// import { getUserById } from './utils/api/thunks';
+import { getNewUserTokens } from './utils/api/thunks';
 import AuthService from './services/authService';
-// import { useLayoutEffect } from 'react';
+
 import {
   authSlice,
   setAuthUserName,
@@ -41,7 +41,10 @@ function App() {
           dispatch(setAuthUserId(localStorage.getItem('userId')));
           dispatch(setAuthUserName(localStorage.getItem('name')));
         })
-        .finally(() => setLoading(false));
+        .finally(() => {
+          dispatch(getNewUserTokens(localStorage.getItem('userId')));
+          setLoading(false);
+        });
     } else {
       dispatch(authSlice.actions.setIsAuth(false));
       setLoading(false);
