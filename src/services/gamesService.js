@@ -63,6 +63,18 @@ export default class GameService {
     }
   }
 
+  static async questionsForUserMenuSprint({ userId, group, page }) {
+    try {
+      const response = await $authHost.get(
+        `/users/${userId}/aggregatedWords?wordsPerPage=20&group=${group}&filter=%7B%22page%22%3A${page}%7D`
+      );
+
+      return response.data[0].paginatedResults;
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   static async questionsForUserMenu({ userId, group, page }) {
     try {
       const response = await $authHost.get(

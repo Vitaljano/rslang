@@ -97,13 +97,15 @@ function ModalStart({ setActiveModal, preLoader, setDifficult }) {
             </div>
           </>
         )}
-        <button
-          onClick={onClickStart}
-          type="button"
-          className="text-white text-2xl bg-sprint transition duration-300 ease-in-out font-medium rounded-lg w-48 h-12 hover:bg-white hover:bg-sprintHover hover:shadow-lg ml-4"
-        >
-          Поехали!
-        </button>
+        {isGameFromTextbook && (
+          <button
+            onClick={onClickStart}
+            type="button"
+            className="text-white text-2xl bg-sprint transition duration-300 ease-in-out font-medium rounded-lg w-48 h-12 hover:bg-white hover:bg-sprintHover hover:shadow-lg ml-4"
+          >
+            Поехали!
+          </button>
+        )}
       </div>
     </div>
   );
