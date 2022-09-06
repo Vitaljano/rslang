@@ -106,7 +106,7 @@ function Header() {
             <NavLink to={APP_PAGES.login}>
               <button
                 type="button"
-                className="text-white  md:text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
+                className="text-white  p-2 md:text-xl border-2 border-bg-white transition duration-300 ease-in-out font-medium rounded-lg md:w-48 h-12 hover:bg-white hover:text-action hover:border-none  ml-4"
               >
                 Начать учиться
               </button>
@@ -114,7 +114,7 @@ function Header() {
           )}
           <div
             onClick={openBurger ? onClickLink : onClickBurger}
-            className="burger ml-8 cursor-pointer"
+            className="burger ml-8 cursor-pointer "
           >
             <svg
               className={openBurger ? 'rotate-90' : ''}
