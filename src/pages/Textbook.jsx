@@ -31,30 +31,33 @@ export const TextBook = () => {
   useEffect(() => {
     if (isAuth) {
       if (localStorage.getItem('langGroupNumber')) {
-        dispatch(
-          getAllUserAgregatedWords({
-            userId: user.userId,
-            group: langGroupNumber,
-            page: bookPage,
-          })
-        );
-        dispatch(
-          getDifficultWords({
-            userId: user.userId,
-            difficulty: 'hard',
-            isLearned: false,
-            page: bookPage,
-          })
-        );
-
-        dispatch(
-          getLearnedWords({
-            userId: user.userId,
-            difficulty: 'studied',
-            isLearned: true,
-            page: bookPage,
-          })
-        );
+        if (langGroupNumber && langGroupNumber === 6) {
+          dispatch(
+            getDifficultWords({
+              userId: user.userId,
+              difficulty: 'hard',
+              isLearned: false,
+              page: localStorage.getItem('bookPage'),
+            })
+          );
+        } else if (langGroupNumber && langGroupNumber === 7) {
+          dispatch(
+            getLearnedWords({
+              userId: user.userId,
+              difficulty: 'studied',
+              isLearned: true,
+              page: localStorage.getItem('bookPage'),
+            })
+          );
+        } else {
+          dispatch(
+            getAllUserAgregatedWords({
+              userId: user.userId,
+              group: localStorage.getItem('langGroupNumber'),
+              page: localStorage.getItem('bookPage'),
+            })
+          );
+        }
       } else {
         dispatch(
           getAllUserAgregatedWords({
