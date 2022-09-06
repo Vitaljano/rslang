@@ -26,7 +26,7 @@ function ModalStart({ setActiveModal }) {
   };
 
   return (
-    <div className="modal w-3/6 h-96 bg-white flex items-center justify-center relative fixed top-14 rounded-xl shadow-xl">
+    <div className="modal w-6/6 md:w-4/6 h-5/6 md:h-96 bg-white flex items-center justify-center relative fixed top-14 rounded-xl shadow-xl">
       <Link to="/">
         <div className="close flex absolute bg-white bg-opacity-70 -top-8 -right-5 w-8 h-8 rounded-full shadow-xl items-center justify-center">
           <svg
@@ -44,10 +44,10 @@ function ModalStart({ setActiveModal }) {
         </div>
       </Link>
       <div className="content p-10 flex items-center flex-col justify-center">
-        <div className="rules text-3xl text-grey my-10 text-center">
+        <div className="rules text-2xl  text-grey my-10 text-center">
           В этой игре вам необходимо услышать слово и выбрать его перевод
         </div>
-        <div className="text-xl text-grey mb-2">Выбери уровеь</div>
+        <div className="text-2xl text-grey mb-2">Выбери уровень</div>
         <div className="mb-7">
           {levels.map((el, index) => (
             <button
