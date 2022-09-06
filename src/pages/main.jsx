@@ -117,17 +117,24 @@ function Main() {
         <div className="vit">
           <img
             className="rounded-full"
-            src="user-image.png"
+            src="programmer.jpg"
             alt=""
             width={200}
           />
           <div className="caption">
-            <p>
+            <a
+              href="https://github.com/Vitaljano"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <b>Виталий Лазаревич</b>
-            </p>
+            </a>
+            <br />
             <b>Team-Lead</b>
             <br />
-            текст о том что мы сделали
+            Организация командной разработки
+            <br />
+            Игра Спринт
           </div>
         </div>
 
@@ -140,25 +147,41 @@ function Main() {
           />
 
           <div className="caption">
-            <p>
+            <a
+              href="https://github.com/dariavenskaya"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <b>Дарья Венская</b>
-            </p>
-            текст о том что мы сделали
+            </a>
+            <br />
+            Дизайн приложения
+            <br />
+            Игра Аудиовызов
           </div>
         </div>
 
         <div className="den">
           <img
             className="rounded-full"
-            src="user-image.png"
+            src="programmer2.jpg"
             alt=""
             width={200}
           />
           <div className="caption">
-            <p>
+            <a
+              href="https://github.com/Denhope"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <b>Денис Кавальчук</b>
-            </p>
-            текст о том что мы сделали
+            </a>
+            <br />
+            Разработка учебника
+            <br />
+            Авторизация
+            <br />
+            Бизнес-логика приложения
           </div>
         </div>
       </div>
