@@ -262,7 +262,7 @@ function AudioCall() {
   }, [questionNumber, lives]);
   return (
     <>
-      <div className="container w-4/6 h-5/6 flex flex-col items-center relative fixed top-4">
+      <div className="container w-4/6 h-5/6 flex flex-col items-center relative  top-4">
         {results ? (
           <AudioResults onRestartHandle={onRestartHandle} log={log} />
         ) : (
