@@ -44,7 +44,7 @@ function ModalStart({ setActiveModal, preLoader, setDifficult }) {
       </Link>
       <div className="content p-10 flex items-center flex-col justify-center">
         {!isGameFromTextbook && (
-          <div className="rules pt-5 text-2xl text-grey mt-2 mb-4 text-center">
+          <div className="rules pt-5 text-xl md:text-2xl text-grey mt-2 mb-4 text-center">
             В этой игре вам необходимо услышать слово и выбрать его перевод
           </div>
         )}
