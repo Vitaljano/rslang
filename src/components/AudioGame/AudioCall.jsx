@@ -1,15 +1,19 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import { shuffleArray } from '../../utils/helpers/shuffle';
 import Card from './Card';
 import AudioResults from './AudioResults';
 import GameService from '../../services/gamesService';
+import { updateUserWordsById, saveUserWord } from '../../utils/api/thunks';
 
 function AudioCall() {
   const { isAuth } = useSelector((state) => state.auth);
   const { isGameFromTextbook } = useSelector((state) => state.games);
   const difficulty = useSelector((state) => state.words.langGroupNumber);
   const page = useSelector((state) => state.words.bookPage);
+  const dispatch = useDispatch();
 
   const correctSound = new Audio(process.env.PUBLIC_URL + '/audio/correct.mp3');
   const inorrectSound = new Audio(
@@ -22,6 +26,7 @@ function AudioCall() {
   const [log, setLog] = React.useState([]);
 
   const [lives, setLives] = React.useState(5);
+  const [currentAnswerId, setCurrentAnswerId] = React.useState();
 
   const onRightAnswer = () => {
     correctSound.play();
@@ -96,6 +101,53 @@ function AudioCall() {
     setLives(5);
     setResults(false);
     setLog([]);
+  };
+
+  const setCurrentAnswer = (log) => {
+    const currentWords = [];
+    log.map((item) => {
+      if (item.check) {
+        currentWords.push(item);
+      }
+    });
+
+    return setCurrentAnswerId(currentWords);
+  };
+  useEffect(() => {
+    if (isAuth) {
+      setCurrentAnswer(log);
+    }
+  }, [log]);
+
+  useEffect(() => {
+    if (isAuth) {
+      updateWordsDifficulty(currentAnswerId);
+    }
+  }, [lives <= 1]);
+
+  const updateWordsDifficulty = async (array) => {
+    array &&
+      (await array.map(async (item) => {
+        if (item.userWord) {
+          await dispatch(
+            updateUserWordsById({
+              userId: localStorage.getItem('userId'),
+              wordId: item.id,
+              difficulty: 'studied',
+              isLearned: true,
+            })
+          );
+        } else {
+          await dispatch(
+            saveUserWord({
+              userId: localStorage.getItem('userId'),
+              wordId: item.id,
+              difficulty: 'studied',
+              isLearned: true,
+            })
+          );
+        }
+      }));
   };
 
   React.useEffect(() => {
