@@ -67,7 +67,7 @@ function Header() {
           </div>
         </Link>
 
-        <div className="actions flex items-center flex-row">
+        <div className="actions flex items-center flex-row gap-5">
           {isAuth ? (
             <div className=" flex justify-center items-center  gap-3 ">
               <Link to="/stat">
@@ -114,7 +114,7 @@ function Header() {
           )}
           <div
             onClick={openBurger ? onClickLink : onClickBurger}
-            className="burger ml-8 cursor-pointer "
+            className="burger  cursor-pointer  "
           >
             <svg
               className={openBurger ? 'rotate-90' : ''}
